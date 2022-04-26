@@ -1,0 +1,15 @@
+.element-container {
+  display: flex;
+  flex-direction: row;
+  width: 40%;
+  justify-content: space-between;
+  align-items: center;
+  color: rgb(140, 138, 138);
+}
+.icon {
+  color: #588c64;
+}
+.delete-icon {
+  color: rgb(14, 14, 14) !important;
+  cursor: pointer;
+}

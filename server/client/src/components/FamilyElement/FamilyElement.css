@@ -1,0 +1,55 @@
+.volunteers {
+  cursor: pointer;
+  margin-top: 3%;
+  margin-right: 5%;
+  height: 12%;
+  width: 50%;
+  background-color: #e8e8e8;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.family-card-main {
+  height: 100%;
+  width: 100%;
+  border: 0.5px solid rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.name-and-avatar {
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: row;
+}
+.card-text {
+  margin-right: 20px;
+}
+.buttons-box {
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 95%;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.edit-family-btn {
+  width: 9rem !important;
+  height: 2rem !important;
+  font-size: 14px !important;
+  margin-left: 5px !important;
+}
+.create-task-btn {
+  width: 7rem !important;
+  height: 2rem !important;
+  font-size: 14px !important;
+}

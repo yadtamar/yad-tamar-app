@@ -1,0 +1,53 @@
+.create-or-add {
+  height: 90%;
+  width: 90%;
+  margin-right: none;
+  border-radius: 20px;
+  background-color: #e8e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  padding-bottom: 15px;
+  padding-top: 10px;
+}
+.btn {
+  height: 35px;
+  width: 160px !important;
+  padding: 5px 10px 5px !important;
+  margin-left: 0 !important;
+}
+.name-avatar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 46%;
+}
+.avatar {
+  height: 120px !important;
+  width: 120px !important;
+}
+.volunteers-list {
+  margin-top: 30px;
+  overflow-x: auto;
+  height: 40vh;
+}
+.family-img {
+  position: absolute;
+  left: 40px;
+  top: -60px;
+  height: 200px;
+  transform: scaleX(-1);
+}
+.right-side-layout {
+  overflow: auto !important;
+  justify-content: flex-start !important;
+  padding-top: 45px !important;
+  width: 90% !important;
+  height: 98% !important;
+  margin-right: 30px !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+}

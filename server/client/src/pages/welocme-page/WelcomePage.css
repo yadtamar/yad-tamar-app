@@ -1,0 +1,25 @@
+.neigboor-img {
+  transform: scalex(-1);
+  position: absolute;
+  top: 25vh;
+  left: 20vw;
+  height: 60vh;
+}
+.homeBuble {
+  display: flex;
+  justify-content: center;
+}
+.main-container {
+  width: 90% !important;
+  transform: scalex(-1);
+  justify-content: center;
+}
+.css-1ajfi66 {
+  margin-left: 10px;
+  width: 160px;
+}
+.css-bt223m {
+  margin-right: 10px;
+  width: 160px;
+  height: 45px;
+}

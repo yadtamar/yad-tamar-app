@@ -1,0 +1,75 @@
+.new-family-button {
+  margin-top: 0 !important;
+  z-index: 999;
+}
+.chose-family {
+  font-size: 25px !important;
+}
+
+@media only screen and (max-width: 1200px) {
+  .chose-family {
+    font-size: 20px !important ;
+  }
+  .new-family-button {
+    width: 70% !important;
+    height: 45% !important;
+  }
+}
+@media only screen and (max-width: 850px) {
+  .chose-family {
+    font-size: 15px !important ;
+  }
+}
+.choose-or-create-main {
+  height: 15vh;
+  width: 80vw;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  margin-left: auto;
+  margin-right: 4%;
+}
+.choose-or-create-div {
+  height: 100%;
+  width: 60%;
+  border-radius: 15px;
+  display: flex;
+  box-sizing: border-box;
+  padding: 10px;
+}
+.search-bar-div {
+  width: 50%;
+  margin-left: auto;
+  margin-right: 3vw;
+}
+
+.families-card-div {
+  display: flex;
+  overflow: auto;
+  flex-wrap: wrap;
+  height: 45vh;
+  margin-left: auto;
+  margin-right: 4%;
+  flex-direction: row;
+  margin-top: 2%;
+  margin-bottom: 5%;
+}
+.choose-text-div {
+  background-color: #8ca8e0;
+  height: 100%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+.create-btn-div {
+  background-color: #e8e8e8;
+  height: 100%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+}

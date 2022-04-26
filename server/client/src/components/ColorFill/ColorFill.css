@@ -1,0 +1,15 @@
+.back-icon {
+  cursor: pointer !important;
+}
+.main-div {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.location-text {
+  font-size: 2.5rem !important;
+  color: white !important;
+  margin-right: 20px !important;
+}

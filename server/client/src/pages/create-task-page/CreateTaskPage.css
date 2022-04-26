@@ -1,0 +1,104 @@
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+.task-container {
+  height: 90%;
+  width: 60%;
+  overflow-x: auto;
+}
+
+.img-container {
+  height: 100%;
+  width: 40%;
+
+  display: flex;
+  flex-direction: column;
+}
+.heart-img {
+  max-width: 330px;
+  max-height: 250px;
+  position: relative;
+  bottom: 85px;
+  background-size: cover;
+}
+@media only screen and (max-width: 1024px) {
+  .heart-img {
+    width: 235px;
+    height: 180px;
+    position: relative;
+    bottom: 85px;
+    background-size: cover;
+  }
+}
+.tasks-layout {
+  height: 92%;
+  width: 95%;
+  margin-top: 5%;
+  margin-right: auto;
+}
+.task-name {
+  opacity: 0.5;
+}
+.task-details {
+  opacity: 0.5;
+  margin-top: 20px !important;
+}
+.task-name-input {
+  width: 90%;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid #909597;
+  font-family: "Varela Round", "cursive";
+  font-size: 1.5em;
+  margin-bottom: 22px;
+}
+
+.task-details-input {
+  width: 90%;
+  border: none;
+  border-bottom: 1px solid #909597;
+  font-family: "Varela Round", "cursive";
+  font-size: 1.5em;
+}
+.task-details-input::placeholder {
+  color: #e8e8e8;
+}
+::placeholder {
+  font-family: "Varela Round", "cursive";
+  color: #e8e8e8;
+}
+.green-btn {
+  height: 30px;
+  width: 150px !important;
+}
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  justify-content: space-between;
+}
+.trash-icon {
+  color: #eb8f7c;
+  align-self: center;
+  height: 30px !important;
+  width: 30px !important;
+}
+.trash-icon-div {
+  display: flex;
+  flex-direction: row;
+  align-self: flex-end !important;
+  align-items: center;
+  height: 35px;
+  width: 180px;
+  position: relative;
+  bottom: 4px;
+}
+.delete-text {
+  position: relative;
+  font-size: 17px;
+  color: #eb8f7c;
+  text-decoration: underline;
+  cursor: pointer;
+}

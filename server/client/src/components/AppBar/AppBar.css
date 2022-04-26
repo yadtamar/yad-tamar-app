@@ -1,0 +1,28 @@
+.app-header {
+  height: 11vh !important;
+  width: 90% !important;
+  margin: auto !important;
+  background-color: transparent !important;
+  justify-content: flex-start !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  position: static !important;
+}
+.logo-container {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+}
+.logo {
+  width: 3.5rem;
+}
+.text-container {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  height: 50% !important;
+}
+.nav-button {
+  font-size: 20px !important;
+  margin-right: 15px !important;
+}
