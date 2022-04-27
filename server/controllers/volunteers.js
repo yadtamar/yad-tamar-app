@@ -41,13 +41,23 @@ const getFamilyVolunteers = (async (req, res) => {
             [family_id]
         );
         if (foundUserId.rows[0]) {
-            const userId = foundUserId.rows[0].user_id;
-            console.log(userId);
-            const foundVolunteer = await pool.query(
-                "SELECT * FROM users WHERE user_id=$1 ",
-                [userId]
-            );
-            res.json(foundVolunteer.rows);
+            var familyVolus = [];
+            console.log(foundUserId.rows)
+            for (var i = 0; i < foundUserId.rows.length; i++) {
+                const userId = foundUserId.rows[i].user_id;
+                //console.log(foundUserId.rows[i].user_id);
+                if(userId){
+                    var foundVolunteer = await pool.query(
+                    "SELECT * FROM users WHERE user_id=$1 ",
+                    [userId]
+                    );
+                    familyVolus.push(foundVolunteer.rows);
+                    foundVolunteer =+ foundVolunteer;
+                }
+            }
+            console.log(foundVolunteer, familyVolus)
+            res.json(familyVolus);
+           // res.json(foundUserId.rows);
         } else { res.send("sorry, but that family don't have volunteers") }
     } catch (err) {
         console.error(err);
