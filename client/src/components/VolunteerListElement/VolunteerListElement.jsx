@@ -10,11 +10,11 @@ function VolunteerListElement({ name, id, setVolunteers, family_id }) {
       <Typography variant="subtitle1">{name}</Typography>
       <ClearIcon
         onClick={() => {
-          fetch(`http://localhost:5000/delete/${id}`, {
+          fetch(`http://localhost:5000/delete_volunteer/${id}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
           });
-          fetch(`http://localhost:5000/volunteers/${family_id}`)
+          fetch(`http://localhost:5000/volunteers_for_family/${family_id}`)
             .then((response) => {
               if (response.ok) {
                 return response.json();

@@ -11,7 +11,7 @@ import "./AddVolunteerPopup.css";
 
 export default function AddVolunteerPopup({ open, setOpen, family_id }) {
   const [volunteer, setVolunteer] = useState({
-    community_id: family_id,
+    family_id: family_id,
     name: "",
     cell_phone: undefined,
   });
@@ -58,14 +58,11 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
         <DialogActions>
           <Button
             onClick={() => {
-              fetch(
-                "http://ec2-18-195-126-1.eu-central-1.compute.amazonaws.com:5000/Create_Volunteer",
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(volunteer),
-                }
-              );
+              fetch("http://localhost:5000/Create_Volunteer", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(volunteer),
+              });
               setVolunteer({ ...volunteer, name: "", phone: "" });
             }}
           >

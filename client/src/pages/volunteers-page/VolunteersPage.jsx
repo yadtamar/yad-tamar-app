@@ -18,14 +18,18 @@ function VolunteersPage() {
 
     useEffect(() => {
       {
-        fetch(`http://localhost:5000/volunteers/${family_id}`)
+        fetch(`http://localhost:5000/volunteers_for_family/${family_id}`)
           .then((response) => {
             if (response.ok) {
               return response.json();
             }
             throw response;
           })
-          .then((data) => setVolunteers(data))
+          .then((data) => {
+            if (data.length > volunteers.length) {
+              setVolunteers(data);
+            }
+          })
 
           .catch((err) => {
             if (err.statusText !== "OK") {
@@ -33,7 +37,7 @@ function VolunteersPage() {
             }
           });
       }
-    }, [open, volunteers]);
+    }, [open, volunteers, family_id]);
 
     return (
       <>
@@ -57,21 +61,24 @@ function VolunteersPage() {
                   {"מתנדבים"}
                 </Typography>
                 {volunteers.map((volunteer) => {
-                  return (
-                    <VolunteerListElement
-                      setVolunteers={setVolunteers}
-                      name={volunteer.name}
-                      id={volunteer.id}
-                      family_id={family_id}
-                    />
-                  );
+                  if (volunteer.length > 0) {
+                    return (
+                      <VolunteerListElement
+                        setVolunteers={setVolunteers}
+                        name={volunteer[0]?.first_name}
+                        id={volunteer[0]?.user_id}
+                        family_id={family_id}
+                        key={volunteer[0]?.user_id}
+                      />
+                    );
+                  }
                 })}
               </div>
             </Grid>
           </Grid>
           <Grid item xs={5.5} height="100%">
             <Grid item>
-              <img className="family-img" src={family}></img>
+              <img className="family-img" alt="family-img" src={family}></img>
             </Grid>
             <Grid container marginTop="50%">
               <div className="create-or-add">
