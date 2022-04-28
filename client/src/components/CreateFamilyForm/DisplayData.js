@@ -2,6 +2,8 @@ import { Typography, Grid } from "@mui/material";
 import MainGreenButton from "../styled/MainGreenButton";
 import { useParams, useNavigate } from "react-router";
 import MainBlueButton from "../styled/MainBlueButton";
+import { buttonStyle } from "./styles.jsx";
+import DetailsItem from "../styled/DetailsItem";
 
 const DisplayData = ({ data, image, setStep }) => {
   const navigate = useNavigate();
@@ -18,41 +20,94 @@ const DisplayData = ({ data, image, setStep }) => {
         paddingBottom: "30px",
       }}
     >
-      <Typography variant="h5">שם פרטי</Typography>
-      <Typography variant="subtitle1">{data.first_name}</Typography>
-      <Typography variant="h5">שם משפחה</Typography>
-      <Typography variant="subtitle1">{data.last_name}</Typography>
-      <Typography variant="h5">טלפון בבית</Typography>
-      <Typography variant="subtitle1">{data.home_phone}</Typography>
-      <Typography variant="h5">טלפון נייד</Typography>
-      <Typography variant="subtitle1">{data.cell_phone}</Typography>
-      <Typography variant="h5">דוא''ל</Typography>
-      <Typography variant="subtitle1">{data.mail}</Typography>
-      <Typography variant="h5">כתובת</Typography>
-      <Typography variant="subtitle1">{data.adress}</Typography>
-      <Typography variant="h5">יישוב</Typography>
-      <Typography variant="subtitle1">{data.city}</Typography>
-      <Typography variant="h5">גיל </Typography>
-      <Typography variant="subtitle1">{data.age}</Typography>
-      <Typography variant="h5"> מגדר</Typography>
-      <Typography variant="subtitle1">{data.gender}</Typography>
-      <Typography variant="h5">מצב משפחתי</Typography>
-      <Typography variant="subtitle1">{data.family_status}</Typography>
-      <Typography variant="h5">מס ילדים</Typography>
-      <Typography variant="subtitle1">{data.kids_num}</Typography>
-      <Typography variant="h5">שפה</Typography>
-      <Typography variant="subtitle1">{data.language}</Typography>
-      <Typography variant="h5">סוג המחלה</Typography>
-      <Typography variant="subtitle1">{data.typeofCancer}</Typography>
-      <Typography variant="h5">בית חולים מטפל</Typography>
-      <Typography variant="subtitle1">{data.hospital}</Typography>
-      <Typography variant="h5">קופת חולים</Typography>
-      <Typography variant="subtitle1">{data.medicalInsurance}</Typography>
-      <Typography variant="h5">היסטוריה רפואית</Typography>
-      <Typography variant="subtitle1">{data.medicalHistory}</Typography>
+      <div className="details-header">
+        <Typography variant="h4" color="#8ca8e0">
+          {"נא לוודא את הפרטים לפני יצירת המשפחה"}
+        </Typography>
+      </div>
+      <Typography variant="h5" marginBottom="20px">
+        {"פרטים אישיים"}
+      </Typography>
+      <DetailsItem item>
+        <Typography variant="subtitle1">שם פרטי</Typography>
+        <Typography variant="subtitle1"></Typography>
+        <Typography variant="subtitle1">{data.first_name}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">שם משפחה</Typography>
+        <Typography variant="subtitle1">{data.last_name}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">טלפון בבית</Typography>
+        <Typography variant="subtitle1">{data.home_phone}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">טלפון נייד</Typography>
+        <Typography variant="subtitle1">{data.cell_phone}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">דוא''ל</Typography>
+        <Typography variant="subtitle1">{data.mail}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">כתובת</Typography>
+        <Typography variant="subtitle1">{data.address}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">יישוב</Typography>
+        <Typography variant="subtitle1">{data.city}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">גיל </Typography>
+        <Typography variant="subtitle1">{data.age}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1"> מגדר</Typography>
+        <Typography variant="subtitle1">{data.gender}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">מצב משפחתי</Typography>
+        <Typography variant="subtitle1">{data.family_status}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">מס ילדים</Typography>
+        <Typography variant="subtitle1">{data.kids_num}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">שפה</Typography>
+        <Typography variant="subtitle1">{data.language}</Typography>
+      </DetailsItem>
+      <Typography variant="h5" marginBottom="20px" marginTop="20px">
+        {"פרטים רפואיים"}
+      </Typography>
+      <DetailsItem>
+        <Typography variant="subtitle1">סוג המחלה</Typography>
+        <Typography variant="subtitle1">{data.sickness}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">בית חולים מטפל</Typography>
+        <Typography variant="subtitle1">{data.hospital}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">קופת חולים</Typography>
+        <Typography variant="subtitle1">{data.medical_insurance}</Typography>
+      </DetailsItem>
+      <DetailsItem>
+        <Typography variant="subtitle1">היסטוריה רפואית</Typography>
+        <Typography variant="subtitle1">{data.medical_history}</Typography>
+      </DetailsItem>
       <div className="display-btn-container">
+        <MainBlueButton
+          style={buttonStyle}
+          onClick={() => {
+            setStep(3);
+          }}
+        >
+          {"חזור"}
+        </MainBlueButton>
         {id ? (
           <MainGreenButton
+            style={buttonStyle}
             onClick={() => {
               fetch(`http://localhost:5000/families/${id}`, {
                 method: "PUT",
@@ -68,6 +123,7 @@ const DisplayData = ({ data, image, setStep }) => {
           </MainGreenButton>
         ) : (
           <MainGreenButton
+            style={buttonStyle}
             onClick={() => {
               const formData = new FormData();
               formData.append("data", data);
@@ -90,13 +146,6 @@ const DisplayData = ({ data, image, setStep }) => {
             צור משפחה
           </MainGreenButton>
         )}
-        <MainBlueButton
-          onClick={() => {
-            setStep(3);
-          }}
-        >
-          {"חזור"}
-        </MainBlueButton>
       </div>
     </Grid>
   );

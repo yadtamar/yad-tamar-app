@@ -4,6 +4,7 @@ export const stepOneSchema = yup.object().shape({
     .string("יש להכניס אותיות בעברית בלבד")
     .matches(/^([^0-9]*)$/, "שם לא יכול לכלול מספרים")
     .required("שדה זה הינו שדה חובה"),
+
   last_name: yup
     .string("יש להכניס אותיות בעברית בלבד")
     .matches(/^([^0-9]*)$/, "שם לא יכול לכלול מספרים")

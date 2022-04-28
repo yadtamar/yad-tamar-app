@@ -3,7 +3,7 @@ import { styled } from "@mui/material";
 const MainGreenButton = styled("button")`
   margin-top: 13px;
   color: white;
-  width: 230px;
+  width: 180px;
   font-size: 16px;
   font-weight: 200;
   letter-spacing: 1px;
@@ -29,7 +29,7 @@ const MainGreenButton = styled("button")`
     height: 100%;
     top: 2px;
     left: -5px;
-    transition: 0.2s;
+    transition: 0.5s;
   }
 
   :hover:after {
@@ -38,7 +38,6 @@ const MainGreenButton = styled("button")`
   }
 
   @media (min-width: 768px) {
-    padding: 5px 10px 5px;
   }
 `;
 

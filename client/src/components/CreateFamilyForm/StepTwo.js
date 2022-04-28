@@ -85,21 +85,17 @@ const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
         </Grid>
         <Grid item xs={5.5} height="100%">
           <Grid item>
-            <img className="family-img" style={familyImg} src={family} />
+            <img
+              className="family-img"
+              style={familyImg}
+              src={family}
+              alt={"family"}
+              loading="lazy"
+            />
           </Grid>
           <Grid container style={leftLayout}>
             <Grid item width="100%">
               <Grid container style={buttonsContainer}>
-                <Grid item>
-                  <MainGreenButton
-                    style={buttonStyle}
-                    onClick={handleSubmit(() => {
-                      setStep(3);
-                    })}
-                  >
-                    {"הבא"}
-                  </MainGreenButton>
-                </Grid>
                 <Grid item>
                   <MainBlueButton
                     style={buttonStyle}
@@ -109,6 +105,16 @@ const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
                   >
                     {"הקודם"}
                   </MainBlueButton>
+                </Grid>
+                <Grid item>
+                  <MainGreenButton
+                    style={buttonStyle}
+                    onClick={handleSubmit(() => {
+                      setStep(3);
+                    })}
+                  >
+                    {"הבא"}
+                  </MainGreenButton>
                 </Grid>
               </Grid>
             </Grid>

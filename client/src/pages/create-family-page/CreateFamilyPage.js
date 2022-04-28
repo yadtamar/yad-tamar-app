@@ -11,22 +11,22 @@ const CreateFamilyPage = () => {
   const [step, setStep] = useState(1);
   const [image, setImage] = useState(null);
   const [data, setData] = useState({
-    first_name: "",
-    last_name: "",
-    home_phone: "",
-    cell_phone: "",
-    mail: "",
-    address: "",
-    city: "",
-    age: "",
-    gender: "",
-    family_status: "",
-    kids_num: "",
-    language: "",
-    sickness: "",
-    hospital: "",
-    medical_insurance: "",
-    medical_history: "",
+    first_name: "newFam",
+    last_name: "newFam",
+    home_phone: "123456789",
+    cell_phone: "1234567890",
+    mail: "newFam@newFam.com",
+    address: "newFam",
+    city: "newFam",
+    age: "1",
+    gender: "newFam",
+    family_status: "newFam",
+    kids_num: "1",
+    language: "newFam",
+    sickness: "newFam",
+    hospital: "1",
+    medical_insurance: "1",
+    medical_history: "newFam",
   });
   /* useEffect(() => {
     if (id) {

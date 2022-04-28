@@ -7,6 +7,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(214, 214, 214);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(150, 150, 150);
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -14,19 +33,9 @@ code {
 
 .homePageWave {
   position: fixed;
-  top: 400px;
+  bottom: 0;
 }
-.homeBuble {
-  background-image: url("./assets/buble.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  position: fixed;
-  right: 20vw;
-  bottom: 40vh;
-  transform: scaleX(-1);
-  height: 40vh;
-  width: 45vw;
-}
+
 .colorFill {
   background-color: #8ca8e0;
   height: 25vh;
@@ -101,7 +110,7 @@ code {
 }
 .display-btn-container {
   display: flex;
-  width: 35%;
+  width: 45%;
   margin: auto;
   align-self: center;
   justify-content: space-between;
@@ -120,9 +129,35 @@ code {
   display: flex;
   padding-right: 10px;
 }
+input[type="file"] {
+  opacity: 0;
+  position: absolute;
+
+  left: 0;
+
+  bottom: 0;
+  cursor: pointer;
+  height: 50%;
+  width: 40%;
+}
 
 @media only screen and (max-width: 1000px) {
   .css-1o7apob-MuiGrid-root {
     display: none !important;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.details-header {
+  width: 50%;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  padding: 40px, 10px;
+  background-color: #e8e8e8;
 }
