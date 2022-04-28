@@ -41,7 +41,7 @@ function WelcomePage() {
           >
             <MainBlueButton
               onClick={() => {
-                navigate("/createfamily");
+                navigate("/create-family");
               }}
             >
               {"צור משפחה"}

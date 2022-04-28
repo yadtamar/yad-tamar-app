@@ -94,7 +94,7 @@ function VolunteersPage() {
                 </MainBlueButton>
                 <MainGreenButton
                   onClick={() => {
-                    navigate(`/createtask/${family_id}`);
+                    navigate(`/create-task/${family_id}`);
                   }}
                   className="btn"
                 >

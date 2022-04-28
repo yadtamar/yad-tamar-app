@@ -36,13 +36,14 @@ export const stepTwoSchema = yup.object().shape({
     .max(199, "נא להקיש גיל תקין")
     .required("שדה זה הינו שדה חובה"),
   gender: yup
-    .string()
-    .matches(/^([^0-9]*)$/, "מגדר אינו יכול להכיל מספרים")
+    .number()
+    .typeError("שדה זה הינה שדה חובה")
     .required("שדה זה הינו שדה חובה"),
   family_status: yup
-    .string()
-    .matches(/^([^0-9]*)$/, "מצב משפחתי אינו יכול להכיל מספרים")
+    .number()
+    .typeError("שדה זה הינה שדה חובה")
     .required("שדה זה הינו שדה חובה"),
+
   kids_num: yup
     .string()
     .matches(/^([^a-z]*)$/, "יש להכניס ספרות בלבד")
@@ -57,10 +58,10 @@ export const stepTwoSchema = yup.object().shape({
 export const stepThreeSchema = yup.object().shape({
   sickness: yup.string().required("שדה זה הינו שדה חובה"),
   hospital: yup
-    .number("יש להקיש ספרות בלבד")
-    .typeError("יש להקיש ספרות בלבד")
-    .max(199, "נא להקיש גיל תקין")
+    .number()
+    .typeError("שדה זה הינה שדה חובה")
     .required("שדה זה הינו שדה חובה"),
+
   medical_insurance: yup.string().required("שדה זה הינו שדה חובה"),
   medical_history: yup.string().required("שדה זה הינו שדה חובה"),
 });

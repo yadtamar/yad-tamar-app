@@ -64,7 +64,7 @@ const FamiliesPage = () => {
                   <MainBlueButton
                     className="new-family-button"
                     onClick={() => {
-                      navigate("/createfamily");
+                      navigate("/create-family");
                     }}
                   >
                     {"צור משפחה"}

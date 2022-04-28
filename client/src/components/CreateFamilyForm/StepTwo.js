@@ -7,14 +7,14 @@ import {
 } from "./styles";
 import FormLabel from "../FormLabel/FormLabel.jsx";
 import { TextField, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router";
 import family from "../../assets/family.png";
 import MainBlueButton from "../styled/MainBlueButton";
 import MainGreenButton from "../styled/MainGreenButton";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { stepTwoSchema } from "./schema";
+import SelectField from "../Select/Select.jsx";
+import { gendrerOptions, familyStatusOptions } from "../Select/SelectData";
 
 const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
   const {
@@ -22,7 +22,6 @@ const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(stepTwoSchema), mode: "onBlur" });
-  const { id } = useParams();
 
   return (
     <>
@@ -41,24 +40,24 @@ const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
               }}
             />
             <FormLabel text={"מגדר"} />
-            <TextField
-              {...register("gender")}
-              error={!!errors.gender}
-              helperText={errors?.gender?.message}
+            <SelectField
+              data={data}
               value={data.gender}
-              onChange={(e) => {
-                setData({ ...data, gender: e.target.value });
-              }}
+              setData={setData}
+              register={register}
+              registerAs="gender"
+              options={gendrerOptions}
+              errors={errors}
             />
             <FormLabel text={"מצב משפחתי"} />
-            <TextField
-              {...register("family_status")}
-              error={!!errors.family_status}
-              helperText={errors?.family_status?.message}
+            <SelectField
+              data={data}
               value={data.family_status}
-              onChange={(e) => {
-                setData({ ...data, family_status: e.target.value });
-              }}
+              setData={setData}
+              register={register}
+              registerAs="family_status"
+              options={familyStatusOptions}
+              errors={errors}
             />
             <FormLabel text={"מספר ילדים"} />
             <TextField

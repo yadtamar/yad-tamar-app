@@ -12,6 +12,8 @@ import MainGreenButton from "../styled/MainGreenButton";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { stepThreeSchema } from "./schema";
+import SelectField from "../Select/Select.jsx";
+import { hospitalOptions } from "../Select/SelectData.jsx";
 
 const FormStepThree = ({ setStep, data, setData }) => {
   const {
@@ -35,14 +37,14 @@ const FormStepThree = ({ setStep, data, setData }) => {
               }}
             />
             <FormLabel text={"בית חולים מטפל"} />
-            <TextField
-              {...register("hospital")}
-              error={!!errors.hospital}
-              helperText={errors?.hospital?.message}
+            <SelectField
               value={data.hospital}
-              onChange={(e) => {
-                setData({ ...data, hospital: e.target.value });
-              }}
+              data={data}
+              setData={setData}
+              register={register}
+              registerAs="hospital"
+              options={hospitalOptions}
+              errors={errors}
             />
             <FormLabel text={"קופת חולים"} />
             <TextField
