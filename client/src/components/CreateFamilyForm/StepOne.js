@@ -162,13 +162,10 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
                     <MainRedButton
                       style={buttonStyle}
                       onClick={() => {
-                        fetch(
-                          `http://ec2-18-195-126-1.eu-central-1.compute.amazonaws.com:5000/families/${id}`,
-                          {
-                            method: "DELETE",
-                            headers: { "Content-Type": "application/json" },
-                          }
-                        ).then((response) => {
+                        fetch(`/families/${id}`, {
+                          method: "DELETE",
+                          headers: { "Content-Type": "application/json" },
+                        }).then((response) => {
                           if (response.ok) {
                             navigate("/families");
                           }

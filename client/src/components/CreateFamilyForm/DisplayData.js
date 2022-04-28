@@ -54,7 +54,7 @@ const DisplayData = ({ data, image, setStep }) => {
         {id ? (
           <MainGreenButton
             onClick={() => {
-              fetch(`http://localhost:5000/families/${id}`, {
+              fetch(`/families/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
@@ -73,14 +73,11 @@ const DisplayData = ({ data, image, setStep }) => {
               formData.append("data", data);
               formData.append("image", image);
               console.log(JSON.stringify(data));
-              fetch(
-                "http://ec2-18-195-126-1.eu-central-1.compute.amazonaws.com:5000/families",
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(data),
-                }
-              ).then((response) => {
+              fetch("/families", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+              }).then((response) => {
                 if (response.ok) {
                   navigate("/families");
                 }
