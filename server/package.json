@@ -17,6 +17,5 @@
     "pg": "^8.7.3",
     "serverless-http": "^2.7.0"
   },
-  "devDependencies": {},
   "description": ""
 }

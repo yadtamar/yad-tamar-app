@@ -13,11 +13,17 @@ const voluteerController = require("./controllers/volunteers.js")
 app.use(cors());
 app.use(express.json());
 
-const port = process.env.PORT;
-
-app.listen(port, () => {
-  console.log(`server started on port ${port}`);
-});
+// const port = process.env.PORT;
+// console.log("the port thet runs is"+port);
+// app.listen(port, () => {
+//   console.log(`server started on port ${port}`);
+// });
+console.log(process.env.PORT)
+app.listen(process.env.PORT, function (err) {
+  if (err) {
+   console.log(err);
+  }
+})
 
 //ROUTES
 //create family
