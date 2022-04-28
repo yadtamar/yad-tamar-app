@@ -162,7 +162,7 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
                     <MainRedButton
                       style={buttonStyle}
                       onClick={() => {
-                        fetch(`http://localhost:5000/families/${id}`, {
+                        fetch(`/families/${id}`, {
                           method: "DELETE",
                           headers: { "Content-Type": "application/json" },
                         }).then((response) => {

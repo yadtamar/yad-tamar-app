@@ -6,7 +6,7 @@ import MainGreenButton from "../../components/styled/MainGreenButton";
 import MainBlueButton from "../../components/styled/MainBlueButton";
 import PageLayout from "../../components/PageLayout/PageLayout";
 import "./VolunteersPage.css";
-import VolunteerListElement from "../../components/VolunteerListElement/VolunteerListElement";
+import Volunteer from "../../components/Volunteer/Volunteer";
 import AddVolunteerPopup from "../../components/AddVolunteerPopup/AddVolunteerPopup";
 
 function VolunteersPage() {
@@ -18,7 +18,7 @@ function VolunteersPage() {
 
     useEffect(() => {
       {
-        fetch(`http://localhost:5000/volunteers_for_family/${family_id}`)
+        fetch(`/volunteers_for_family/${family_id}`)
           .then((response) => {
             if (response.ok) {
               return response.json();
@@ -63,7 +63,7 @@ function VolunteersPage() {
                 {volunteers.map((volunteer) => {
                   if (volunteer.length > 0) {
                     return (
-                      <VolunteerListElement
+                      <Volunteer
                         setVolunteers={setVolunteers}
                         name={volunteer[0]?.first_name}
                         id={volunteer[0]?.user_id}
@@ -78,7 +78,7 @@ function VolunteersPage() {
           </Grid>
           <Grid item xs={5.5} height="100%">
             <Grid item>
-              <img className="family-img" alt="family-img" src={family}></img>
+              <img className="family-img" alt="family" src={family}></img>
             </Grid>
             <Grid container marginTop="50%">
               <div className="create-or-add">

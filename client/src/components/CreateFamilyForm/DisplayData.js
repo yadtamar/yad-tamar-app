@@ -54,7 +54,7 @@ const DisplayData = ({ data, image, setStep }) => {
         {id ? (
           <MainGreenButton
             onClick={() => {
-              fetch(`http://localhost:5000/families/${id}`, {
+              fetch(`/families/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
@@ -73,7 +73,7 @@ const DisplayData = ({ data, image, setStep }) => {
               formData.append("data", data);
               formData.append("image", image);
               console.log(JSON.stringify(data));
-              fetch("http://localhost:5000/families", {
+              fetch("/families", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),

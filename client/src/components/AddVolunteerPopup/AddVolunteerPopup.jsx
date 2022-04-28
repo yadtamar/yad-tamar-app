@@ -58,7 +58,7 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
         <DialogActions>
           <Button
             onClick={() => {
-              fetch("http://localhost:5000/Create_Volunteer", {
+              fetch("/Create_Volunteer", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(volunteer),

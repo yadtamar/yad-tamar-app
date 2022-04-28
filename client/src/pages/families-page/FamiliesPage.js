@@ -12,7 +12,7 @@ const FamiliesPage = () => {
   const [filteredFamilies, setFilteredFamilies] = useState([]);
   const [error, setError] = useState(undefined);
   useEffect(() => {
-    fetch("http://localhost:5000/families")
+    fetch("/families")
       .then((response) => {
         if (response.ok) {
           return response.json();
