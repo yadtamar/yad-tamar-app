@@ -14,7 +14,11 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { stepTwoSchema } from "./schema";
 import SelectField from "../Select/Select.jsx";
-import { gendrerOptions, familyStatusOptions } from "../Select/SelectData";
+import {
+  gendrerOptions,
+  familyStatusOptions,
+  languageOptions,
+} from "../Select/SelectData";
 
 const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
   const {
@@ -70,15 +74,14 @@ const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
               }}
             />
             <FormLabel text={"שפה"} />
-            <TextField
-              {...register("language")}
-              error={!!errors.language}
-              helperText={errors?.language?.message}
+            <SelectField
+              data={data}
               value={data.language}
-              size="small"
-              onChange={(e) => {
-                setData({ ...data, language: e.target.value });
-              }}
+              setData={setData}
+              register={register}
+              registerAs="language"
+              options={languageOptions}
+              errors={errors}
             />
           </Grid>
         </Grid>

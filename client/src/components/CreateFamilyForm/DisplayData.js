@@ -4,7 +4,13 @@ import { useParams, useNavigate } from "react-router";
 import MainBlueButton from "../styled/MainBlueButton";
 import { buttonStyle } from "./styles.jsx";
 import DetailsItem from "../styled/DetailsItem";
-
+import {
+  familyStatusOptions,
+  hospitalOptions,
+  insuranseOptions,
+  gendrerOptions,
+  languageOptions,
+} from "../Select/SelectData";
 const DisplayData = ({ data, image, setStep }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -63,11 +69,15 @@ const DisplayData = ({ data, image, setStep }) => {
       </DetailsItem>
       <DetailsItem>
         <Typography variant="subtitle1"> מגדר</Typography>
-        <Typography variant="subtitle1">{data.gender}</Typography>
+        <Typography variant="subtitle1">
+          {gendrerOptions[data.gender - 1].option}
+        </Typography>
       </DetailsItem>
       <DetailsItem>
         <Typography variant="subtitle1">מצב משפחתי</Typography>
-        <Typography variant="subtitle1">{data.family_status}</Typography>
+        <Typography variant="subtitle1">
+          {familyStatusOptions[data.family_status - 1].option}
+        </Typography>
       </DetailsItem>
       <DetailsItem>
         <Typography variant="subtitle1">מס ילדים</Typography>
@@ -75,7 +85,9 @@ const DisplayData = ({ data, image, setStep }) => {
       </DetailsItem>
       <DetailsItem>
         <Typography variant="subtitle1">שפה</Typography>
-        <Typography variant="subtitle1">{data.language}</Typography>
+        <Typography variant="subtitle1">
+          {languageOptions[data.language - 1].option}
+        </Typography>
       </DetailsItem>
       <Typography variant="h5" marginBottom="20px" marginTop="20px">
         {"פרטים רפואיים"}
@@ -86,11 +98,15 @@ const DisplayData = ({ data, image, setStep }) => {
       </DetailsItem>
       <DetailsItem>
         <Typography variant="subtitle1">בית חולים מטפל</Typography>
-        <Typography variant="subtitle1">{data.hospital}</Typography>
+        <Typography variant="subtitle1">
+          {hospitalOptions[data.hospital - 1].option}
+        </Typography>
       </DetailsItem>
       <DetailsItem>
         <Typography variant="subtitle1">קופת חולים</Typography>
-        <Typography variant="subtitle1">{data.medical_insurance}</Typography>
+        <Typography variant="subtitle1">
+          {insuranseOptions[data.medical_insurance - 1].option}
+        </Typography>
       </DetailsItem>
       <DetailsItem>
         <Typography variant="subtitle1">היסטוריה רפואית</Typography>

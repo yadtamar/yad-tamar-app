@@ -51,8 +51,8 @@ export const stepTwoSchema = yup.object().shape({
     .max(30, "מספר הילדים לא יכול להיות מעל 30")
     .required("שדה זה הינו שדה חובה"),
   language: yup
-    .string()
-    .matches(/^([^0-9]*)$/, "שפה לא יכולה להכיל מספרים")
+    .number()
+    .typeError("שדה זה הינה שדה חובה")
     .required("שדה זה הינו שדה חובה"),
 });
 export const stepThreeSchema = yup.object().shape({

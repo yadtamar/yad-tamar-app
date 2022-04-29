@@ -47,4 +47,20 @@ export const hospitalOptions = [
   { option: "שיבא", value: 32 },
   { option: "אסותא רמת החייל", value: 33 },
   { option: "סוראסקי", value: 34 },
+  { option: "אחר", value: 35 },
+];
+export const insuranseOptions = [
+  { option: "מכבי", value: 1 },
+  { option: "כללית", value: 2 },
+  { option: "מאוחדת", value: 3 },
+  { option: "לאומית", value: 4 },
+  { option: "אחר", value: 5 },
+];
+export const languageOptions = [
+  { option: "עברית", value: 1 },
+  { option: "ערבית", value: 2 },
+  { option: "אנגלית", value: 3 },
+  { option: "רוסית", value: 4 },
+  { option: "אמהרית", value: 5 },
+  { option: "אחר", value: 5 },
 ];

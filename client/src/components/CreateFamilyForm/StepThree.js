@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { stepThreeSchema } from "./schema";
 import SelectField from "../Select/Select.jsx";
-import { hospitalOptions } from "../Select/SelectData.jsx";
+import { hospitalOptions, insuranseOptions } from "../Select/SelectData.jsx";
 
 const FormStepThree = ({ setStep, data, setData }) => {
   const {
@@ -47,15 +47,16 @@ const FormStepThree = ({ setStep, data, setData }) => {
               errors={errors}
             />
             <FormLabel text={"קופת חולים"} />
-            <TextField
-              {...register("medical_insurance")}
-              error={!!errors.medical_insurance}
-              helperText={errors?.medical_insurance?.message}
+            <SelectField
               value={data.medical_insurance}
-              onChange={(e) => {
-                setData({ ...data, medical_insurance: e.target.value });
-              }}
+              data={data}
+              setData={setData}
+              register={register}
+              registerAs="medical_insurance"
+              options={insuranseOptions}
+              errors={errors}
             />
+
             <FormLabel text={"היסטוריה רפואית"} />
             <TextField
               {...register("medical_history")}
