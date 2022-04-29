@@ -71,44 +71,46 @@ const FormStepThree = ({ setStep, data, setData }) => {
             />
           </Grid>
         </Grid>
-        <Grid item xs={5.5} height="100%" minHeight="98.5%">
-          <Grid
-            container
-            style={{
-              minHeight: "98.5%",
-              height: "98.5%",
-              width: "98%",
-              justifyContent: "center",
-            }}
-          >
-            <img
-              src={neighboor2}
-              style={neighboorStyle}
-              alt="neigboor"
-              loading="lazy"
-            ></img>
-            <Grid item width="100%">
-              <Grid container style={buttonsContainer}>
-                <Grid item>
-                  <MainBlueButton
-                    style={buttonStyle}
-                    onClick={() => {
-                      setStep(2);
-                    }}
-                  >
-                    {"הקודם"}
-                  </MainBlueButton>
-                </Grid>
-                <Grid item>
-                  <MainGreenButton
-                    style={buttonStyle}
-                    onClick={handleSubmit(() => {
-                      setStep(4);
-                    })}
-                  >
-                    {"הבא"}
-                  </MainGreenButton>
-                </Grid>
+        <Grid
+          item
+          xs={5.5}
+          height="100%"
+          minHeight="100%"
+          style={{
+            width: "98%",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            paddingTop: "25px",
+          }}
+        >
+          <img
+            src={neighboor2}
+            style={neighboorStyle}
+            alt="neigboor"
+            loading="lazy"
+          />
+          <Grid item width="98%" marginLeft="auto">
+            <Grid container style={buttonsContainer}>
+              <Grid item>
+                <MainBlueButton
+                  style={buttonStyle}
+                  onClick={() => {
+                    setStep(2);
+                  }}
+                >
+                  {"הקודם"}
+                </MainBlueButton>
+              </Grid>
+              <Grid item>
+                <MainGreenButton
+                  style={buttonStyle}
+                  onClick={handleSubmit(() => {
+                    setStep(4);
+                  })}
+                >
+                  {"הבא"}
+                </MainGreenButton>
               </Grid>
             </Grid>
           </Grid>
