@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { stepThreeSchema } from "./schema";
 import SelectField from "../Select/Select.jsx";
+import { leftLayout } from "./styles";
 import { hospitalOptions, insuranseOptions } from "../Select/SelectData.jsx";
 
 const FormStepThree = ({ setStep, data, setData }) => {
@@ -71,7 +72,43 @@ const FormStepThree = ({ setStep, data, setData }) => {
             />
           </Grid>
         </Grid>
-        <Grid
+        <Grid item xs={5.5} height="100%">
+          <Grid container style={leftLayout}>
+            <Grid item style={{ minHeight: "361px", justifyContent: "center" }}>
+              <img
+                src={neighboor2}
+                style={neighboorStyle}
+                alt="neigboor"
+                loading="lazy"
+              />
+            </Grid>
+            <Grid item style={{ width: "100%", alignSelf: "flex-end" }}>
+              <Grid container style={buttonsContainer}>
+                <Grid item>
+                  <MainBlueButton
+                    style={buttonStyle}
+                    onClick={() => {
+                      setStep(2);
+                    }}
+                  >
+                    {"הקודם"}
+                  </MainBlueButton>
+                </Grid>
+                <Grid item>
+                  <MainGreenButton
+                    style={buttonStyle}
+                    onClick={handleSubmit(() => {
+                      setStep(4);
+                    })}
+                  >
+                    {"הבא"}
+                  </MainGreenButton>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        {/* <Grid
           item
           xs={5.5}
           height="100%"
@@ -114,7 +151,7 @@ const FormStepThree = ({ setStep, data, setData }) => {
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   );

@@ -19,10 +19,11 @@ export const leftLayout = {
   flexWrap: "no-wrap",
   paddingTop: "30px",
   width: "98%",
+  minHeight: "92.5%",
   height: "92.5%",
   alignItems: "center",
-
   alignContent: "flex-end",
+  justifyContent: "center",
 };
 export const avatar = {
   flexDirection: "row",
@@ -37,8 +38,6 @@ export const buttonsContainer = {
 export const buttonStyle = { width: "140px", height: "40px" };
 
 export const neighboorStyle = {
-  minHeight: "361px",
   height: "47vh",
-  marginTop: "10vh",
   transform: "scaleX(-1)",
 };
