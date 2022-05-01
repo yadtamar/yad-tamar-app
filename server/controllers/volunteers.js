@@ -109,10 +109,10 @@ const getUser = (async (req, res) => {
 });
 
 module.exports = {
- createVoluteer,
- getFamilyVolunteers,
- getUsers,
- getUser,
- updateVoluteer,
- deleteVolunteer
+    createVoluteer,
+    getFamilyVolunteers,
+    getUsers,
+    getUser,
+    updateVoluteer,
+    deleteVolunteer
 }

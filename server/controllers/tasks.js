@@ -69,7 +69,7 @@ const updateTask = (async (req, res) => {
     }
 });
 
-const deletetask = (async (req, res) => {
+const deleteTask = (async (req, res) => {
     try {
         const { task_id } = req.params;
         await pool.query("DELETE FROM tasks WHERE task_id=$1",
@@ -85,5 +85,5 @@ module.exports = {
     getTasksForFamily,
     getSingleTask,
     updateTask,
-    deletetask
+    deleteTask
 };

@@ -155,10 +155,10 @@ const getSingleFamily = (async (req, res) => {
           var familyVolunteers;
           var familydetails;
           var volunteers_num;
-          volunteers.rows[0] !== undefined ? familyVolunteers = volunteers.rows:"";
-          volunteers.rows[0] !== undefined ? volunteers_num = volunteers.rows.length:"";
+          volunteers.rows[0] !== undefined ? familyVolunteers = volunteers.rows: familyVolunteers="no volunteers";
+          volunteers.rows[0] !== undefined ? volunteers_num = volunteers.rows.length: volunteers_num = "thet family don't have any volunteers";
           mainDetails.rows[0] !== undefined ? maino = mainDetails.rows:"";
-          foundFamily.rows[0] !== undefined ? familydetails = foundFamily.rows:"";
+          foundFamily.rows[0] !== undefined ? familydetails = foundFamily.rows: familydetails ="sorry, no family details!!!!";
           res.json({
             volunteers_count:volunteers_num,
             volunteers: familyVolunteers, 
