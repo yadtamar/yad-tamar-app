@@ -18,7 +18,7 @@ import {
   gendrerOptions,
   familyStatusOptions,
   languageOptions,
-} from "../Select/SelectData";
+} from "../../constants/SelectData.js";
 
 const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
   const {

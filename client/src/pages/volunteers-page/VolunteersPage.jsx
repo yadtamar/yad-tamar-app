@@ -18,7 +18,7 @@ function VolunteersPage() {
 
     useEffect(() => {
       {
-        fetch(`http://localhost:5000/volunteers/${family_id}`)
+        fetch(`/volunteers/${family_id}`)
           .then((response) => {
             if (response.ok) {
               return response.json();

@@ -11,7 +11,7 @@ export default function NavBar() {
     <AppBar elevation={0} className="app-header">
       <Grid item className="logo-container">
         <Grid item>
-          <img className="logo" alt={logo} src={logo} loading="lazy"></img>
+          <img className="logo" alt={"logo"} src={logo} loading="lazy"></img>
         </Grid>
         <Grid container className="text-container">
           <Typography variant="h4" lineHeight="1" fontSize="1.5rem">
