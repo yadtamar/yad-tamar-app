@@ -26,7 +26,7 @@ const DisplayData = ({ data, image, setStep }) => {
       { fieldName: "מגדר", fieldValue: gendrerOptions[data.gender - 1].option },
       {
         fieldName: "מצב משפחתי",
-        fieldValue: familyStatusOptions[data.gender - 1].option,
+        fieldValue: familyStatusOptions[data.family_status - 1].option,
       },
       { fieldName: "מס ילדים", fieldValue: data.kids_num },
       {

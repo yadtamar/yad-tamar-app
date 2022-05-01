@@ -62,5 +62,5 @@ export const languageOptions = [
   { option: "אנגלית", value: 3 },
   { option: "רוסית", value: 4 },
   { option: "אמהרית", value: 5 },
-  { option: "אחר", value: 5 },
+  { option: "אחר", value: 6 },
 ];
