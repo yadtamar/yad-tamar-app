@@ -20,7 +20,7 @@ function WelcomePage() {
         alt="neighboor"
         loading="lazy"
       ></img>
-      <div className="homeBuble">
+      <div className="home-buble">
         <Grid container className="main-container">
           <Typography fontSize="40px" variant="h1" marginTop="10px">
             {"ברוך הבא ליד תמר"}

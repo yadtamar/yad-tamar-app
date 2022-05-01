@@ -31,19 +31,19 @@ code {
     monospace;
 }
 
-.homePageWave {
+.home-page-wave {
   position: fixed;
   bottom: 0;
 }
 
-.colorFill {
+.color-fill {
   background-color: #8ca8e0;
   height: 25vh;
   z-index: -1;
   text-align: right;
   border-top: 0.1px solid rgba(0, 0, 0, 0.4);
 }
-.gridContainer {
+.grid-container {
   border: 1px solid black;
   flex-direction: row;
   background-color: white;
@@ -55,18 +55,18 @@ code {
   bottom: 20px;
   z-index: 999;
 }
-.layoutDivider {
+.layout-divider {
   height: 100%;
 
   background-color: #e8e8e8;
 }
-.gridHeader {
+.grid-header {
   width: 80%;
   margin-left: auto;
   margin-right: auto;
   background-color: #e8e8e8;
 }
-.questionsHeader {
+.questions-header {
   background-color: #e8e8e8;
   height: 55px;
   width: 95%;
@@ -139,18 +139,14 @@ code {
 
 .add-photo-input {
   display: flex;
-  padding-right: 10px;
-}
-input[type="file"] {
   opacity: 0;
   position: absolute;
-
   left: 0;
-
   bottom: 0;
   cursor: pointer;
-  height: 50%;
-  width: 40%;
+  height: 30%;
+  width: 30%;
+  margin-bottom: 5%;
 }
 
 @media only screen and (max-width: 1000px) {

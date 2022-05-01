@@ -5,7 +5,7 @@
   left: 20vw;
   height: 60vh;
 }
-.homeBuble {
+.home-buble {
   transform: scaleX(-1);
   width: 40%;
   display: flex;

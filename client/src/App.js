@@ -13,8 +13,8 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/create-family">
+            <Route index element={<CreateFamilyPage />} />
             <Route path=":id" element={<CreateFamilyPage />} />
-            <Route path="" element={<CreateFamilyPage />} />
           </Route>
           <Route path="/" element={<WelcomePage />} />
           <Route path="/families" element={<FamiliesPage />} />

@@ -98,7 +98,11 @@ const DisplayData = ({ data, image, setStep }) => {
         {"פרטים אישיים"}
       </Typography>
       {displayDataFields.personalInfo.map(({ fieldName, fieldValue }) => (
-        <DetailsItem fieldName={fieldName} fieldValue={fieldValue} />
+        <DetailsItem
+          key={fieldName}
+          fieldName={fieldName}
+          fieldValue={fieldValue}
+        />
       ))}
 
       <Typography variant="h5" marginBottom="20px" marginTop="20px">
@@ -106,7 +110,11 @@ const DisplayData = ({ data, image, setStep }) => {
       </Typography>
 
       {displayDataFields.medicalInfo.map(({ fieldName, fieldValue }) => (
-        <DetailsItem fieldName={fieldName} fieldValue={fieldValue} />
+        <DetailsItem
+          key={fieldName}
+          fieldName={fieldName}
+          fieldValue={fieldValue}
+        />
       ))}
 
       <div className="display-btn-container">
