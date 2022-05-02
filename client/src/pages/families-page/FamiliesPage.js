@@ -12,9 +12,7 @@ const FamiliesPage = () => {
   const [filteredFamilies, setFilteredFamilies] = useState([]);
   const [error, setError] = useState(undefined);
   useEffect(() => {
-    fetch(
-      "http://ec2-18-195-126-1.eu-central-1.compute.amazonaws.com:5000/families"
-    )
+    fetch("/families")
       .then((response) => {
         if (response.ok) {
           return response.json();
