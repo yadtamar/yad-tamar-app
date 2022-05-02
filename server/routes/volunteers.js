@@ -8,20 +8,11 @@ const {
     deleteVolunteer
 } = require('../controllers/volunteers');
 
-router.post("/Create_Volunteer", 
-    (req, res) => createVoluteer(req, res)
-);
-router.get("/volunteers_for_family/:family_id",
-    (req, res) => getFamilyVolunteers(req, res)
-);
+router.post("/Create_Volunteer", createVoluteer);
+router.get("/volunteers_for_family/:family_id", getFamilyVolunteers);
 router.get("/", getUsers);
-router.get("/:user_id",
-    (req, res) => getUser(req, res)
-);
-router.put("/:user_id", 
-    (req, res) =>updateVoluteer(req, res)
-);
-router.delete("/:user_id", 
-    (req, res) => deleteVolunteer(req, res));
+router.get("/:user_id", getUser);
+router.put("/:user_id", updateVoluteer);
+router.delete("/:user_id", deleteVolunteer);
 
 module.exports = router;

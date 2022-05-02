@@ -78,7 +78,7 @@ const getAllFamilies = (async (req, res) => {
         const families = await pool.query(
           "SELECT * FROM families");
         //for each family get a details
-        for (var i = 0; i < families.rows.length; i++) {
+        for (let i = 0; i < families.rows.length; i++) {
           const family_id = families.rows[i].family_id;
           console.log(families.rows[i].family_id);
           if(family_id){
@@ -98,7 +98,7 @@ const getAllFamilies = (async (req, res) => {
             );
             if (volunteers.rows) {
              // console.log(volunteers.rows , volunteers.rows.length )  
-              var mainDetails = {};
+              let mainDetails = {};
               if(mainId.rows[0]){
                 //console.log("main: ", mainId.rows[0].a);
                 mainDetails = await pool.query(
@@ -133,11 +133,11 @@ const getSingleFamily = (async (req, res) => {
           "SELECT * FROM families WHERE family_id=$1",
           [family_id]
         );
-        var volunteers = await pool.query(
+        let volunteers = await pool.query(
           "SELECT * FROM roles WHERE family_id=$1 AND role ='helper'",
           [family_id]
         );
-        var main = await pool.query(
+        let main = await pool.query(
           "SELECT * FROM roles WHERE family_id=$1 AND role ='main'",
           [family_id]
         );
@@ -150,15 +150,14 @@ const getSingleFamily = (async (req, res) => {
             "SELECT * FROM users WHERE user_id=$1 ",
             [mainId]
           );
-          var data = [];
-          var maino;
-          var familyVolunteers;
-          var familydetails;
-          var volunteers_num;
-          volunteers.rows[0] !== undefined ? familyVolunteers = volunteers.rows: familyVolunteers="no volunteers";
-          volunteers.rows[0] !== undefined ? volunteers_num = volunteers.rows.length: volunteers_num = "thet family don't have any volunteers";
+          let maino;
+          let familyVolunteers;
+          let familydetails;
+          let volunteers_num;
+          familyVolunteers = volunteers.rows[0] ? volunteers.rows : "no volunteers"
+          volunteers_num = volunteers.rows[0] ? volunteers.rows.length : "no volunteers"
           mainDetails.rows[0] !== undefined ? maino = mainDetails.rows:"";
-          foundFamily.rows[0] !== undefined ? familydetails = foundFamily.rows: familydetails ="sorry, no family details!!!!";
+          foundFamily.rows[0] !== undefined ? familydetails = foundFamily.rows: familydetails ="sorry, no family details!";
           res.json({
             volunteers_count:volunteers_num,
             volunteers: familyVolunteers, 

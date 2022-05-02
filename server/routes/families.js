@@ -7,19 +7,10 @@ const {
     deleteFamily
 } = require('../controllers/families');;
 
-router.post("/", 
-    (req, res) => createFamily(req, res)
-);
-router.get("/",
-    (req, res) => getAllFamilies(req, res)
-);
-router.get("/:family_id",
-    (req, res) => getSingleFamily(req, res)
-);
-router.put("/:family_id", 
-    (req, res) => updateFamily(req, res)
-);
-router.delete("/:family_id", 
-    (req, res) => deleteFamily(req, res));
+router.post("/",  createFamily);
+router.get("/", getAllFamilies);
+router.get("/:family_id", getSingleFamily);
+router.put("/:family_id", updateFamily);
+router.delete("/:family_id", deleteFamily);
 
 module.exports = router;

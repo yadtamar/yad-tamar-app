@@ -41,13 +41,13 @@ const getFamilyVolunteers = (async (req, res) => {
             [family_id]
         );
         if (foundUserId.rows[0]) {
-            var familyVolus = [];
+            let familyVolus = [];
             console.log(foundUserId.rows)
-            for (var i = 0; i < foundUserId.rows.length; i++) {
+            for (let i = 0; i < foundUserId.rows.length; i++) {
                 const userId = foundUserId.rows[i].user_id;
                 //console.log(foundUserId.rows[i].user_id);
                 if(userId){
-                    var foundVolunteer = await pool.query(
+                    let foundVolunteer = await pool.query(
                     "SELECT * FROM users WHERE user_id=$1 ",
                     [userId]
                     );
