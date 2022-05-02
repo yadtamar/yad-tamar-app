@@ -12,13 +12,13 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/createfamily">
+          <Route path="/create-family">
+            <Route index element={<CreateFamilyPage />} />
             <Route path=":id" element={<CreateFamilyPage />} />
-            <Route path="" element={<CreateFamilyPage />} />
           </Route>
           <Route path="/" element={<WelcomePage />} />
           <Route path="/families" element={<FamiliesPage />} />
-          <Route path="/createtask/:id" element={<CreateTaskPage />} />
+          <Route path="/create-task/:id" element={<CreateTaskPage />} />
           <Route
             path="/families/volunteers/:family_id/:name"
             element={<VolunteersPage />}

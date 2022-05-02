@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 const ColorFill = ({ text }) => {
   const navigate = useNavigate();
   return (
-    <div className="colorFill">
+    <div className="color-fill">
       <div className="main-div">
         <ArrowForwardIcon
           fontSize="large"

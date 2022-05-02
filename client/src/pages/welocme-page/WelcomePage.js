@@ -14,8 +14,13 @@ function WelcomePage() {
     <>
       <AppBar />
       <SvgWave />
-      <img className="neigboor-img" src={neighboor}></img>
-      <div className="homeBuble">
+      <img
+        className="neigboor-img"
+        src={neighboor}
+        alt="neighboor"
+        loading="lazy"
+      ></img>
+      <div className="home-buble">
         <Grid container className="main-container">
           <Typography fontSize="40px" variant="h1" marginTop="10px">
             {"ברוך הבא ליד תמר"}
@@ -25,10 +30,18 @@ function WelcomePage() {
               "            על מנת להתחיל התקשרות יש ליצור משפחה חדשה או להצטרף למשפחה קיימת"
             }
           </Typography>
-          <Grid item marginTop="6px">
+          <Grid
+            item
+            marginTop="6px"
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              width: "95%",
+            }}
+          >
             <MainBlueButton
               onClick={() => {
-                navigate("/createfamily");
+                navigate("/create-family");
               }}
             >
               {"צור משפחה"}

@@ -7,14 +7,18 @@ import {
 } from "./styles";
 import FormLabel from "../FormLabel/FormLabel.jsx";
 import { TextField, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router";
 import family from "../../assets/family.png";
 import MainBlueButton from "../styled/MainBlueButton";
 import MainGreenButton from "../styled/MainGreenButton";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { stepTwoSchema } from "./schema";
+import SelectField from "../Select/Select.jsx";
+import {
+  gendrerOptions,
+  familyStatusOptions,
+  languageOptions,
+} from "../../constants/SelectData.js";
 
 const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
   const {
@@ -22,7 +26,6 @@ const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(stepTwoSchema), mode: "onBlur" });
-  const { id } = useParams();
 
   return (
     <>
@@ -41,24 +44,24 @@ const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
               }}
             />
             <FormLabel text={"מגדר"} />
-            <TextField
-              {...register("gender")}
-              error={!!errors.gender}
-              helperText={errors?.gender?.message}
+            <SelectField
+              data={data}
               value={data.gender}
-              onChange={(e) => {
-                setData({ ...data, gender: e.target.value });
-              }}
+              setData={setData}
+              register={register}
+              registerAs="gender"
+              options={gendrerOptions}
+              errors={errors}
             />
             <FormLabel text={"מצב משפחתי"} />
-            <TextField
-              {...register("family_status")}
-              error={!!errors.family_status}
-              helperText={errors?.family_status?.message}
+            <SelectField
+              data={data}
               value={data.family_status}
-              onChange={(e) => {
-                setData({ ...data, family_status: e.target.value });
-              }}
+              setData={setData}
+              register={register}
+              registerAs="family_status"
+              options={familyStatusOptions}
+              errors={errors}
             />
             <FormLabel text={"מספר ילדים"} />
             <TextField
@@ -71,35 +74,30 @@ const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
               }}
             />
             <FormLabel text={"שפה"} />
-            <TextField
-              {...register("language")}
-              error={!!errors.language}
-              helperText={errors?.language?.message}
+            <SelectField
+              data={data}
               value={data.language}
-              size="small"
-              onChange={(e) => {
-                setData({ ...data, language: e.target.value });
-              }}
+              setData={setData}
+              register={register}
+              registerAs="language"
+              options={languageOptions}
+              errors={errors}
             />
           </Grid>
         </Grid>
         <Grid item xs={5.5} height="100%">
           <Grid item>
-            <img className="family-img" style={familyImg} src={family} />
+            <img
+              className="family-img"
+              style={familyImg}
+              src={family}
+              alt={"family"}
+              loading="lazy"
+            />
           </Grid>
           <Grid container style={leftLayout}>
             <Grid item width="100%">
               <Grid container style={buttonsContainer}>
-                <Grid item>
-                  <MainGreenButton
-                    style={buttonStyle}
-                    onClick={handleSubmit(() => {
-                      setStep(3);
-                    })}
-                  >
-                    {"הבא"}
-                  </MainGreenButton>
-                </Grid>
                 <Grid item>
                   <MainBlueButton
                     style={buttonStyle}
@@ -109,6 +107,16 @@ const FormStepTwo = ({ setStep, data, setData, image, setImage }) => {
                   >
                     {"הקודם"}
                   </MainBlueButton>
+                </Grid>
+                <Grid item>
+                  <MainGreenButton
+                    style={buttonStyle}
+                    onClick={handleSubmit(() => {
+                      setStep(3);
+                    })}
+                  >
+                    {"הבא"}
+                  </MainGreenButton>
                 </Grid>
               </Grid>
             </Grid>

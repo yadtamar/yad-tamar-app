@@ -3,8 +3,7 @@ import React from "react";
 function SvgWave() {
   return (
     <svg
-      className="homePageWave"
-      height="50vh"
+      className="home-page-wave"
       width="100vw"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 1440 320"

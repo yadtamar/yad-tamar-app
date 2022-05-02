@@ -76,7 +76,12 @@ function CreateTaskPage() {
           </div>
         </div>
         <div className="img-container">
-          <img src={heart} className="heart-img"></img>
+          <img
+            src={heart}
+            className="heart-img"
+            alt={"hear"}
+            loading="lazy"
+          ></img>
         </div>
       </div>
     );

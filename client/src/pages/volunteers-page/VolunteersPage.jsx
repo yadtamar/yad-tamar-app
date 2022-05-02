@@ -78,7 +78,16 @@ function VolunteersPage() {
           </Grid>
           <Grid item xs={5.5} height="100%">
             <Grid item>
+<<<<<<< HEAD
+              <img
+                className="family-img"
+                src={family}
+                alt="family"
+                loading="lazy"
+              ></img>
+=======
               <img className="family-img" alt="family" src={family}></img>
+>>>>>>> main
             </Grid>
             <Grid container marginTop="50%">
               <div className="create-or-add">
@@ -96,7 +105,7 @@ function VolunteersPage() {
                 </MainBlueButton>
                 <MainGreenButton
                   onClick={() => {
-                    navigate(`/createtask/${family_id}`);
+                    navigate(`/create-task/${family_id}`);
                   }}
                   className="btn"
                 >

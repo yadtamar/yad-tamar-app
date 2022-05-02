@@ -117,7 +117,12 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
         </Grid>
         <Grid item xs={5.5} height="100%">
           <Grid item>
-            <img style={familyImg} src={family} alt="family"></img>
+            <img
+              style={familyImg}
+              src={family}
+              alt="family"
+              loading="lazy"
+            ></img>
           </Grid>
           <Grid container style={leftLayout}>
             <Grid item>
@@ -130,7 +135,7 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
                 </Grid>
                 <Grid item alignSelf="center">
                   <Typography variant="h4" fontSize={25} paddingRight="10px">
-                    {"הוסף תמונה"}
+                    {preview ? "נוסף בהצלחה" : "הוסף תמונה"}
                   </Typography>
                   <input
                     className="add-photo-input"

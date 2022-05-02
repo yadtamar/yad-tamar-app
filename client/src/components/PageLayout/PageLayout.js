@@ -10,7 +10,7 @@ const PageLayout = ({ pageComponent, headerText }) => {
     <>
       <AppBar />
       <ColorFill text={headerText} />
-      <Grid container className="gridContainer">
+      <Grid container className="grid-container">
         <Grid item xs={2}>
           <Grid container alignItems="center" flexDirection="column">
             <Typography mt="30px" fontSize="22px" variant="h4">
@@ -49,7 +49,7 @@ const PageLayout = ({ pageComponent, headerText }) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item className="layoutDivider" xs={0.2}></Grid>
+        <Grid item className="layout-divider" xs={0.2}></Grid>
         <Grid item xs={9.8}>
           {pageComponent}
         </Grid>

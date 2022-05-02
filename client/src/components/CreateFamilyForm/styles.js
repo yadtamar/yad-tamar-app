@@ -10,19 +10,20 @@ export const formContainer = {
 };
 export const familyImg = {
   position: "absolute",
-  left: "40px",
+  left: "30px",
   top: "-60px",
-  height: "200px",
+  height: "180px",
   transform: "scaleX(-1)",
 };
 export const leftLayout = {
   flexWrap: "no-wrap",
   paddingTop: "30px",
-  width: "95%",
-  height: "60%",
+  width: "98%",
+  minHeight: "92.5%",
+  height: "92.5%",
   alignItems: "center",
-  marginTop: "40%",
   alignContent: "flex-end",
+  justifyContent: "center",
 };
 export const avatar = {
   flexDirection: "row",
@@ -34,10 +35,9 @@ export const buttonsContainer = {
   justifyContent: "space-between",
   flexWrap: "wrap",
 };
-export const buttonStyle = { width: "160px", height: "40px" };
+export const buttonStyle = { width: "140px", height: "40px" };
 
 export const neighboorStyle = {
   height: "47vh",
-  marginTop: "10vh",
   transform: "scaleX(-1)",
 };
