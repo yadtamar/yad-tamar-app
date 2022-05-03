@@ -11,9 +11,7 @@ const pool = new Pool({
   ssl: {
     rejectUnauthorized: false,
     ca: fs.readFileSync('ca-certificate.crt').toString(),
-    // key: fs.readFileSync('/path/to/client-key/postgresql.key').toString(),
-    // cert: fs.readFileSync('/path/to/client-certificates/postgresql.crt').toString(),
-  },
+   },
 });
 
 module.exports = pool;

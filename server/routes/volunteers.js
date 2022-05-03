@@ -9,7 +9,7 @@ const {
 } = require('../controllers/volunteers');
 
 router.post("/create-volunteer", createVoluteer);
-router.get("/volunteers-for-family/:family-id", getFamilyVolunteers);
+router.get("/volunteers-for-family/:family_id", getFamilyVolunteers);
 router.get("/", getUsers);
 router.get("/:user_id", getUser);
 router.put("/:user_id", updateVoluteer);

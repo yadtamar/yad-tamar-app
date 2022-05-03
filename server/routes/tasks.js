@@ -8,7 +8,7 @@ const {
 } = require('../controllers/tasks');;
 
 router.post("/create-task", createTask);
-router.get("/tasks-for-family/:family-id", getTasksForFamily);
+router.get("/tasks-for-family/:family_id", getTasksForFamily);
 router.get("/:task_id", getSingleTask);
 router.put("/:task_id",  updateTask);
 router.delete("/:task_id", deleteTask);

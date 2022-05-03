@@ -13,9 +13,8 @@ const taskRouter = require('./routes/tasks');
 app.use(cors());
 app.use(express.json());
 
- const port = process.env.PORT;
+ const port = 5000;
 
-console.log(process.env.PORT)
 app.listen(port, function (err) {
   if (err) {
    console.log(err);

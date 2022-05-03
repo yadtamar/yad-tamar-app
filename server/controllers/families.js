@@ -42,8 +42,7 @@ const createFamily = (async (req, res) => {
       "INSERT INTO families (sickness, hospital, medical_history, hmo ) VALUES ($1,$2,$3,$4) RETURNING *",
       [sickness, hospital, medical_history, hmo]
     );
-    console.log(newFamily.rows[0].family_id, newuser.rows[0].user_id)
-
+    //find the main person of the family
     const mainRole = await pool.query(
       "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
       [newuser.rows[0].user_id, newFamily.rows[0].family_id, "main"]
@@ -73,34 +72,28 @@ const createFamily = (async (req, res) => {
 
 const getAllFamilies = (async (req, res) => {
     try {
-        //console.log("the families!!");
         const data = []
         const families = await pool.query(
           "SELECT * FROM families");
         //for each family get a details
         for (let i = 0; i < families.rows.length; i++) {
           const family_id = families.rows[i].family_id;
-          console.log(families.rows[i].family_id);
           if(family_id){
             const foundFamily = await pool.query(
               "SELECT * FROM families WHERE family_id=$1",
               [family_id]
             );
-            //console.log(foundFamily.rows);
             const volunteers = await pool.query(
               "SELECT * FROM roles WHERE family_id=$1 AND role ='helper'",
               [family_id]
             );
-            //console.log(volunteers.rows);
             const mainId = await pool.query(
               "SELECT user_id FROM roles WHERE family_id=$1 AND role ='main'",
               [family_id]
             );
             if (volunteers.rows) {
-             // console.log(volunteers.rows , volunteers.rows.length )  
               let mainDetails = {};
               if(mainId.rows[0]){
-                //console.log("main: ", mainId.rows[0].a);
                 mainDetails = await pool.query(
                 "SELECT * FROM users WHERE user_id=$1 ",
                 [mainId.rows[0].user_id]
@@ -142,10 +135,7 @@ const getSingleFamily = (async (req, res) => {
           [family_id]
         );
         if (main.rows[0] ) {
-          console.log(volunteers.rows + volunteers.rows.length )
-          
           const mainId = main.rows[0].user_id;
-          console.log("main :", mainId);
           const mainDetails = await pool.query(
             "SELECT * FROM users WHERE user_id=$1 ",
             [mainId]
@@ -173,7 +163,6 @@ const getSingleFamily = (async (req, res) => {
 
 const updateFamily = (async (req, res) => {
     const { family_id } = req.params;
-    console.log(family_id)
     try {
       const {
         first_name,
@@ -204,7 +193,6 @@ const updateFamily = (async (req, res) => {
           [family_id]
         );
          if (foundUserId.rows[0] !== undefined) {
-          console.log(foundUserId.rows);
           const user_id = foundUserId.rows[0].user_id;
           const updatedUser = await pool.query(
             "UPDATE users SET first_name=$1, last_name=$2 ,phone=$3,cell_phone=$4,mail=$5,address=$6,city=$7, age=$8, gender=$9, family_status=$10,  kids_num=$11,language=$12 WHERE user_id=$13 RETURNING *",
@@ -223,10 +211,7 @@ const updateFamily = (async (req, res) => {
               language,
               user_id
             ]
-          );
-  
-          console.log(updatedUser.rows[0])
-  
+          );  
           const Role = await pool.query(
             "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
             [updatedUser.rows[0].user_id, updatedFamily.rows[0].fumily_id, "main"]
@@ -244,7 +229,7 @@ const updateFamily = (async (req, res) => {
           );
           res.send("Updated");
         }
-      } else { console.log("oiiivey!!!!") }
+      } else { console.log("can not update!") }
   
   
     } catch (err) {
