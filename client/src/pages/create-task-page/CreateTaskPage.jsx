@@ -63,7 +63,7 @@ function CreateTaskPage() {
               rows="2"
               className="task-details-input"
               placeholder="הקלד כאן"
-            ></textarea>
+            />
             <div className="buttons-container">
               <MainGreenButton onClick={handleAddTask} className="green-btn">
                 {"סיים"}

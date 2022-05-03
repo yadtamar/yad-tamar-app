@@ -36,10 +36,13 @@ const FamiliesPage = () => {
   useEffect(() => {
     setFilteredFamilies(
       families.filter((family) => {
-        return family.last_name.includes(filter);
+        return family.main_user[0].last_name
+          .toLowerCase()
+          .includes(filter.toLowerCase());
       })
     );
   }, [filter]);
+
   const familiesToShow = filter ? filteredFamilies : families;
 
   return (

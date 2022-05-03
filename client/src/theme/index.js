@@ -1,8 +1,8 @@
 import { createTheme } from "@mui/material";
-
+import { heIL } from "@mui/material/locale";
 const theme = createTheme({
+  heIL,
   components: {
-    // Name of the component
     MuiTextField: {
       defaultProps: {
         size: "small",
