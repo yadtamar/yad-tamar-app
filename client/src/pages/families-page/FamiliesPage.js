@@ -1,16 +1,19 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import PageLayout from "../../components/PageLayout/PageLayout";
 import FamilyElement from "../../components/FamilyElement/FamilyElement";
 import { TextField, Typography } from "@mui/material";
 import MainBlueButton from "../../components/styled/MainBlueButton";
-import { useNavigate } from "react-router";
+import Spinner from "../../components/Spinner/Spinner";
 import "./FamiliesPage.css";
-import { useEffect, useState } from "react";
 const FamiliesPage = () => {
   const navigate = useNavigate();
   const [families, setFamilies] = useState([]);
   const [filter, setFilter] = useState("");
   const [filteredFamilies, setFilteredFamilies] = useState([]);
   const [error, setError] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     fetch("/families")
       .then((response) => {
@@ -26,6 +29,9 @@ const FamiliesPage = () => {
         }) */
         )
       )
+      .then(() => {
+        setIsLoading(false);
+      })
       .catch((err) => {
         if (err.statusText !== "OK") {
           setError(err);
@@ -86,8 +92,8 @@ const FamiliesPage = () => {
             </div>
 
             <div className="families-card-div">
-              {error !== undefined ? (
-                <Typography variant="h4">{error.statusText}</Typography>
+              {isLoading ? (
+                <Spinner />
               ) : (
                 familiesToShow.map((family, index) => {
                   return (
