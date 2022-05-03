@@ -7,7 +7,7 @@ const MainBlueButton = styled("button")`
   font-size: 16px;
   font-weight: 200;
   letter-spacing: 1px;
-  padding: 13px 20px 13px;
+
   outline: 0;
   border: 1px solid black;
   border-radius: 30px;
@@ -35,10 +35,6 @@ const MainBlueButton = styled("button")`
   :hover:after {
     top: 0px;
     left: 0px;
-  }
-
-  @media (min-width: 768px) {
-    padding: 13px 20px 13px;
   }
 `;
 
