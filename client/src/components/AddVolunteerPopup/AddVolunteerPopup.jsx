@@ -7,6 +7,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import FormLabel from "../FormLabel/FormLabel";
+import CloseIcon from "@mui/icons-material/Close";
 import "./AddVolunteerPopup.css";
 
 export default function AddVolunteerPopup({ open, setOpen, family_id }) {
@@ -25,9 +27,19 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
       <Dialog open={open} onClose={handleClose} direction="rtl">
         <DialogTitle>הוספת מתנדב</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <CloseIcon
+            style={{
+              position: "absolute",
+              left: "10px",
+              top: "10px",
+              cursor: "pointer",
+            }}
+            onClick={handleClose}
+          />
+          <DialogContentText style={{ marginBottom: "20px" }}>
             על מנת להוסיף מנתדב לקהילה יש להקליד שם ומספר טלפון
           </DialogContentText>
+          <FormLabel text="שם המתנדב" />
           <TextField
             className="input"
             onChange={(e) => {
@@ -37,10 +49,9 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
             autoFocus
             margin="dense"
             id="name"
-            label="שם"
             fullWidth
-            variant="standard"
           />
+          <FormLabel text="טלפון נייד" />
           <TextField
             className="input"
             onChange={(e) => {
@@ -50,9 +61,7 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
             autoFocus
             margin="dense"
             id="name"
-            label="טלפון"
             fullWidth
-            variant="standard"
           />
         </DialogContent>
         <DialogActions>

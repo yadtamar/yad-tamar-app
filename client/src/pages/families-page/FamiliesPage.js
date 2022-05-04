@@ -69,7 +69,11 @@ const FamiliesPage = () => {
                 </div>
                 <div className="create-btn-div">
                   <MainBlueButton
-                    className="new-family-button"
+                    style={{
+                      paddingTop: "10px",
+                      paddingBottom: "10px",
+                      marginTop: "0px",
+                    }}
                     onClick={() => {
                       navigate("/create-family");
                     }}

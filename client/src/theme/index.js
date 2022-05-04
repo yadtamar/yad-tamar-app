@@ -1,8 +1,6 @@
 import { createTheme } from "@mui/material";
-import { heIL } from "@mui/material/locale";
 
 const theme = createTheme({
-  heIL,
   components: {
     MuiTextField: {
       defaultProps: {
