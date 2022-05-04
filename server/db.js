@@ -4,7 +4,7 @@ const fs = require("fs");
 const password = process.env.Password;
 const pool = new Pool({
   user: "doadmin",
-  password: password,
+  password,
   host: "db-postgresql-fra1-55064-do-user-9520949-0.b.db.ondigitalocean.com",
   port: "25060",
   database: "danv4",

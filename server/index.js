@@ -16,6 +16,7 @@ app.use(express.json());
  const port = 5000;
 
 app.listen(port, function (err) {
+  console.log("welcome to Yad tamar app!")
   if (err) {
    console.log(err);
   }

@@ -71,187 +71,172 @@ const createFamily = (async (req, res) => {
 });
 
 const getAllFamilies = (async (req, res) => {
-    try {
-        const data = []
-        const families = await pool.query(
-          "SELECT * FROM families");
-        //for each family get a details
-        for (let i = 0; i < families.rows.length; i++) {
-          const family_id = families.rows[i].family_id;
-          if(family_id){
-            const foundFamily = await pool.query(
-              "SELECT * FROM families WHERE family_id=$1",
-              [family_id]
-            );
-            const volunteers = await pool.query(
-              "SELECT * FROM roles WHERE family_id=$1 AND role ='helper'",
-              [family_id]
-            );
-            const mainId = await pool.query(
-              "SELECT user_id FROM roles WHERE family_id=$1 AND role ='main'",
-              [family_id]
-            );
-            if (volunteers.rows) {
-              let mainDetails = {};
-              if(mainId.rows[0]){
-                mainDetails = await pool.query(
-                "SELECT * FROM users WHERE user_id=$1 ",
-                [mainId.rows[0].user_id]
-              );
-            }else{
-              mainDetails = [{rows:"we don't have any details..."}];
+  try {
+    const data = []
+    const families = await pool.query(
+      "SELECT family_id FROM families");
+    //for each family get a details
+    const familiesDetails = families.rows;
+    const idOfFamilies = familiesDetails.map(x => {
+      let familyID = x; return (familyID.family_id)
+    })
+    if (idOfFamilies) {
+      const foundFamily = await pool.query(
+        "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id ORDER BY families.family_id"
+      );
+      let data = [];
+      const familiesDtls = foundFamily.rows;
+      if (familiesDtls[0]) {
+        for (let i = 0; i < familiesDtls.length; i++) {
+          let volunteersCount = 0;
+          if (familiesDtls[i].role === 'main') {
+            for (let v = 0; v < familiesDtls.length; v++) {
+              if (familiesDtls[i].family_id === familiesDtls[v].family_id && familiesDtls[v].role === 'helper') {
+                ("volunteer of ", familiesDtls[i].last_name, " family is: ", familiesDtls[v].first_name)
+                volunteersCount++;
+              }
             }
-              data.push({
-                volunteers_count:volunteers.rows.length,
-                volunteers: volunteers.rows, 
-                main_user: mainDetails?.rows, 
-                family: foundFamily.rows
-              })
+            let details = {
+              volunteersCount,
+              name_of_family: familiesDtls[i].last_name,
+              family_id: familiesDtls[i].family_id
+            }
+            data.push(details)
           }
-        
-        } else {
-          console.log("its failed!!")
         }
       }
-        res.json(data);
-      } catch (err) {
-        console.error(err);
-      }
+      res.json(data)
+    } else {
+      console.log("its failed!!")
+    }
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 const getSingleFamily = (async (req, res) => {
-    try {
-        const {family_id}= req.params;
-        const foundFamily = await pool.query(
-          "SELECT * FROM families WHERE family_id=$1",
-          [family_id]
-        );
-        let volunteers = await pool.query(
-          "SELECT * FROM roles WHERE family_id=$1 AND role ='helper'",
-          [family_id]
-        );
-        let main = await pool.query(
-          "SELECT * FROM roles WHERE family_id=$1 AND role ='main'",
-          [family_id]
-        );
-        if (main.rows[0] ) {
-          const mainId = main.rows[0].user_id;
-          const mainDetails = await pool.query(
-            "SELECT * FROM users WHERE user_id=$1 ",
-            [mainId]
-          );
-          let maino;
-          let familyVolunteers;
-          let familydetails;
-          let volunteers_num;
-          familyVolunteers = volunteers.rows[0] ? volunteers.rows : "no volunteers"
-          volunteers_num = volunteers.rows[0] ? volunteers.rows.length : "no volunteers"
-          mainDetails.rows[0] !== undefined ? maino = mainDetails.rows:"";
-          foundFamily.rows[0] !== undefined ? familydetails = foundFamily.rows: familydetails ="sorry, no family details!";
-          res.json({
-            volunteers_count:volunteers_num,
-            volunteers: familyVolunteers, 
-            user: maino, 
-            family: familydetails
-          });
-          
+  try {
+    const { family_id } = req.params;
+    const foundFamily = await pool.query(
+      "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id WHERE families.family_id = $1 ORDER BY families.family_id",
+      [family_id]
+    );
+    let data;
+    let volunteers = [];
+    let mainPerson;
+    const familiesDtls = foundFamily.rows;
+    if (familiesDtls[0]) {
+      for (let i = 0; i < familiesDtls.length; i++) {
+        if (familiesDtls[i].role === 'main') {
+          mainPerson = familiesDtls[i]
+        } else if (familiesDtls[i].role === 'helper') {
+          volunteers.push(familiesDtls[i]);
         }
-      } catch (err) {
-        console.error(err);
       }
+      data = {
+        mainPerson,
+        volunteers
+      }
+      res.json(data)
+    } else {
+      console.log("its failed!!")
+    }
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 const updateFamily = (async (req, res) => {
-    const { family_id } = req.params;
-    try {
-      const {
-        first_name,
-        last_name,
-        home_phone,
-        cell_phone,
-        mail,
-        adress,
-        city,
-        age,
-        gender,
-        family_status,
-        kids_num,
-        language,
-        sickness,
-        hmo,
-        hospital,
-        medical_insurance,
-        medical_history,
-      } = req.body;
-       const updatedFamily = await pool.query(
-         "UPDATE families SET sickness=$1, hospital=$2,medical_history=$3, hmo=$4 WHERE family_id=$5 RETURNING *",
-         [sickness, hospital, medical_history, hmo, family_id]
-       );
-      if (updatedFamily.rows[0] !== undefined) {
-        const foundUserId = await pool.query(
-          "SELECT * FROM roles WHERE family_id=$1 AND role = 'main'",
-          [family_id]
+  const { family_id } = req.params;
+  try {
+    const {
+      first_name,
+      last_name,
+      home_phone,
+      cell_phone,
+      mail,
+      adress,
+      city,
+      age,
+      gender,
+      family_status,
+      kids_num,
+      language,
+      sickness,
+      hmo,
+      hospital,
+      medical_insurance,
+      medical_history,
+    } = req.body;
+    const updatedFamily = await pool.query(
+      "UPDATE families SET sickness=$1, hospital=$2,medical_history=$3, hmo=$4 WHERE family_id=$5 RETURNING *",
+      [sickness, hospital, medical_history, hmo, family_id]
+    );
+    if (updatedFamily.rows[0] !== undefined) {
+      const foundUserId = await pool.query(
+        "SELECT * FROM roles WHERE family_id=$1 AND role = 'main'",
+        [family_id]
+      );
+      if (foundUserId.rows[0] !== undefined) {
+        const user_id = foundUserId.rows[0].user_id;
+        const updatedUser = await pool.query(
+          "UPDATE users SET first_name=$1, last_name=$2 ,phone=$3,cell_phone=$4,mail=$5,address=$6,city=$7, age=$8, gender=$9, family_status=$10,  kids_num=$11,language=$12 WHERE user_id=$13 RETURNING *",
+          [
+            first_name,
+            last_name,
+            home_phone,
+            cell_phone,
+            mail,
+            adress,
+            city,
+            age,
+            gender,
+            family_status,
+            kids_num,
+            language,
+            user_id
+          ]
         );
-         if (foundUserId.rows[0] !== undefined) {
-          const user_id = foundUserId.rows[0].user_id;
-          const updatedUser = await pool.query(
-            "UPDATE users SET first_name=$1, last_name=$2 ,phone=$3,cell_phone=$4,mail=$5,address=$6,city=$7, age=$8, gender=$9, family_status=$10,  kids_num=$11,language=$12 WHERE user_id=$13 RETURNING *",
-            [
-              first_name,
-              last_name,
-              home_phone,
-              cell_phone,
-              mail,
-              adress,
-              city,
-              age,
-              gender,
-              family_status,
-              kids_num,
-              language,
-              user_id
-            ]
-          );  
-          const Role = await pool.query(
-            "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
-            [updatedUser.rows[0].user_id, updatedFamily.rows[0].fumily_id, "main"]
-          );
-  
-          //update medical insurances
-          const insurances = await pool.query(
-            "UPDATE insurance SET user_id=$1, insurance_name=$2 RETURNING *",
-            [updatedFamily.rows[0].user_id, medical_insurance]
-          );
-          //update names of hospitals (and hmos)
-          const hospi = await pool.query(
-            "SELECT name FROM hospitals WHERE hospital_id = $1 OR hospital_id = $2",
-            [updatedFamily.rows[0].hospital , updatedFamily.rows[0].hmo]
-          );
-          res.send("Updated");
-        }
-      } else { console.log("can not update!") }
-  
-  
-    } catch (err) {
-      console.error(err);
-    }
+        const Role = await pool.query(
+          "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
+          [updatedUser.rows[0].user_id, updatedFamily.rows[0].fumily_id, "main"]
+        );
+
+        //update medical insurances
+        const insurances = await pool.query(
+          "UPDATE insurance SET user_id=$1, insurance_name=$2 RETURNING *",
+          [updatedFamily.rows[0].user_id, medical_insurance]
+        );
+        //update names of hospitals (and hmos)
+        const hospi = await pool.query(
+          "SELECT name FROM hospitals WHERE hospital_id = $1 OR hospital_id = $2",
+          [updatedFamily.rows[0].hospital, updatedFamily.rows[0].hmo]
+        );
+        res.send("Updated");
+      }
+    } else { console.log("can not update!") }
+
+
+  } catch (err) {
+    console.error(err);
+  }
 })
 
 const deleteFamily = (async (req, res) => {
-    try {
-        const { family_id } = req.params;
-        await pool.query("DELETE FROM families WHERE family_id=$1",
-        [family_id]);
-        res.send("deleted succsessfuly");
-      } catch (err) {
-        console.error(err);
-      }
+  try {
+    const { family_id } = req.params;
+    await pool.query("DELETE FROM families WHERE family_id=$1",
+      [family_id]);
+    res.send("deleted succsessfuly");
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 module.exports = {
-    createFamily,
-    getSingleFamily,
-    getAllFamilies,
-    updateFamily,
-    deleteFamily
+  createFamily,
+  getSingleFamily,
+  getAllFamilies,
+  updateFamily,
+  deleteFamily
 }
