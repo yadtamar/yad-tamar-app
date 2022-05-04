@@ -9,13 +9,21 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import FormLabel from "../FormLabel/FormLabel";
 import CloseIcon from "@mui/icons-material/Close";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { addVolunteerSchema } from "../CreateFamilyForm/schema";
 import "./AddVolunteerPopup.css";
 
 export default function AddVolunteerPopup({ open, setOpen, family_id }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(addVolunteerSchema), mode: "onBlur" });
   const [volunteer, setVolunteer] = useState({
     family_id: family_id,
     name: "",
-    cell_phone: undefined,
+    cell_phone: "",
   });
 
   const handleClose = () => {
@@ -42,38 +50,40 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
           <FormLabel text="שם המתנדב" />
           <TextField
             className="input"
+            {...register("name")}
+            error={!!errors.name}
+            helperText={errors?.name?.message}
             onChange={(e) => {
               setVolunteer({ ...volunteer, name: e.target.value });
             }}
             value={volunteer.name}
-            autoFocus
             margin="dense"
-            id="name"
             fullWidth
           />
           <FormLabel text="טלפון נייד" />
           <TextField
+            {...register("phone")}
+            error={!!errors.phone}
+            helperText={errors?.phone?.message}
             className="input"
             onChange={(e) => {
               setVolunteer({ ...volunteer, phone: e.target.value });
             }}
             value={volunteer.phone}
-            autoFocus
             margin="dense"
-            id="name"
             fullWidth
           />
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() => {
+            onClick={handleSubmit(() => {
               fetch("/Create_Volunteer", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(volunteer),
               });
               setVolunteer({ ...volunteer, name: "", phone: "" });
-            }}
+            })}
           >
             הוסף
           </Button>
