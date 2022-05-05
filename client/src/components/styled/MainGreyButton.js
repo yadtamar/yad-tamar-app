@@ -28,7 +28,7 @@ const MainGreyButton = styled("button")`
     height: 100%;
     top: 2px;
     left: -5px;
-    transition: 0.2s;
+    transition: 0.5s;
   }
 
   :hover:after {

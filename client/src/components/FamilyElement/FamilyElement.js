@@ -35,7 +35,7 @@ const FamilyElement = ({ name, family_id, volunteers_count }) => {
             <MainGreenButton
               className="edit-family-btn"
               onClick={() => {
-                navigate(`/createtask/${family_id}`);
+                navigate(`/create-task/${family_id}`);
               }}
             >
               {"צור משימות"}
@@ -43,7 +43,7 @@ const FamilyElement = ({ name, family_id, volunteers_count }) => {
             <MainGreyButton
               className="create-task-btn"
               onClick={() => {
-                navigate(`/createfamily/${family_id}`);
+                navigate(`/create-family/${family_id}`);
               }}
             >
               {"ערוך משפחה"}

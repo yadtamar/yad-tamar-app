@@ -12,6 +12,9 @@ import MainGreenButton from "../styled/MainGreenButton";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { stepThreeSchema } from "./schema";
+import SelectField from "../Select/Select.jsx";
+import { leftLayout } from "./styles";
+import { hospitalOptions, insuranseOptions } from "../../constants/SelectData";
 
 const FormStepThree = ({ setStep, data, setData }) => {
   const {
@@ -35,25 +38,26 @@ const FormStepThree = ({ setStep, data, setData }) => {
               }}
             />
             <FormLabel text={"בית חולים מטפל"} />
-            <TextField
-              {...register("hospital")}
-              error={!!errors.hospital}
-              helperText={errors?.hospital?.message}
+            <SelectField
               value={data.hospital}
-              onChange={(e) => {
-                setData({ ...data, hospital: e.target.value });
-              }}
+              data={data}
+              setData={setData}
+              register={register}
+              registerAs="hospital"
+              options={hospitalOptions}
+              errors={errors}
             />
             <FormLabel text={"קופת חולים"} />
-            <TextField
-              {...register("medical_insurance")}
-              error={!!errors.medical_insurance}
-              helperText={errors?.medical_insurance?.message}
+            <SelectField
               value={data.medical_insurance}
-              onChange={(e) => {
-                setData({ ...data, medical_insurance: e.target.value });
-              }}
+              data={data}
+              setData={setData}
+              register={register}
+              registerAs="medical_insurance"
+              options={insuranseOptions}
+              errors={errors}
             />
+
             <FormLabel text={"היסטוריה רפואית"} />
             <TextField
               {...register("medical_history")}
@@ -69,20 +73,17 @@ const FormStepThree = ({ setStep, data, setData }) => {
           </Grid>
         </Grid>
         <Grid item xs={5.5} height="100%">
-          <Grid container style={{ height: "100%", justifyContent: "center" }}>
-            <img src={neighboor2} style={neighboorStyle}></img>
-            <Grid item width="100%">
+          <Grid container style={leftLayout}>
+            <Grid item style={{ minHeight: "361px", justifyContent: "center" }}>
+              <img
+                src={neighboor2}
+                style={neighboorStyle}
+                alt="neigboor"
+                loading="lazy"
+              />
+            </Grid>
+            <Grid item style={{ width: "100%", alignSelf: "flex-end" }}>
               <Grid container style={buttonsContainer}>
-                <Grid item>
-                  <MainGreenButton
-                    style={buttonStyle}
-                    onClick={handleSubmit(() => {
-                      setStep(4);
-                    })}
-                  >
-                    {"הבא"}
-                  </MainGreenButton>
-                </Grid>
                 <Grid item>
                   <MainBlueButton
                     style={buttonStyle}
@@ -92,6 +93,16 @@ const FormStepThree = ({ setStep, data, setData }) => {
                   >
                     {"הקודם"}
                   </MainBlueButton>
+                </Grid>
+                <Grid item>
+                  <MainGreenButton
+                    style={buttonStyle}
+                    onClick={handleSubmit(() => {
+                      setStep(4);
+                    })}
+                  >
+                    {"הבא"}
+                  </MainGreenButton>
                 </Grid>
               </Grid>
             </Grid>

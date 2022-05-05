@@ -20,19 +20,16 @@ function CreateTaskPage() {
 
     const handleAddTask = () => {
       taskName &&
-        fetch(
-          "http://ec2-18-195-126-1.eu-central-1.compute.amazonaws.com:5000/Create_Task",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              community_id: id,
-              task_name: taskName,
-              comments: taskDescription,
-              date: value,
-            }),
-          }
-        );
+        fetch("/Create_Task", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            family_id: id,
+            task_name: taskName,
+            comments: taskDescription,
+            date: value,
+          }),
+        });
       navigate(-1);
     };
 
@@ -79,7 +76,12 @@ function CreateTaskPage() {
           </div>
         </div>
         <div className="img-container">
-          <img src={heart} className="heart-img"></img>
+          <img
+            src={heart}
+            className="heart-img"
+            alt={"hear"}
+            loading="lazy"
+          ></img>
         </div>
       </div>
     );
