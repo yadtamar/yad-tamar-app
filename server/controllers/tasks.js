@@ -10,8 +10,6 @@ const createTask = (async (req, res) => {
             "INSERT INTO tasks (family_id, task_name, helper_id, date, comments) VALUES ($1,$2,$3,$4,$5) RETURNING *",
             [family_id, task_name, helper_id, date, comments]
         );
-
-        console.log(req.body, newTask.rows);
         res.json(newTask.rows);
     } catch (err) {
         console.error(err.message);
@@ -23,7 +21,7 @@ const getTasksForFamily = (async (req, res) => {
         const { family_id } = req.params;
         const familyTasks = await pool.query("SELECT * FROM tasks WHERE family_id=$1",
             [family_id]);
-        (familyTasks.rows[0] !== undefined ? console.log(familyTasks.rows) + res.json(familyTasks.rows) : res.send("no tasks for this family"));
+        (familyTasks.rows[0] !== undefined ? res.json(familyTasks.rows) : res.send("no tasks for this family"));
     } catch (err) {
         console.error(err);
     }
@@ -69,7 +67,7 @@ const updateTask = (async (req, res) => {
     }
 });
 
-const deletetask = (async (req, res) => {
+const deleteTask = (async (req, res) => {
     try {
         const { task_id } = req.params;
         await pool.query("DELETE FROM tasks WHERE task_id=$1",
@@ -85,5 +83,5 @@ module.exports = {
     getTasksForFamily,
     getSingleTask,
     updateTask,
-    deletetask
+    deleteTask
 };

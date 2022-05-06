@@ -15,8 +15,6 @@ const createVoluteer = (async (req, res) => {
             "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
             [newVolunteer.rows[0].user_id, family_id, "helper"]
         );
-
-        console.log(req.body, newVolunteer.rows, VolunteerRole.rows);
         res.json({ user: newVolunteer.rows, role: VolunteerRole.rows[0], community: VolunteerRole.rows[0].family_id });
     } catch (err) {
         console.error(err.message);
@@ -25,7 +23,6 @@ const createVoluteer = (async (req, res) => {
 
 const getUsers = (async (req, res) => {
     try {
-        console.log("the users!!")
         const families = await pool.query("SELECT * FROM users");
         res.json(families.rows);
     } catch (err) {
@@ -36,29 +33,13 @@ const getUsers = (async (req, res) => {
 const getFamilyVolunteers = (async (req, res) => {
     try {
         const { family_id } = req.params;
-        const foundUserId = await pool.query(
-            "SELECT * FROM roles WHERE family_id=$1 AND role ='helper'",
+        const foundVolunteers = await pool.query(
+            "SELECT * FROM users INNER JOIN roles ON roles.family_id=$1 AND roles.role ='helper' AND roles.user_id = users.user_id",
             [family_id]
         );
-        if (foundUserId.rows[0]) {
-            var familyVolus = [];
-            console.log(foundUserId.rows)
-            for (var i = 0; i < foundUserId.rows.length; i++) {
-                const userId = foundUserId.rows[i].user_id;
-                //console.log(foundUserId.rows[i].user_id);
-                if(userId){
-                    var foundVolunteer = await pool.query(
-                    "SELECT * FROM users WHERE user_id=$1 ",
-                    [userId]
-                    );
-                    familyVolus.push(foundVolunteer.rows);
-                    foundVolunteer =+ foundVolunteer;
-                }
-            }
-            console.log(foundVolunteer, familyVolus)
-            res.json(familyVolus);
-           // res.json(foundUserId.rows);
-        } else { res.send("sorry, but that family don't have volunteers") }
+        if (foundVolunteers.rows[0]) {
+            res.json(foundVolunteers.rows);
+        } else { res.send("sorry, but that family don't have any volunteers") }
     } catch (err) {
         console.error(err);
     }
@@ -109,10 +90,10 @@ const getUser = (async (req, res) => {
 });
 
 module.exports = {
- createVoluteer,
- getFamilyVolunteers,
- getUsers,
- getUser,
- updateVoluteer,
- deleteVolunteer
+    createVoluteer,
+    getFamilyVolunteers,
+    getUsers,
+    getUser,
+    updateVoluteer,
+    deleteVolunteer
 }
