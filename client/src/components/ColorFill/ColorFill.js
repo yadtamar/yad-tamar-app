@@ -6,7 +6,7 @@ const ColorFill = ({ text }) => {
   const navigate = useNavigate();
   return (
     <div className="color-fill">
-      <div className="main-div">
+      <div className="header">
         <ArrowForwardIcon
           fontSize="large"
           color="text"
