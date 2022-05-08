@@ -30,6 +30,15 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
     setOpen(false);
   };
 
+  const createVolunteer = () => {
+    fetch("/Create_Volunteer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(volunteer),
+    });
+    setVolunteer({ ...volunteer, name: "", phone: "" });
+  };
+
   return (
     <div>
       <Dialog open={open} onClose={handleClose} direction="rtl">
@@ -75,18 +84,7 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={handleSubmit(() => {
-              fetch("/Create_Volunteer", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(volunteer),
-              });
-              setVolunteer({ ...volunteer, name: "", phone: "" });
-            })}
-          >
-            הוסף
-          </Button>
+          <Button onClick={handleSubmit(createVolunteer)}>הוסף</Button>
           <Button onClick={handleClose}>סיים</Button>
         </DialogActions>
       </Dialog>
