@@ -12,6 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addVolunteerSchema } from "../CreateFamilyForm/schema";
+import { CloseButton } from "./styled";
 import "./AddVolunteerPopup.css";
 
 export default function AddVolunteerPopup({ open, setOpen, family_id }) {
@@ -44,15 +45,7 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
       <Dialog open={open} onClose={handleClose} direction="rtl">
         <DialogTitle>הוספת מתנדב</DialogTitle>
         <DialogContent>
-          <CloseIcon
-            style={{
-              position: "absolute",
-              left: "10px",
-              top: "10px",
-              cursor: "pointer",
-            }}
-            onClick={handleClose}
-          />
+          <CloseButton onClick={handleClose} />
           <DialogContentText style={{ marginBottom: "20px" }}>
             על מנת להוסיף מנתדב לקהילה יש להקליד שם ומספר טלפון
           </DialogContentText>
