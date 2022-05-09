@@ -115,13 +115,13 @@ const getSingleFamily = (async (req, res) => {
     let mainPerson;
     const familiesDtls = foundFamily.rows;
     if (familiesDtls[0]) {
-      for (let i = 0; i < familiesDtls.length; i++) {
-        if (familiesDtls[i].role === 'main') {
-          mainPerson = familiesDtls[i]
-        } else if (familiesDtls[i].role === 'helper') {
-          volunteers.push(familiesDtls[i]);
-        }
-      }
+      familiesDtls.forEach(i => {
+          if (i.role === 'main') {
+            mainPerson = i
+          } else if (i.role === 'helper') {
+            volunteers.push(i);
+          } 
+      })
       data = {
         mainPerson,
         volunteers
