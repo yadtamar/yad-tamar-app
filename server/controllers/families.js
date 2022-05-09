@@ -72,43 +72,32 @@ const createFamily = (async (req, res) => {
 
 const getAllFamilies = (async (req, res) => {
   try {
-    const data = []
-    const families = await pool.query(
-      "SELECT family_id FROM families");
-    //for each family get a details
-    const familiesDetails = families.rows;
-    const idOfFamilies = familiesDetails.map(x => {
-      let familyID = x; return (familyID.family_id)
-    })
-    if (idOfFamilies) {
-      const foundFamily = await pool.query(
-        "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id ORDER BY families.family_id"
-      );
-      let data = [];
-      const familiesDtls = foundFamily.rows;
-      if (familiesDtls[0]) {
-        for (let i = 0; i < familiesDtls.length; i++) {
-          let volunteersCount = 0;
-          if (familiesDtls[i].role === 'main') {
-            for (let v = 0; v < familiesDtls.length; v++) {
-              if (familiesDtls[i].family_id === familiesDtls[v].family_id && familiesDtls[v].role === 'helper') {
-                ("volunteer of ", familiesDtls[i].last_name, " family is: ", familiesDtls[v].first_name)
-                volunteersCount++;
-              }
+    const foundFamily = await pool.query(
+      "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id ORDER BY families.family_id"
+    );
+    let data = [];
+    const familiesDtls = foundFamily.rows;
+    if (familiesDtls[0]) {
+      familiesDtls.forEach(i => {
+        let volunteersCount = 0;
+        if (i.role === 'main') {
+          familiesDtls.forEach(volunteers => {
+            if (i.family_id === volunteers.family_id && volunteers.role === 'helper') {
+              ("volunteer of ", i.last_name, " family is: ", volunteers.first_name)
+              volunteersCount++;
             }
-            let details = {
-              volunteersCount,
-              name_of_family: familiesDtls[i].last_name,
-              family_id: familiesDtls[i].family_id
-            }
-            data.push(details)
+          })
+          let details = {
+            volunteersCount,
+            name_of_family: i.last_name,
+            family_id: i.family_id
           }
+          data.push(details)
         }
-      }
-      res.json(data)
-    } else {
-      console.log("its failed!!")
+      })
     }
+    res.json(data)
+
   } catch (err) {
     console.error(err);
   }
