@@ -28,25 +28,7 @@ const CreateFamilyPage = () => {
     medical_insurance: "",
     medical_history: "",
   });
-  /* useEffect(() => {
-    if (id) {
-      fetch(
-        `http://ec2-18-195-126-1.eu-central-1.compute.amazonaws.com:5000/families/${id}`
-      )
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw response;
-        })
-        .then((data) => setData(...data))
-        .catch((err) => {
-          if (err.statusText !== "OK") {
-            console.log(err);
-          }
-        });
-    }
-  }, []); */
+
   return (
     <PageLayout
       pageComponent={

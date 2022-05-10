@@ -53,9 +53,7 @@ const DisplayData = ({ data, image, setStep }) => {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
-    }).then((response) => {
-      console.log(response);
-    });
+    }).then((response) => {});
     navigate("/families");
   };
 
@@ -63,7 +61,7 @@ const DisplayData = ({ data, image, setStep }) => {
     const formData = new FormData();
     formData.append("data", data);
     formData.append("image", image);
-    console.log(JSON.stringify(data));
+
     fetch("/families", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -118,42 +116,6 @@ const DisplayData = ({ data, image, setStep }) => {
       ))}
 
       <div className="display-btn-container">
-        {id ? (
-          <MainGreenButton
-            onClick={() => {
-              fetch(`/families/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-              }).then((response) => {
-                console.log(response);
-              });
-              navigate("/families");
-            }}
-          >
-            עדכן משפחה
-          </MainGreenButton>
-        ) : (
-          <MainGreenButton
-            onClick={() => {
-              const formData = new FormData();
-              formData.append("data", data);
-              formData.append("image", image);
-              console.log(JSON.stringify(data));
-              fetch("/families", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-              }).then((response) => {
-                if (response.ok) {
-                  navigate("/families");
-                }
-              });
-            }}
-          >
-            צור משפחה
-          </MainGreenButton>
-        )}
         <MainBlueButton
           style={buttonStyle}
           onClick={() => {

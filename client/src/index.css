@@ -172,3 +172,6 @@ input::-webkit-inner-spin-button {
 .select div {
   padding: 8.5px 8.5px;
 }
+textarea {
+  resize: none;
+}

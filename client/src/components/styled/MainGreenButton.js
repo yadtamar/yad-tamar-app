@@ -1,5 +1,4 @@
 import { styled } from "@mui/material";
-
 const MainGreenButton = styled("button")`
   margin-top: 13px;
   color: white;
@@ -7,7 +6,7 @@ const MainGreenButton = styled("button")`
   font-size: 16px;
   font-weight: 200;
   letter-spacing: 1px;
-  padding: 13px 13px 13px;
+
   outline: 0;
   border: 1px solid black;
   border-radius: 30px;
