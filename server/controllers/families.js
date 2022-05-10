@@ -57,11 +57,16 @@ const createFamily = (async (req, res) => {
       "SELECT name FROM hospitals WHERE hospitals.hospital_id = $1 OR hospitals.hospital_id = $2",
       [newFamily.rows[0].hospital, newFamily.rows[0].hmo]
     );
+    const hmos = await pool.query(
+      "SELECT hmo_name FROM hmo WHERE hmo.id = $1",
+      [newFamily.rows[0].hmo]
+    );
     const data = {
       family: newFamily.rows,
       user: newuser.rows,
       role: mainRole.rows,
       hospital: hospi.rows,
+      hmo: hmos,
       insurance: insurances.rows
     }
     res.json(data);
@@ -73,7 +78,7 @@ const createFamily = (async (req, res) => {
 const getAllFamilies = (async (req, res) => {
   try {
     const foundFamily = await pool.query(
-      "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id ORDER BY families.family_id"
+      "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN hospitals ON hospitals.hospital_id = familieis.hospital INNER JOIN hmo ON hmo.id = families.hmo INNER JOIN users ON users.user_id = roles.user_id ORDER BY families.family_id"
     );
     let data = [];
     const familiesDtls = foundFamily.rows;
@@ -106,14 +111,21 @@ const getAllFamilies = (async (req, res) => {
 const getSingleFamily = (async (req, res) => {
   try {
     const { family_id } = req.params;
+    console.log(req.body)
     const foundFamily = await pool.query(
-      "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id WHERE families.family_id = $1 ORDER BY families.family_id",
+      "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id  JOIN users ON users.user_id = roles.user_id INNER JOIN hospitals ON hospitals.hospital_id = families.hospital WHERE families.family_id = $1 ORDER BY families.family_id",
       [family_id]
     );
     let data;
     let volunteers = [];
     let mainPerson;
+    // const hospitalName = await pool.query(
+    //   "SELECT name FROM hospitals WHERE hospitals.hospital_id = $1", INNER JOIN hospitals ON hospitals.hospital_id = families.hospital INNER JOIN hmo ON hmo.id = families.hmo
+    //   [foundFamily.rows[0].hospital]
+    // );
+    // let hospital = hospitalName.rows[0].name
     const familiesDtls = foundFamily.rows;
+    console.log(familiesDtls);
     if (familiesDtls[0]) {
       familiesDtls.forEach(i => {
           if (i.role === 'main') {
