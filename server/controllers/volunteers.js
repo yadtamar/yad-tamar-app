@@ -13,14 +13,19 @@ const createVoluteer = (async (req, res) => {
         const uniqVolunteerCode = "http://localhost:3000/tasks/" + family_id + "/"+ newVolunteer.rows[0].user_id;
 
         const setUniqCode = await pool.query(
-            "INSERT INTO users ( uniq_code) VALUES ($1) RETURNING *",
+            "INSERT INTO users (uniq_code) VALUES ($1) RETURNING *",
             [uniqVolunteerCode]
         )
         const VolunteerRole = await pool.query(
             "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
             [newVolunteer.rows[0].user_id, family_id, "helper"]
         );
-        res.json({ user: newVolunteer.rows, role: VolunteerRole.rows[0], community: VolunteerRole.rows[0].family_id, uniqode: setUniqCode.rows[0].uniq_code });
+        res.json({ 
+            user: newVolunteer.rows, 
+            role: VolunteerRole.rows[0], 
+            community: VolunteerRole.rows[0].family_id, 
+            uniqode: setUniqCode.rows[0].uniq_code 
+        });
     } catch (err) {
         console.error(err.message);
     }
@@ -28,8 +33,8 @@ const createVoluteer = (async (req, res) => {
 
 const getUsers = (async (req, res) => {
     try {
-        const families = await pool.query("SELECT * FROM users");
-        res.json(families.rows);
+        const users = await pool.query("SELECT * FROM users");
+        res.json(users.rows);
     } catch (err) {
         console.error(err);
     }
