@@ -16,10 +16,10 @@ const createFamily = (async (req, res) => {
       kids_num,
       language,
       sickness,
-      hmo,
+      HMO,
       hospital,
       medical_insurance,
-      medical_history,
+      medical_history
     } = req.body;
     const newuser = await pool.query(
       "INSERT INTO users (first_name, last_name, phone, cell_phone, mail, address, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
@@ -40,7 +40,7 @@ const createFamily = (async (req, res) => {
     );
     const newFamily = await pool.query(
       "INSERT INTO families (sickness, hospital, medical_history, hmo ) VALUES ($1,$2,$3,$4) RETURNING *",
-      [sickness, hospital, medical_history, hmo]
+      [sickness, hospital, medical_history, HMO]
     );
     //find the main person of the family
     const mainRole = await pool.query(
@@ -54,10 +54,10 @@ const createFamily = (async (req, res) => {
     );
     //insert names of hospitals (and hmos)
     const hospi = await pool.query(
-      "SELECT name FROM hospitals WHERE hospitals.hospital_id = $1 OR hospitals.hospital_id = $2",
-      [newFamily.rows[0].hospital, newFamily.rows[0].hmo]
+      "SELECT hospital_name FROM hospitals WHERE hospitals.hospital_id = $1",
+      [newFamily.rows[0].hospital]
     );
-    const hmos = await pool.query(
+    const myHmo = await pool.query(
       "SELECT hmo_name FROM hmo WHERE hmo.id = $1",
       [newFamily.rows[0].hmo]
     );
@@ -66,8 +66,8 @@ const createFamily = (async (req, res) => {
       user: newuser.rows,
       role: mainRole.rows,
       hospital: hospi.rows,
-      hmo: hmos,
-      insurance: insurances.rows
+      insurance: insurances.rows,
+      hmo: myHmo.rows
     }
     res.json(data);
   } catch (err) {
@@ -77,32 +77,43 @@ const createFamily = (async (req, res) => {
 
 const getAllFamilies = (async (req, res) => {
   try {
-    const foundFamily = await pool.query(
-      "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN hospitals ON hospitals.hospital_id = familieis.hospital INNER JOIN hmo ON hmo.id = families.hmo INNER JOIN users ON users.user_id = roles.user_id ORDER BY families.family_id"
-    );
-    let data = [];
-    const familiesDtls = foundFamily.rows;
-    if (familiesDtls[0]) {
-      familiesDtls.forEach(i => {
-        let volunteersCount = 0;
-        if (i.role === 'main') {
-          familiesDtls.forEach(volunteers => {
-            if (i.family_id === volunteers.family_id && volunteers.role === 'helper') {
-              ("volunteer of ", i.last_name, " family is: ", volunteers.first_name)
-              volunteersCount++;
+    const data = []
+    const families = await pool.query(
+      "SELECT family_id FROM families");
+    //for each family get a details
+    const familiesDetails = families.rows;
+    const idOfFamilies = familiesDetails.map(x => {
+      let familyID = x; return (familyID.family_id)
+    })
+    if (idOfFamilies) {
+      const foundFamily = await pool.query(
+        "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id ORDER BY families.family_id"
+      );
+      let data = [];
+      const familiesDtls = foundFamily.rows;
+      if (familiesDtls[0]) {
+        for (let i = 0; i < familiesDtls.length; i++) {
+          let volunteersCount = 0;
+          if (familiesDtls[i].role === 'main') {
+            for (let v = 0; v < familiesDtls.length; v++) {
+              if (familiesDtls[i].family_id === familiesDtls[v].family_id && familiesDtls[v].role === 'helper') {
+                ("volunteer of ", familiesDtls[i].last_name, " family is: ", familiesDtls[v].first_name)
+                volunteersCount++;
+              }
             }
-          })
-          let details = {
-            volunteersCount,
-            name_of_family: i.last_name,
-            family_id: i.family_id
+            let details = {
+              volunteersCount,
+              name_of_family: familiesDtls[i].last_name,
+              family_id: familiesDtls[i].family_id
+            }
+            data.push(details)
           }
-          data.push(details)
         }
-      })
+      }
+      res.json(data)
+    } else {
+      console.log("its failed!!")
     }
-    res.json(data)
-
   } catch (err) {
     console.error(err);
   }
@@ -111,29 +122,22 @@ const getAllFamilies = (async (req, res) => {
 const getSingleFamily = (async (req, res) => {
   try {
     const { family_id } = req.params;
-    console.log(req.body)
     const foundFamily = await pool.query(
-      "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id  JOIN users ON users.user_id = roles.user_id INNER JOIN hospitals ON hospitals.hospital_id = families.hospital WHERE families.family_id = $1 ORDER BY families.family_id",
+      "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id WHERE families.family_id = $1 ORDER BY families.family_id",
       [family_id]
     );
     let data;
     let volunteers = [];
     let mainPerson;
-    // const hospitalName = await pool.query(
-    //   "SELECT name FROM hospitals WHERE hospitals.hospital_id = $1", INNER JOIN hospitals ON hospitals.hospital_id = families.hospital INNER JOIN hmo ON hmo.id = families.hmo
-    //   [foundFamily.rows[0].hospital]
-    // );
-    // let hospital = hospitalName.rows[0].name
     const familiesDtls = foundFamily.rows;
-    console.log(familiesDtls);
     if (familiesDtls[0]) {
-      familiesDtls.forEach(i => {
-          if (i.role === 'main') {
-            mainPerson = i
-          } else if (i.role === 'helper') {
-            volunteers.push(i);
-          } 
-      })
+      for (let i = 0; i < familiesDtls.length; i++) {
+        if (familiesDtls[i].role === 'main') {
+          mainPerson = familiesDtls[i]
+        } else if (familiesDtls[i].role === 'helper') {
+          volunteers.push(familiesDtls[i]);
+        }
+      }
       data = {
         mainPerson,
         volunteers

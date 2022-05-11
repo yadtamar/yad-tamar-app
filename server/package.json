@@ -18,8 +18,7 @@
     "nodemon": "^2.0.15",
     "npm": "^8.5.5",
     "pg": "^8.7.3",
-    "serverless-http": "^2.7.0",
-    "yup": "^0.32.11"
+    "serverless-http": "^2.7.0"
   },
   "description": ""
 }

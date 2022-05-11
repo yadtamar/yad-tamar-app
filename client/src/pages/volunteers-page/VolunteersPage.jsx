@@ -78,7 +78,6 @@ function VolunteersPage() {
           </Grid>
           <Grid item xs={5.5} height="100%">
             <Grid item>
-            
               <img className="family-img" alt="family" src={family}></img>
             </Grid>
             <Grid container marginTop="50%">

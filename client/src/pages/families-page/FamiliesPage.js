@@ -90,9 +90,9 @@ const FamiliesPage = () => {
                   return (
                     <FamilyElement
                       key={index}
-                      family_id={family.family[0].family_id}
-                      name={family.main_user[0].last_name}
-                      volunteers_count={family.volunteers_count}
+                      family_id={family?.family[0]?.family_id}
+                      name={family?.main_user[0]?.last_name}
+                      volunteers_count={family?.volunteers_count}
                     />
                   );
                 })

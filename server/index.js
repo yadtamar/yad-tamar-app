@@ -1,7 +1,8 @@
 const serverless = require('serverless-http');
 require("dotenv").config();
+//const port = 5000;
 const express = require("express");
-const app = express(); 
+const app = express(); //req.body
 const cors = require("cors");
 const pool = require("./db");
 const voluneerRouter = require('./routes/volunteers');
