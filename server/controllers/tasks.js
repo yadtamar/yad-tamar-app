@@ -1,6 +1,6 @@
 const pool = require("./../db");
 //create a new task
-const createTask = (async (req, res) => {
+const createTask = (async (req, res, next) => {
     try {
         const {
             family_id, task_name, helper_id, date, comments
@@ -12,22 +12,22 @@ const createTask = (async (req, res) => {
         );
         res.json(newTask.rows);
     } catch (err) {
-        console.error(err.message);
+        next(err.message);
     }
 });
 
-const getTasksForFamily = (async (req, res) => {
+const getTasksForFamily = (async (req, res, next) => {
     try {
         const { family_id } = req.params;
         const familyTasks = await pool.query("SELECT * FROM tasks WHERE family_id=$1",
             [family_id]);
         (familyTasks.rows[0] !== undefined ? res.json(familyTasks.rows) : res.send("no tasks for this family"));
     } catch (err) {
-        console.error(err);
+        next(err);
     }
 });
 
-const getSingleTask = (async (req, res) => {
+const getSingleTask = (async (req, res, next) => {
     try {
         const { task_id } = req.params;
         const foundTask = await pool.query(
@@ -36,11 +36,11 @@ const getSingleTask = (async (req, res) => {
         );
         res.json(foundTask.rows);
     } catch (err) {
-        console.error(err);
+        next(err);
     }
 });
 
-const updateTask = (async (req, res) => {
+const updateTask = (async (req, res, next) => {
     try {
         const { task_id } = req.params;
         const {
@@ -63,18 +63,18 @@ const updateTask = (async (req, res) => {
         );
         res.send("the task was Updated");
     } catch (err) {
-        console.error(err);
+        next(err);
     }
 });
 
-const deleteTask = (async (req, res) => {
+const deleteTask = (async (req, res, next) => {
     try {
         const { task_id } = req.params;
         await pool.query("DELETE FROM tasks WHERE task_id=$1",
             [task_id]);
         res.send("the task was deleted succsessfuly");
     } catch (err) {
-        console.error(err);
+        next(err);
     }
 });
 

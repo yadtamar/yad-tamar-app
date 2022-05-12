@@ -1,6 +1,6 @@
 const pool = require("./../db");
 
-const createFamily = (async (req, res) => {
+const createFamily = (async (req, res, next) => {
   try {
     const {
       first_name,
@@ -71,13 +71,12 @@ const createFamily = (async (req, res) => {
     }
     res.json(data);
   } catch (err) {
-    console.error(err.message);
+    next(err.message);
   }
 });
 
-const getAllFamilies = (async (req, res) => {
+const getAllFamilies = (async (req, res, next) => {
   try {
-    const data = []
     const families = await pool.query(
       "SELECT family_id FROM families");
     //for each family get a details
@@ -112,14 +111,14 @@ const getAllFamilies = (async (req, res) => {
       }
       res.json(data)
     } else {
-      console.log("its failed!!")
+      res.send("one or more of the details are wrong!")
     }
   } catch (err) {
-    console.error(err);
+    next(err);
   }
 });
 
-const getSingleFamily = (async (req, res) => {
+const getSingleFamily = (async (req, res, next) => {
   try {
     const { family_id } = req.params;
     const foundFamily = await pool.query(
@@ -144,14 +143,14 @@ const getSingleFamily = (async (req, res) => {
       }
       res.json(data)
     } else {
-      console.log("its failed!!")
+      res.send("one or more of the details are wrong!")
     }
   } catch (err) {
-    console.error(err);
+    next(err);
   }
 });
 
-const updateFamily = (async (req, res) => {
+const updateFamily = (async (req, res, next) => {
   const { family_id } = req.params;
   try {
     const {
@@ -212,29 +211,23 @@ const updateFamily = (async (req, res) => {
           "UPDATE insurance SET user_id=$1, insurance_name=$2 RETURNING *",
           [updatedFamily.rows[0].user_id, medical_insurance]
         );
-        //update names of hospitals (and hmos)
-        const hospi = await pool.query(
-          "SELECT name FROM hospitals WHERE hospital_id = $1 OR hospital_id = $2",
-          [updatedFamily.rows[0].hospital, updatedFamily.rows[0].hmo]
-        );
+        
         res.send("Updated");
       }
-    } else { console.log("can not update!") }
-
-
+    } 
   } catch (err) {
-    console.error(err);
+    next(err);
   }
 })
 
-const deleteFamily = (async (req, res) => {
+const deleteFamily = (async (req, res, next) => {
   try {
     const { family_id } = req.params;
     await pool.query("DELETE FROM families WHERE family_id=$1",
       [family_id]);
     res.send("deleted succsessfuly");
   } catch (err) {
-    console.error(err);
+    next(err);
   }
 });
 
