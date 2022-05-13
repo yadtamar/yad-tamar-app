@@ -1,8 +1,5 @@
 const Pool = require("pg").Pool;
 require("dotenv").config();
-const path = require('path')
-///home/ubuntu/project/yad-tamar-app/server
-console.log(`${__dirname}/ca-certificate.crt`);
 
 const fs = require("fs");
 const password = process.env.Password;
