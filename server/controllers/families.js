@@ -1,4 +1,5 @@
 const pool = require("./../db");
+//const { stepOneSchema} = require("../constants/schema.js")
 
 const createFamily = (async (req, res, next) => {
   try {
@@ -91,27 +92,27 @@ const getAllFamilies = (async (req, res, next) => {
       let data = [];
       const familiesDtls = foundFamily.rows;
       if (familiesDtls[0]) {
-        for (let i = 0; i < familiesDtls.length; i++) {
+        familiesDtls?.forEach(i => {
           let volunteersCount = 0;
-          if (familiesDtls[i].role === 'main') {
-            for (let v = 0; v < familiesDtls.length; v++) {
-              if (familiesDtls[i].family_id === familiesDtls[v].family_id && familiesDtls[v].role === 'helper') {
-                ("volunteer of ", familiesDtls[i].last_name, " family is: ", familiesDtls[v].first_name)
+          if (i.role === 'main') {
+            familiesDtls.forEach(v => {
+              if (i.family_id === v.family_id && v.role === 'helper') {
+                ("volunteer of ", i.last_name, " family is: ", v.first_name)
                 volunteersCount++;
               }
-            }
+            })
             let details = {
               volunteersCount,
-              name_of_family: familiesDtls[i].last_name,
-              family_id: familiesDtls[i].family_id
+              name_of_family: i.last_name,
+              family_id: i.family_id
             }
             data.push(details)
           }
-        }
+        })
+        res.json(data)
+      } else {
+        res.send("one or more of the details are wrong!")
       }
-      res.json(data)
-    } else {
-      res.send("one or more of the details are wrong!")
     }
   } catch (err) {
     next(err);
@@ -130,13 +131,13 @@ const getSingleFamily = (async (req, res, next) => {
     let mainPerson;
     const familiesDtls = foundFamily.rows;
     if (familiesDtls[0]) {
-      for (let i = 0; i < familiesDtls.length; i++) {
-        if (familiesDtls[i].role === 'main') {
-          mainPerson = familiesDtls[i]
-        } else if (familiesDtls[i].role === 'helper') {
-          volunteers.push(familiesDtls[i]);
+      familiesDtls.forEach(i => {
+        if (i.role === 'main') {
+          mainPerson = i
+        } else if (i.role === 'helper') {
+          volunteers.push(i);
         }
-      }
+      });
       data = {
         mainPerson,
         volunteers
@@ -211,10 +212,10 @@ const updateFamily = (async (req, res, next) => {
           "UPDATE insurance SET user_id=$1, insurance_name=$2 RETURNING *",
           [updatedFamily.rows[0].user_id, medical_insurance]
         );
-        
+
         res.send("Updated");
       }
-    } 
+    }
   } catch (err) {
     next(err);
   }

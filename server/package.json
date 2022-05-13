@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon index.js",
     "client": "npm start --prefix ../client",
-    "start": "concurrently \"npm run watch\" \"npm run client\""
+    "start": "nodemon index.js",
+    "dev": "nodemon index.js"
+    
   },
   "keywords": [],
   "author": "",
@@ -17,7 +18,8 @@
     "express": "4.17.3",
     "nodemon": "2.0.15",
     "pg": "8.7.3",
-    "serverless-http": "2.7.0"
+    "serverless-http": "2.7.0",
+    "yup": "0.32.11"
   },
   "description": ""
 }

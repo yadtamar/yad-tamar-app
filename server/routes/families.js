@@ -7,7 +7,8 @@ const {
     deleteFamily
 } = require('../controllers/families');;
 
-router.post("/",  createFamily);
+router.post("/", createFamily);
+//router.post("/valid", valid);
 router.get("/", getAllFamilies);
 router.get("/:family_id", getSingleFamily);
 router.put("/:family_id", updateFamily);
