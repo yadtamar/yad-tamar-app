@@ -1,6 +1,6 @@
 import PageLayout from "../../components/PageLayout/PageLayout";
 import FormStepOne from "../../components/CreateFamilyForm/StepOne";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FormStepTwo from "../../components/CreateFamilyForm/StepTwo";
 import DisplayData from "../../components/CreateFamilyForm/DisplayData";
 import FormStepThree from "../../components/CreateFamilyForm/StepThree";
@@ -56,6 +56,3 @@ const CreateFamilyPage = () => {
   );
 };
 export default CreateFamilyPage;
-{
-  /* <DisplayData data={data} image={image} /> */
-}

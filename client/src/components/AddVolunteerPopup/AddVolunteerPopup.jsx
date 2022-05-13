@@ -8,7 +8,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import FormLabel from "../FormLabel/FormLabel";
-import CloseIcon from "@mui/icons-material/Close";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addVolunteerSchema } from "../CreateFamilyForm/schema";

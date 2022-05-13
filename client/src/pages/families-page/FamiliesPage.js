@@ -11,7 +11,7 @@ const FamiliesPage = () => {
   const [families, setFamilies] = useState([]);
   const [filter, setFilter] = useState("");
   const [filteredFamilies, setFilteredFamilies] = useState([]);
-  const [error, setError] = useState(undefined);
+  const [setError] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -104,7 +104,7 @@ const FamiliesPage = () => {
                     <FamilyElement
                       key={index}
                       family_id={family.family[0].family_id}
-                      name={family.main_user[0].last_name}
+                      name={family?.main_user[0]?.last_name}
                       volunteers_count={family.volunteers_count}
                     />
                   );
