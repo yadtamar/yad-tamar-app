@@ -18,7 +18,7 @@ function VolunteersPage() {
 
     useEffect(() => {
       {
-        fetch(`/volunteers_for_family/${family_id}`)
+        fetch(`/volunteers/volunteers-for-family/${family_id}`)
           .then((response) => {
             if (response.ok) {
               return response.json();
@@ -61,17 +61,15 @@ function VolunteersPage() {
                   {"מתנדבים"}
                 </Typography>
                 {volunteers.map((volunteer) => {
-                  if (volunteer.length > 0) {
-                    return (
-                      <Volunteer
-                        setVolunteers={setVolunteers}
-                        name={volunteer[0]?.first_name}
-                        id={volunteer[0]?.user_id}
-                        family_id={family_id}
-                        key={volunteer[0]?.user_id}
-                      />
-                    );
-                  }
+                  return (
+                    <Volunteer
+                      setVolunteers={setVolunteers}
+                      name={volunteer?.first_name}
+                      id={volunteer?.user_id}
+                      family_id={family_id}
+                      key={volunteer?.user_id}
+                    />
+                  );
                 })}
               </div>
             </Grid>

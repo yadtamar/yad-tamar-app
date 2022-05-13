@@ -102,10 +102,10 @@ const FamiliesPage = () => {
                 familiesToShow.map((family, index) => {
                   return (
                     <FamilyElement
-                      key={index}
-                      family_id={family.family[0].family_id}
-                      name={family.main_user[0].last_name}
-                      volunteers_count={family.volunteers_count}
+                      key={family.family_id}
+                      family_id={family.family_id}
+                      name={family.name_of_family}
+                      volunteers_count={family.volunteersCount}
                     />
                   );
                 })
