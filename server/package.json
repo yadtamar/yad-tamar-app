@@ -5,7 +5,8 @@
   "scripts": {
     "watch": "nodemon index.js",
     "client": "npm start --prefix ../client",
-    "start": "concurrently \"npm run watch\" \"npm run client\""
+    "start": "concurrently \"npm run watch\" \"npm run client\"",
+    "start:prod": "node index.js"
   },
   "keywords": [],
   "author": "",
