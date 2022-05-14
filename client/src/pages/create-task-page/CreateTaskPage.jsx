@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
+
+import { useNavigate, useParams } from "react-router-dom";
 import "./CreateTaskPage.css";
 import heart from "../../assets/heart.png";
 import PageLayout from "../../components/PageLayout/PageLayout";

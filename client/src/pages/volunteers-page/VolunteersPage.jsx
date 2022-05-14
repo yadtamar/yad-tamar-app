@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Typography, Avatar } from "@mui/material";
 import family from "../../assets/family.png";
 import MainGreenButton from "../../components/styled/MainGreenButton";

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import FormStepTwo from "../../components/CreateFamilyForm/StepTwo";
 import DisplayData from "../../components/CreateFamilyForm/DisplayData";
 import FormStepThree from "../../components/CreateFamilyForm/StepThree";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 
 const CreateFamilyPage = () => {
   const { id } = useParams();

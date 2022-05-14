@@ -8,7 +8,7 @@ import {
 } from "./styles";
 import { TextField, Grid, Typography, Avatar } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import family from "../../assets/family.png";
 import MainGreenButton from "../styled/MainGreenButton";
 import MainRedButton from "../styled/MainRedButton";

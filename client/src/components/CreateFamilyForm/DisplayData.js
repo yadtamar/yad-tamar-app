@@ -1,6 +1,6 @@
 import { Typography, Grid } from "@mui/material";
 import MainGreenButton from "../styled/MainGreenButton";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import MainBlueButton from "../styled/MainBlueButton";
 import { buttonStyle } from "./styles.js";
 import DetailsItem from "../DetailsItem/DetailsItem.jsx";
