@@ -10,11 +10,13 @@ function Volunteer({ name, id, setVolunteers, family_id }) {
       <Typography variant="subtitle1">{name}</Typography>
       <ClearIcon
         onClick={() => {
-          fetch(`/delete_volunteer/${id}`, {
+          fetch(`http://18.197.147.245/api/volunteers/${id}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
           });
-          fetch(`/volunteers_for_family/${family_id}`)
+          fetch(
+            `http://18.197.147.245/api/volunteers/volunteers-for-family/${family_id}`
+          )
             .then((response) => {
               if (response.ok) {
                 return response.json();

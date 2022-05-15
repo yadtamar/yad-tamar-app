@@ -18,7 +18,9 @@ function VolunteersPage() {
 
     useEffect(() => {
       {
-        fetch(`/volunteers/volunteers-for-family/${family_id}`)
+        fetch(
+          `http://18.197.147.245/api/volunteers/volunteers-for-family/${family_id}`
+        )
           .then((response) => {
             if (response.ok) {
               return response.json();

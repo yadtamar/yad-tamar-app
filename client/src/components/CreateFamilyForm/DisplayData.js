@@ -49,11 +49,14 @@ const DisplayData = ({ data, image, setStep }) => {
   };
 
   const handleUpdateFamily = () => {
-    fetch(`/families/${id}`, {
+    fetch(`http://18.197.147.245/api/families/${id}`, {
       method: "PUT",
+      "Access-Control-Allow-Origin": "*",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
-    }).then((response) => {});
+    }).then((response) => {
+      console.log(response);
+    });
     navigate("/families");
   };
 
@@ -62,9 +65,12 @@ const DisplayData = ({ data, image, setStep }) => {
     formData.append("data", data);
     formData.append("image", image);
 
-    fetch("/families", {
+    fetch("http://18.197.147.245/api/families", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     }).then((response) => {
       if (response.ok) {

@@ -29,6 +29,57 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchCurrentFamily = async () => {
+      try {
+        const response = await fetch(
+          `http://18.197.147.245/api/families/${id}`
+        );
+        if (response.ok) {
+          const {
+            mainPerson: {
+              first_name,
+              last_name,
+              home_phone,
+              cell_phone,
+              mail,
+              address,
+              city,
+              age,
+              gender,
+              family_status,
+              kids_num,
+              language,
+              sickness,
+              hospital,
+              medical_insurance,
+              medical_history,
+            },
+          } = await response.json();
+          setData({
+            first_name,
+            last_name,
+            home_phone,
+            cell_phone,
+            mail,
+            address,
+            city,
+            age,
+            gender,
+            family_status,
+            kids_num,
+            language,
+            sickness,
+            hospital,
+            medical_insurance,
+            medical_history,
+          });
+        }
+      } catch (error) {}
+    };
+    fetchCurrentFamily();
+  }, []);
+
+  useEffect(() => {
     if (image) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -167,7 +218,7 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
                     <MainRedButton
                       style={buttonStyle}
                       onClick={() => {
-                        fetch(`/families/${id}`, {
+                        fetch(`http://18.197.147.245/api/families/${id}`, {
                           method: "DELETE",
                           headers: { "Content-Type": "application/json" },
                         }).then((response) => {

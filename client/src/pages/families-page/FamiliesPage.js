@@ -15,7 +15,7 @@ const FamiliesPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/families")
+    fetch("http://18.197.147.245/api/families")
       .then((response) => {
         if (response.ok) {
           return response.json();

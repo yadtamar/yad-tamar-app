@@ -20,7 +20,7 @@ function CreateTaskPage() {
 
     const handleAddTask = () => {
       taskName &&
-        fetch("/Create_Task", {
+        fetch("http://18.197.147.245/api/tasks/create-task", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
