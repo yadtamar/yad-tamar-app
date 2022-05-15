@@ -29,14 +29,34 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCurrentFamily = async () => {
-      try {
-        const response = await fetch(
-          `http://18.197.147.245/api/families/${id}`
-        );
-        if (response.ok) {
-          const {
-            mainPerson: {
+    if (id) {
+      const fetchCurrentFamily = async () => {
+        try {
+          const response = await fetch(
+            `http://18.197.147.245/api/families/${id}`
+          );
+          if (response.ok) {
+            const {
+              mainPerson: {
+                first_name,
+                last_name,
+                home_phone,
+                cell_phone,
+                mail,
+                address,
+                city,
+                age,
+                gender,
+                family_status,
+                kids_num,
+                language,
+                sickness,
+                hospital,
+                medical_insurance,
+                medical_history,
+              },
+            } = await response.json();
+            setData({
               first_name,
               last_name,
               home_phone,
@@ -53,30 +73,12 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
               hospital,
               medical_insurance,
               medical_history,
-            },
-          } = await response.json();
-          setData({
-            first_name,
-            last_name,
-            home_phone,
-            cell_phone,
-            mail,
-            address,
-            city,
-            age,
-            gender,
-            family_status,
-            kids_num,
-            language,
-            sickness,
-            hospital,
-            medical_insurance,
-            medical_history,
-          });
-        }
-      } catch (error) {}
-    };
-    fetchCurrentFamily();
+            });
+          }
+        } catch (error) {}
+      };
+      fetchCurrentFamily();
+    }
   }, []);
 
   useEffect(() => {

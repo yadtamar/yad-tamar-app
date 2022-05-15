@@ -49,15 +49,17 @@ const DisplayData = ({ data, image, setStep }) => {
   };
 
   const handleUpdateFamily = () => {
-    fetch(`http://18.197.147.245/api/families/${id}`, {
-      method: "PUT",
-      "Access-Control-Allow-Origin": "*",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    }).then((response) => {
-      console.log(response);
-    });
-    navigate("/families");
+    if (id) {
+      fetch(`http://18.197.147.245/api/families/${id}`, {
+        method: "PUT",
+        "Access-Control-Allow-Origin": "*",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }).then((response) => {
+        console.log(response);
+      });
+      navigate("/families");
+    }
   };
 
   const handleCreateFamily = () => {
@@ -72,11 +74,8 @@ const DisplayData = ({ data, image, setStep }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    }).then((response) => {
-      if (response.ok) {
-        navigate("/families");
-      }
     });
+    navigate("/families");
   };
 
   const navigate = useNavigate();
