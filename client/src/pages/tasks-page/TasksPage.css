@@ -1,0 +1,65 @@
+.tasks-container {
+  text-align: center;
+  height: 100vh;
+  max-width: 60rem;
+}
+.task-element-container {
+  margin: 30px auto auto auto;
+  width: 80%;
+
+  box-shadow: 10px 6px 12px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+.task-header {
+  background-color: #8ca8e0;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+  color: white;
+}
+
+.element-body {
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.task {
+  padding: 6px;
+  background-color: #e0e0e0;
+  width: 65%;
+  text-align: right;
+  border-radius: 5px;
+}
+
+.done-until {
+  position: relative;
+  text-align: left;
+  width: 100%;
+  opacity: 0.7;
+}
+
+.task-description {
+  padding: 3px;
+}
+
+.done-by {
+  border-radius: 5px;
+  width: 25%;
+  padding: 12px 6px 0 6px;
+  background-color: #e0e0e0;
+}
+
+.helper-name {
+  padding: 1px;
+  font-size: 20px;
+}
+
+.will-do-it {
+  font-size: 13px;
+  opacity: 0.7;
+}
