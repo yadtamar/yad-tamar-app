@@ -17,28 +17,22 @@ function VolunteersPage() {
     const [volunteers, setVolunteers] = useState([]);
 
     useEffect(() => {
-      {
-        fetch(
-          `http://18.197.147.245/api/volunteers/volunteers-for-family/${family_id}`
-        )
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            }
-            throw response;
-          })
-          .then((data) => {
+      const fetchVolunteers = async () => {
+        try {
+          const response = await fetch(
+            `http://18.197.147.245/api/volunteers/volunteers-for-family/${family_id}`
+          );
+          if (response.ok) {
+            const data = await response.json();
             if (data.length > volunteers.length) {
               setVolunteers(data);
             }
-          })
-
-          .catch((err) => {
-            if (err.statusText !== "OK") {
-              console.log(err);
-            }
-          });
-      }
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchVolunteers();
     }, [open, volunteers, family_id]);
 
     return (

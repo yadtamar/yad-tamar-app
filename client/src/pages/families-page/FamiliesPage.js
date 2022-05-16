@@ -42,7 +42,7 @@ const FamiliesPage = () => {
   useEffect(() => {
     setFilteredFamilies(
       families.filter((family) => {
-        return family.main_user[0].last_name
+        return family.name_of_family
           .toLowerCase()
           .includes(filter.toLowerCase());
       })
