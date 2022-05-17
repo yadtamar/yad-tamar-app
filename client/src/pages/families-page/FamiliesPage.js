@@ -1,18 +1,21 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageLayout from "../../components/PageLayout/PageLayout";
 import FamilyElement from "../../components/FamilyElement/FamilyElement";
 import { TextField, Typography } from "@mui/material";
 import MainBlueButton from "../../components/styled/MainBlueButton";
-import { useNavigate } from "react-router";
+import Spinner from "../../components/Spinner/Spinner";
 import "./FamiliesPage.css";
-import { useEffect, useState } from "react";
 const FamiliesPage = () => {
   const navigate = useNavigate();
   const [families, setFamilies] = useState([]);
   const [filter, setFilter] = useState("");
   const [filteredFamilies, setFilteredFamilies] = useState([]);
   const [error, setError] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    fetch("/families")
+    fetch("http://18.197.147.245/api/families")
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -26,20 +29,26 @@ const FamiliesPage = () => {
         }) */
         )
       )
+      .then(() => {
+        setIsLoading(false);
+      })
       .catch((err) => {
         if (err.statusText !== "OK") {
           setError(err);
         }
       });
-  }, []);
+  }, [isLoading]);
 
   useEffect(() => {
     setFilteredFamilies(
       families.filter((family) => {
-        return family.last_name.includes(filter);
+        return family.name_of_family
+          .toLowerCase()
+          .includes(filter.toLowerCase());
       })
     );
   }, [filter]);
+
   const familiesToShow = filter ? filteredFamilies : families;
 
   return (
@@ -60,7 +69,11 @@ const FamiliesPage = () => {
                 </div>
                 <div className="create-btn-div">
                   <MainBlueButton
-                    className="new-family-button"
+                    style={{
+                      paddingTop: "10px",
+                      paddingBottom: "10px",
+                      marginTop: "0px",
+                    }}
                     onClick={() => {
                       navigate("/create-family");
                     }}
@@ -83,16 +96,16 @@ const FamiliesPage = () => {
             </div>
 
             <div className="families-card-div">
-              {error !== undefined ? (
-                <Typography variant="h4">{error.statusText}</Typography>
+              {isLoading ? (
+                <Spinner />
               ) : (
                 familiesToShow.map((family, index) => {
                   return (
                     <FamilyElement
-                      key={index}
-                      family_id={family?.family[0]?.family_id}
-                      name={family?.main_user[0]?.last_name}
-                      volunteers_count={family?.volunteers_count}
+                      key={family.family_id}
+                      family_id={family.family_id}
+                      name={family.name_of_family}
+                      volunteers_count={family.volunteersCount}
                     />
                   );
                 })

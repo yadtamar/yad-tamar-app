@@ -7,17 +7,37 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import FormLabel from "../FormLabel/FormLabel";
+import CloseIcon from "@mui/icons-material/Close";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { addVolunteerSchema } from "../CreateFamilyForm/schema";
+import { CloseButton } from "./styled";
 import "./AddVolunteerPopup.css";
 
 export default function AddVolunteerPopup({ open, setOpen, family_id }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(addVolunteerSchema), mode: "onBlur" });
   const [volunteer, setVolunteer] = useState({
     family_id: family_id,
     name: "",
-    cell_phone: undefined,
+    cell_phone: "",
   });
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const createVolunteer = () => {
+    fetch("http://18.197.147.245/api/volunteers/create-volunteer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(volunteer),
+    });
+    setVolunteer({ ...volunteer, name: "", phone: "" });
   };
 
   return (
@@ -25,49 +45,39 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
       <Dialog open={open} onClose={handleClose} direction="rtl">
         <DialogTitle>הוספת מתנדב</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <CloseButton onClick={handleClose} />
+          <DialogContentText style={{ marginBottom: "20px" }}>
             על מנת להוסיף מנתדב לקהילה יש להקליד שם ומספר טלפון
           </DialogContentText>
+          <FormLabel text="שם המתנדב" />
           <TextField
             className="input"
+            {...register("name")}
+            error={!!errors.name}
+            helperText={errors?.name?.message}
             onChange={(e) => {
               setVolunteer({ ...volunteer, name: e.target.value });
             }}
             value={volunteer.name}
-            autoFocus
             margin="dense"
-            id="name"
-            label="שם"
             fullWidth
-            variant="standard"
           />
+          <FormLabel text="טלפון נייד" />
           <TextField
+            {...register("phone")}
+            error={!!errors.phone}
+            helperText={errors?.phone?.message}
             className="input"
             onChange={(e) => {
               setVolunteer({ ...volunteer, phone: e.target.value });
             }}
             value={volunteer.phone}
-            autoFocus
             margin="dense"
-            id="name"
-            label="טלפון"
             fullWidth
-            variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => {
-              fetch("/Create_Volunteer", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(volunteer),
-              });
-              setVolunteer({ ...volunteer, name: "", phone: "" });
-            }}
-          >
-            הוסף
-          </Button>
+          <Button onClick={handleSubmit(createVolunteer)}>הוסף</Button>
           <Button onClick={handleClose}>סיים</Button>
         </DialogActions>
       </Dialog>

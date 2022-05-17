@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Typography, Avatar } from "@mui/material";
 import family from "../../assets/family.png";
 import MainGreenButton from "../../components/styled/MainGreenButton";
@@ -17,26 +17,22 @@ function VolunteersPage() {
     const [volunteers, setVolunteers] = useState([]);
 
     useEffect(() => {
-      {
-        fetch(`/volunteers_for_family/${family_id}`)
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            }
-            throw response;
-          })
-          .then((data) => {
+      const fetchVolunteers = async () => {
+        try {
+          const response = await fetch(
+            `http://18.197.147.245/api/volunteers/volunteers-for-family/${family_id}`
+          );
+          if (response.ok) {
+            const data = await response.json();
             if (data.length > volunteers.length) {
               setVolunteers(data);
             }
-          })
-
-          .catch((err) => {
-            if (err.statusText !== "OK") {
-              console.log(err);
-            }
-          });
-      }
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchVolunteers();
     }, [open, volunteers, family_id]);
 
     return (
@@ -61,24 +57,27 @@ function VolunteersPage() {
                   {"מתנדבים"}
                 </Typography>
                 {volunteers.map((volunteer) => {
-                  if (volunteer.length > 0) {
-                    return (
-                      <Volunteer
-                        setVolunteers={setVolunteers}
-                        name={volunteer[0]?.first_name}
-                        id={volunteer[0]?.user_id}
-                        family_id={family_id}
-                        key={volunteer[0]?.user_id}
-                      />
-                    );
-                  }
+                  return (
+                    <Volunteer
+                      setVolunteers={setVolunteers}
+                      name={volunteer?.first_name}
+                      id={volunteer?.user_id}
+                      family_id={family_id}
+                      key={volunteer?.user_id}
+                    />
+                  );
                 })}
               </div>
             </Grid>
           </Grid>
           <Grid item xs={5.5} height="100%">
             <Grid item>
-              <img className="family-img" alt="family" src={family}></img>
+              <img
+                className="family-img"
+                src={family}
+                alt="family"
+                loading="lazy"
+              ></img>
             </Grid>
             <Grid container marginTop="50%">
               <div className="create-or-add">

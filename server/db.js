@@ -1,7 +1,9 @@
 const Pool = require("pg").Pool;
 require("dotenv").config();
 const fs = require("fs");
+
 const password = process.env.Password;
+
 const pool = new Pool({
   user: "doadmin",
   password,
@@ -10,8 +12,8 @@ const pool = new Pool({
   database: "danv4",
   ssl: {
     rejectUnauthorized: false,
-    ca: fs.readFileSync('ca-certificate.crt').toString(),
-   },
+    ca: fs.readFileSync(`${__dirname}/ca-certificate.crt`).toString(),
+  },
 });
 
 module.exports = pool;

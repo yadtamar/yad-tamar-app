@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
+
+import { useNavigate, useParams } from "react-router-dom";
 import "./CreateTaskPage.css";
 import heart from "../../assets/heart.png";
 import PageLayout from "../../components/PageLayout/PageLayout";
@@ -20,7 +20,7 @@ function CreateTaskPage() {
 
     const handleAddTask = () => {
       taskName &&
-        fetch("/Create_Task", {
+        fetch("http://18.197.147.245/api/tasks/create-task", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -63,7 +63,7 @@ function CreateTaskPage() {
               rows="2"
               className="task-details-input"
               placeholder="הקלד כאן"
-            ></textarea>
+            />
             <div className="buttons-container">
               <MainGreenButton onClick={handleAddTask} className="green-btn">
                 {"סיים"}

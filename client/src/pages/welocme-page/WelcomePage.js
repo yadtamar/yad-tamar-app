@@ -3,7 +3,7 @@ import neighboor from "../../assets/neighboor2.svg";
 import { Typography, Grid } from "@mui/material";
 import MainBlueButton from "../../components/styled/MainBlueButton";
 import MainGreenButton from "../../components/styled/MainGreenButton";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import SvgWave from "../../assets/svgIcons/SvgWave";
 
 import "./WelcomePage.css";

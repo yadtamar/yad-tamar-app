@@ -8,6 +8,7 @@
 .home-buble {
   transform: scaleX(-1);
   width: 40%;
+  height: 25vh;
   display: flex;
   justify-content: center;
   position: relative;
@@ -16,7 +17,7 @@
   background-color: #f5ebeb;
   border: 0.8px solid black;
   border-radius: 10px;
-  padding: 50px 20px;
+  padding: 40px 20px;
 }
 .main-container {
   transform: scalex(-1);

@@ -1,7 +1,7 @@
 import { Grid, Typography, Avatar } from "@mui/material";
 import MainGreenButton from "../styled/MainGreenButton";
 import MainGreyButton from "../styled/MainGreyButton";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import "./FamilyElement.css";
 
 const FamilyElement = ({ name, family_id, volunteers_count }) => {

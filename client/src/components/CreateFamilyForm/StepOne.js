@@ -8,7 +8,7 @@ import {
 } from "./styles";
 import { TextField, Grid, Typography, Avatar } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import family from "../../assets/family.png";
 import MainGreenButton from "../styled/MainGreenButton";
 import MainRedButton from "../styled/MainRedButton";
@@ -27,6 +27,59 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
 
   const { id } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (id) {
+      const fetchCurrentFamily = async () => {
+        try {
+          const response = await fetch(
+            `http://18.197.147.245/api/families/${id}`
+          );
+          if (response.ok) {
+            const {
+              mainPerson: {
+                first_name,
+                last_name,
+                home_phone,
+                cell_phone,
+                mail,
+                address,
+                city,
+                age,
+                gender,
+                family_status,
+                kids_num,
+                language,
+                sickness,
+                hospital,
+                medical_insurance,
+                medical_history,
+              },
+            } = await response.json();
+            setData({
+              first_name,
+              last_name,
+              home_phone,
+              cell_phone,
+              mail,
+              address,
+              city,
+              age,
+              gender,
+              family_status,
+              kids_num,
+              language,
+              sickness,
+              hospital,
+              medical_insurance,
+              medical_history,
+            });
+          }
+        } catch (error) {}
+      };
+      fetchCurrentFamily();
+    }
+  }, []);
 
   useEffect(() => {
     if (image) {
@@ -167,7 +220,7 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
                     <MainRedButton
                       style={buttonStyle}
                       onClick={() => {
-                        fetch(`/families/${id}`, {
+                        fetch(`http://18.197.147.245/api/families/${id}`, {
                           method: "DELETE",
                           headers: { "Content-Type": "application/json" },
                         }).then((response) => {
