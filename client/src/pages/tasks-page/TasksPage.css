@@ -1,3 +1,18 @@
+.mobile-header {
+  height: 8vh;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+}
+
+.logo-mobile {
+  width: 4.3rem;
+}
+
+.logo-text {
+  align-self: center;
+}
+
 .tasks-container {
   text-align: center;
   height: 100vh;
@@ -7,7 +22,7 @@
   margin: 30px auto auto auto;
   width: 80%;
 
-  box-shadow: 10px 6px 12px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 5px 3px 12px 1px rgba(39, 39, 39, 0.25);
   border-radius: 10px;
 }
 .task-header {
@@ -19,11 +34,16 @@
   padding: 10px;
   color: white;
 }
-
+.header-fill {
+  background-color: #8ca8e0;
+  padding-bottom: 20px;
+  border-radius: 0px 0px 40px 40px;
+  box-shadow: 5px 3px 12px 1px rgba(39, 39, 39, 0.25);
+}
 .element-body {
-  background-color: #fafafa;
+  background-color: #f9f9f9;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   justify-content: space-between;
   padding: 20px;
 }
@@ -47,11 +67,34 @@
   padding: 3px;
 }
 
-.done-by {
+.button {
   border-radius: 5px;
   width: 25%;
   padding: 12px 6px 0 6px;
-  background-color: #e0e0e0;
+  cursor: pointer;
+  transition: ease 100ms;
+}
+
+.header-button {
+  font-size: 15px;
+  background-color: #e8e8e8;
+  text-align: center;
+  padding: 2px;
+  padding-bottom: 5px;
+}
+
+.buttons-header {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  margin: auto;
+  justify-content: space-between;
+  margin-top: 5%;
+}
+
+.button:active {
+  box-shadow: 10px 6px 12px 1px rgba(0, 0, 0, 0.1);
+  transform: translateY(4px);
 }
 
 .helper-name {
