@@ -1,5 +1,5 @@
 const pool = require("./../db");
-//const { stepOneSchema} = require("../constants/schema.js")
+const { body, check, validationError, validationResult } = require('express-validator');
 
 const createFamily = (async (req, res, next) => {
   try {
@@ -22,55 +22,88 @@ const createFamily = (async (req, res, next) => {
       medical_insurance,
       medical_history
     } = req.body;
-    const newuser = await pool.query(
-      "INSERT INTO users (first_name, last_name, phone, cell_phone, mail, address, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
-      [
-        first_name,
-        last_name,
-        home_phone,
-        cell_phone,
-        mail,
-        adress,
-        city,
-        age,
-        gender,
-        family_status,
-        kids_num,
-        language
-      ]
-    );
-    const newFamily = await pool.query(
-      "INSERT INTO families (sickness, hospital, medical_history, hmo ) VALUES ($1,$2,$3,$4) RETURNING *",
-      [sickness, hospital, medical_history, HMO]
-    );
-    //find the main person of the family
-    const mainRole = await pool.query(
-      "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
-      [newuser.rows[0].user_id, newFamily.rows[0].family_id, "main"]
-    );
-    //insert medical insurances
-    const insurances = await pool.query(
-      "INSERT INTO insurance (user_id, insurance_name) VALUES ($1,$2) RETURNING *",
-      [newuser.rows[0].user_id, medical_insurance]
-    );
-    //insert names of hospitals (and hmos)
-    const hospi = await pool.query(
-      "SELECT hospital_name FROM hospitals WHERE hospitals.hospital_id = $1",
-      [newFamily.rows[0].hospital]
-    );
-    const myHmo = await pool.query(
-      "SELECT hmo_name FROM hmo WHERE hmo.id = $1",
-      [newFamily.rows[0].hmo]
-    );
-    const data = {
-      family: newFamily.rows,
-      user: newuser.rows,
-      role: mainRole.rows,
-      hospital: hospi.rows,
-      insurance: insurances.rows,
-      hmo: myHmo.rows
+    body(first_name, "the first name is not valid")
+    body(last_name, "email is not valid")
+    body(home_phone, "email is not valid")
+    body(cell_phone, "email is not valid")
+    body(adress, "email is not valid").isEmail();
+    body(city, "email is not valid")
+    body(age, "email is not valid")
+    body(gender, "email is not valid")
+    body(family_status, "email is not valid")
+    body(kids_num, "email is not valid")
+    body(sickness, "email is not valid")
+    body(language, "email is not valid")
+    body(HMO, "email is not valid")
+    body(hospital, "email is not valid")
+    body(medical_history, "email is not valid")
+    body(medical_insurance, "email is not valid")
+    //res.send(this.msg)
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    } else {
+      return res.send("ok")
     }
-    res.json(data);
+    // if (errors) {
+    //   req.session.errors = errors;
+    //   req.session.seccess = false;
+    //   console.log(errors)
+    // } else {
+    //   req.session.seccess = true;
+    //   res.send("hhhh")
+    //   console.log("ok")
+    // }
+    // const newuser = await pool.query(
+    //   "INSERT INTO users (first_name, last_name, phone, cell_phone, mail, address, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
+    //   [
+    //     first_name,
+    //     last_name,
+    //     home_phone,
+    //     cell_phone,
+    //     mail,
+    //     adress,
+    //     city,
+    //     age,
+    //     gender,
+    //     family_status,
+    //     kids_num,
+    //     language
+    //   ]
+    // );
+    // const newFamily = await pool.query(
+    //   "INSERT INTO families (sickness, hospital, medical_history, hmo ) VALUES ($1,$2,$3,$4) RETURNING *",
+    //   [sickness, hospital, medical_history, HMO]
+    // );
+    //find the main person of the family
+    // const mainRole = await pool.query(
+    //   "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
+    //   [newuser.rows[0].user_id, newFamily.rows[0].family_id, "main"]
+    // );
+    // //insert medical insurances
+    // const insurances = await pool.query(
+    //   "INSERT INTO insurance (user_id, insurance_name) VALUES ($1,$2) RETURNING *",
+    //   [newuser.rows[0].user_id, medical_insurance]
+    // );
+    // //insert names of hospitals (and hmos)
+    // const hospi = await pool.query(
+    //   "SELECT hospital_name FROM hospitals WHERE hospitals.hospital_id = $1",
+    //   [newFamily.rows[0].hospital]
+    // );
+    // const myHmo = await pool.query(
+    //   "SELECT hmo_name FROM hmo WHERE hmo.id = $1",
+    //   [newFamily.rows[0].hmo]
+    // );
+    // const data = {
+    //   family: newFamily.rows,
+    //   user: newuser.rows,
+    //   role: mainRole.rows,
+    //   hospital: hospi.rows,
+    //   insurance: insurances.rows,
+    //   hmo: myHmo.rows
+    // }
+    // res.json(data);
   } catch (err) {
     next(err.message);
   }
