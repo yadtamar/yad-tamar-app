@@ -1,5 +1,5 @@
 const pool = require("./../db");
-const { body, check, validationError, validationResult } = require('express-validator');
+let Validator = require('validatorjs');
 
 const createFamily = (async (req, res, next) => {
   try {
@@ -17,93 +17,91 @@ const createFamily = (async (req, res, next) => {
       kids_num,
       language,
       sickness,
-      HMO,
+      healthMaintenanceOrganization,
       hospital,
       medical_insurance,
       medical_history
     } = req.body;
-    body(first_name, "the first name is not valid")
-    body(last_name, "email is not valid")
-    body(home_phone, "email is not valid")
-    body(cell_phone, "email is not valid")
-    body(adress, "email is not valid").isEmail();
-    body(city, "email is not valid")
-    body(age, "email is not valid")
-    body(gender, "email is not valid")
-    body(family_status, "email is not valid")
-    body(kids_num, "email is not valid")
-    body(sickness, "email is not valid")
-    body(language, "email is not valid")
-    body(HMO, "email is not valid")
-    body(hospital, "email is not valid")
-    body(medical_history, "email is not valid")
-    body(medical_insurance, "email is not valid")
-    //res.send(this.msg)
-    let errors = validationResult(req);
+    let rules = {
+      first_name: 'required',
+      last_name: 'required',
+      home_phone: 'required',
+      cell_phone: 'required',
+      adress: 'required',
+      city: 'required',
+      age: 'required',
+      gender: 'required',
+      family_status: 'required',
+      kids_num: 'required',
+      language: 'required',
+      sickness: 'required',
+      healthMaintenanceOrganization: 'required',
+      hospital: 'required',
+      medical_insurance: 'required',
+      medical_history: 'required|string',
+      mail: 'required|email'
+    };
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+    let validation = new Validator(req.body, rules, { required: 'You forgot to give a :attribute' });
+
+    validation.passes(); // true
+    validation.fails(); // false    
+    let errors = validation.fails();
+
+    if (errors) {
+      res.json(validation.errors.all(req.body))
     } else {
-      return res.send("ok")
+
+      const newuser = await pool.query(
+        "INSERT INTO users (first_name, last_name, phone, cell_phone, mail, address, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
+        [
+          first_name,
+          last_name,
+          home_phone,
+          cell_phone,
+          mail,
+          adress,
+          city,
+          age,
+          gender,
+          family_status,
+          kids_num,
+          language
+        ]
+      );
+      const newFamily = await pool.query(
+        "INSERT INTO families (sickness, hospital, medical_history, health_maintenance_organization ) VALUES ($1,$2,$3,$4) RETURNING *",
+        [sickness, hospital, medical_history, healthMaintenanceOrganization]
+      );
+      //find the main person of the family
+      const mainRole = await pool.query(
+        "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
+        [newuser.rows[0].user_id, newFamily.rows[0].family_id, "main"]
+      );
+      //insert medical insurances
+      const insurances = await pool.query(
+        "INSERT INTO insurance (user_id, insurance_name) VALUES ($1,$2) RETURNING *",
+        [newuser.rows[0].user_id, medical_insurance]
+      );
+      //insert names of hospitals (and health_maintenance_organizations)
+      const hospi = await pool.query(
+        "SELECT hospital_name FROM hospitals WHERE hospitals.hospital_id = $1",
+        [newFamily.rows[0].hospital]
+      );
+      const myHealthMaintenanceOrganization = await pool.query(
+        "SELECT health_maintenance_organization_name FROM health_maintenance_organization WHERE health_maintenance_organization.id = $1",
+        [newFamily.rows[0].health_maintenance_organization]
+      );
+      const data = {
+        family: newFamily.rows,
+        user: newuser.rows,
+        role: mainRole.rows,
+        hospital: hospi.rows,
+        insurance: insurances.rows,
+        healthMaintenanceOrganization: myHealthMaintenanceOrganization.rows
+      }
+      res.json(data);
     }
-    // if (errors) {
-    //   req.session.errors = errors;
-    //   req.session.seccess = false;
-    //   console.log(errors)
-    // } else {
-    //   req.session.seccess = true;
-    //   res.send("hhhh")
-    //   console.log("ok")
-    // }
-    // const newuser = await pool.query(
-    //   "INSERT INTO users (first_name, last_name, phone, cell_phone, mail, address, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
-    //   [
-    //     first_name,
-    //     last_name,
-    //     home_phone,
-    //     cell_phone,
-    //     mail,
-    //     adress,
-    //     city,
-    //     age,
-    //     gender,
-    //     family_status,
-    //     kids_num,
-    //     language
-    //   ]
-    // );
-    // const newFamily = await pool.query(
-    //   "INSERT INTO families (sickness, hospital, medical_history, hmo ) VALUES ($1,$2,$3,$4) RETURNING *",
-    //   [sickness, hospital, medical_history, HMO]
-    // );
-    //find the main person of the family
-    // const mainRole = await pool.query(
-    //   "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
-    //   [newuser.rows[0].user_id, newFamily.rows[0].family_id, "main"]
-    // );
-    // //insert medical insurances
-    // const insurances = await pool.query(
-    //   "INSERT INTO insurance (user_id, insurance_name) VALUES ($1,$2) RETURNING *",
-    //   [newuser.rows[0].user_id, medical_insurance]
-    // );
-    // //insert names of hospitals (and hmos)
-    // const hospi = await pool.query(
-    //   "SELECT hospital_name FROM hospitals WHERE hospitals.hospital_id = $1",
-    //   [newFamily.rows[0].hospital]
-    // );
-    // const myHmo = await pool.query(
-    //   "SELECT hmo_name FROM hmo WHERE hmo.id = $1",
-    //   [newFamily.rows[0].hmo]
-    // );
-    // const data = {
-    //   family: newFamily.rows,
-    //   user: newuser.rows,
-    //   role: mainRole.rows,
-    //   hospital: hospi.rows,
-    //   insurance: insurances.rows,
-    //   hmo: myHmo.rows
-    // }
-    // res.json(data);
   } catch (err) {
     next(err.message);
   }
@@ -201,14 +199,14 @@ const updateFamily = (async (req, res, next) => {
       kids_num,
       language,
       sickness,
-      hmo,
+      healthMaintenanceOrganization,
       hospital,
       medical_insurance,
       medical_history,
     } = req.body;
     const updatedFamily = await pool.query(
-      "UPDATE families SET sickness=$1, hospital=$2,medical_history=$3, hmo=$4 WHERE family_id=$5 RETURNING *",
-      [sickness, hospital, medical_history, hmo, family_id]
+      "UPDATE families SET sickness=$1, hospital=$2,medical_history=$3, health_maintenance_organization=$4 WHERE family_id=$5 RETURNING *",
+      [sickness, hospital, medical_history, healthMaintenanceOrganization, family_id]
     );
     if (updatedFamily.rows[0] !== undefined) {
       const foundUserId = await pool.query(
@@ -248,6 +246,8 @@ const updateFamily = (async (req, res, next) => {
 
         res.send("Updated");
       }
+    } else {
+      res.send("sorry, but not such family")
     }
   } catch (err) {
     next(err);
