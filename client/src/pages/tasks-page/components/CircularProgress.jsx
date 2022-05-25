@@ -1,0 +1,50 @@
+import { useState, useEffect } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { borderRadius } from "@mui/system";
+
+export function CircularProgressWithLabel(props) {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prevProgress) =>
+        prevProgress === props.value ? props.value : prevProgress + 1
+      );
+    }, 100);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [props.value]);
+
+  return (
+    <Box
+      style={{
+        backgroundColor: "white",
+
+        borderRadius: "50%",
+        boxShadow: "5px 3px 12px 1px rgba(39, 39, 39, 0.25)",
+      }}
+      sx={{ position: "absolute", display: "flex" }}
+    >
+      <CircularProgress variant="determinate" value={progress} size={55} />
+      <Box
+        sx={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          position: "absolute",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography variant="caption" component="div" color="text.secondary">
+          {`${progress}%`}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}

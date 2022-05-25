@@ -1,65 +1,60 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
-import TaskElement from "./components/TaskElement";
-import "./TasksPage.css";
+import Spinner from "../../components/Spinner/Spinner";
+import moment from "moment";
 import logo from "../../assets/yad-tamar-logo.png";
-function TasksPage() {
-  const volunteerId = 1;
-  const { family_id } = useParams();
-  const [loading, setLoading] = useState(false);
+import TasksList from "./components/TasksList";
+import "./TasksPage.css";
+import { staticData } from "./components/staticData";
+import { CircularProgressWithLabel } from "../tasks-page/components/CircularProgress";
+const volunteerId = 1;
+
+function Tasks() {
+  const [loading, setLoading] = useState(true);
   const [filterBy, setFilterBy] = useState("all");
-  const [tasks, setTasks] = useState([
-    {
-      task_name: "לקחת את הדואר",
-      task_id: 58,
-      family_id: 160,
-      helper_id: 2,
-      date: "2022-05-16T00:00:00.000Z",
-      comments: "",
-      createdAt: null,
-      updatedAt: null,
-    },
-    {
-      task_name: "task1",
-      task_id: 59,
-      family_id: 160,
-      helper_id: 5,
-      date: "2022-05-16T00:00:00.000Z",
-      comments: "task1",
-      createdAt: true,
-      updatedAt: null,
-    },
-    {
-      task_name: "task2",
-      task_id: 60,
-      family_id: 160,
-      helper_id: null,
-      date: "2022-05-16T00:00:00.000Z",
-      comments: "task2",
-      createdAt: null,
-      updatedAt: null,
-    },
-    {
-      task_name: "לקנות מזון",
-      task_id: 61,
-      family_id: 160,
-      helper_id: null,
-      date: "2022-05-11T00:00:00.000Z",
-      comments: "",
-      createdAt: null,
-      updatedAt: null,
-    },
-  ]);
-  const [filteredTasks, setFilteredTasks] = useState(tasks);
+  const [allTasks, setAllTasks] = useState(staticData);
+  const [filteredTasks, setFilteredTasks] = useState(allTasks);
+  const [sortedTasks, setSortedTask] = useState([]);
+  const [completedPrecent, setCompletedPrecent] = useState();
+  var newArr = [];
+  const splitTasks = (tasks) => {
+    if (!tasks[0]) {
+      return newArr;
+    } else {
+      const currentDate = tasks[0].date;
+      const filteredTasks = tasks.filter((task) =>
+        moment(task.date).isSame(currentDate, "day")
+      );
+      newArr.unshift({ date: currentDate, tasks: filteredTasks });
+      const newTasks = tasks.filter(
+        (task) => !moment(task.date).isSame(currentDate, "day")
+      );
+      splitTasks(newTasks);
+    }
+  };
+
+  const calculateCompleted = () => {
+    const completedTasks = allTasks.filter(
+      (task) => task.createdAt === true
+    ).length;
+    setCompletedPrecent((completedTasks / allTasks.length) * 100);
+  };
 
   useEffect(() => {
-    if (tasks) {
+    calculateCompleted();
+    splitTasks(filteredTasks);
+    setSortedTask(newArr);
+    setLoading(false);
+  }, [allTasks, filterBy, filteredTasks]);
+
+  useEffect(() => {
+    if (allTasks) {
       switch (filterBy) {
         case "all":
-          return setFilteredTasks(tasks);
+          return setFilteredTasks(allTasks);
         case "currentUser":
-          const currentUserTasks = tasks.filter((task) => {
+          const currentUserTasks = allTasks.filter((task) => {
             return task.helper_id === volunteerId;
           });
           setFilteredTasks(currentUserTasks);
@@ -67,25 +62,7 @@ function TasksPage() {
     }
   }, [filterBy]);
 
-  /* useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch(
-          `http://18.197.147.245/api/tasks/tasks-for-family/${family_id}`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setTasks(data);
-          setLoading(false);
-        }
-      } catch (error) {}
-    };
-    fetchTasks();
-  }, []); */
-
-  return loading ? (
-    <span>Loading...</span>
-  ) : (
+  return (
     <>
       <div className="header-fill">
         <div className="mobile-header">
@@ -101,7 +78,7 @@ function TasksPage() {
         </div>
         <div className="buttons-header">
           <div
-            className="button header-button"
+            className="task-button header-button"
             onClick={() => {
               setFilterBy("all");
             }}
@@ -109,35 +86,56 @@ function TasksPage() {
             {"רשימה"}
           </div>
           <div
-            className="button header-button"
+            className="task-button header-button"
             onClick={() => {
               setFilterBy("currentUser");
             }}
           >
             {"המשימות שלי"}
           </div>
-          <div className="button header-button">{"השבוע"}</div>
+          <div className="task-button header-button">{"השבוע"}</div>
         </div>
       </div>
-      <div className="tasks-container">
-        {filteredTasks.map(
-          ({ task_name, date, task_id, helper_id, createdAt }) => {
-            return (
-              <TaskElement
-                key={task_id}
-                taskName={task_name}
-                date={date}
-                helper_id={helper_id}
-                setTasks={setTasks}
-                tasks={tasks}
-                createdAt={createdAt}
-              />
-            );
-          }
-        )}
-      </div>
+      {loading ? (
+        <div className="spinner-box">
+          <Spinner />
+        </div>
+      ) : (
+        <>
+          <div className="completed-precentage-box">
+            <CircularProgressWithLabel value={Math.round(completedPrecent)} />
+            <div>
+              <Typography
+                marginRight="60px"
+                alignSelf="center"
+                variant="subtitle1"
+                color="#8CA8E0"
+              >
+                {"משימות הושלמו"}
+              </Typography>
+            </div>
+          </div>
+          <div className="tasks-container">
+            {sortedTasks
+              .map((dateObj, index) => {
+                return { ...dateObj, id: index };
+              })
+              .map(({ date, tasks, id }) => {
+                return (
+                  <TasksList
+                    key={id}
+                    date={date}
+                    tasks={tasks}
+                    allTasks={allTasks}
+                    setAllTasks={setAllTasks}
+                  ></TasksList>
+                );
+              })}
+          </div>
+        </>
+      )}
     </>
   );
 }
 
-export default TasksPage;
+export default Tasks;

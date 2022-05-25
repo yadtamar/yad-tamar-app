@@ -9,7 +9,7 @@ export const stepOneSchema = yup.object().shape({
     .string("יש להכניס אותיות בעברית בלבד")
     .matches(/^([^0-9]*)$/, "שם לא יכול לכלול מספרים")
     .required("שדה זה הינו שדה חובה"),
-  home_phone: yup
+  phone: yup
     .string()
     .matches(/^([^a-z]*)$/, "יש להכניס ספרות בלבד")
     .min(9, "נא להקיש מספר בעל 9 ספרות")
@@ -62,7 +62,9 @@ export const stepThreeSchema = yup.object().shape({
     .typeError("שדה זה הינה שדה חובה")
     .required("שדה זה הינו שדה חובה"),
 
-  medical_insurance: yup.string().required("שדה זה הינו שדה חובה"),
+  health_maintenance_organization: yup
+    .string()
+    .required("שדה זה הינו שדה חובה"),
   medical_history: yup.string().required("שדה זה הינו שדה חובה"),
 });
 export const addVolunteerSchema = yup.object().shape({

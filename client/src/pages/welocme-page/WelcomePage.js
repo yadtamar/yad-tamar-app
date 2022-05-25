@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import SvgWave from "../../assets/svgIcons/SvgWave";
 
 import "./WelcomePage.css";
-function WelcomePage() {
+function Welcome() {
   const navigate = useNavigate();
 
   return (
@@ -60,4 +60,4 @@ function WelcomePage() {
   );
 }
 
-export default WelcomePage;
+export default Welcome;

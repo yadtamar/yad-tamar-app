@@ -49,11 +49,11 @@ const FormStepThree = ({ setStep, data, setData }) => {
             />
             <FormLabel text={"קופת חולים"} />
             <SelectField
-              value={data.medical_insurance}
+              value={data.health_maintenance_organization}
               data={data}
               setData={setData}
               register={register}
-              registerAs="medical_insurance"
+              registerAs="health_maintenance_organization"
               options={insuranseOptions}
               errors={errors}
             />

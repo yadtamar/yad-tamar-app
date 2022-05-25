@@ -69,3 +69,9 @@
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
+.spinner-box {
+  display: flex;
+  margin: 50px auto auto auto;
+  width: 50vw;
+  justify-content: center;
+}

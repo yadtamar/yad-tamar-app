@@ -6,7 +6,7 @@ import { TextField, Typography } from "@mui/material";
 import MainBlueButton from "../../components/styled/MainBlueButton";
 import Spinner from "../../components/Spinner/Spinner";
 import "./FamiliesPage.css";
-const FamiliesPage = () => {
+const Families = () => {
   const navigate = useNavigate();
   const [families, setFamilies] = useState([]);
   const [filter, setFilter] = useState("");
@@ -94,12 +94,13 @@ const FamiliesPage = () => {
                 }}
               />
             </div>
-
-            <div className="families-card-div">
-              {isLoading ? (
+            {isLoading ? (
+              <div className="spinner-box">
                 <Spinner />
-              ) : (
-                familiesToShow.map((family, index) => {
+              </div>
+            ) : (
+              <div className="families-card-div">
+                {familiesToShow.map((family, index) => {
                   return (
                     <FamilyElement
                       key={family.family_id}
@@ -108,9 +109,9 @@ const FamiliesPage = () => {
                       volunteers_count={family.volunteersCount}
                     />
                   );
-                })
-              )}
-            </div>
+                })}
+              </div>
+            )}
           </div>
         }
         headerText={"משפחות"}
@@ -118,4 +119,4 @@ const FamiliesPage = () => {
     </>
   );
 };
-export default FamiliesPage;
+export default Families;

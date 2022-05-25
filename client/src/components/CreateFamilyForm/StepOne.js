@@ -40,7 +40,7 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
               mainPerson: {
                 first_name,
                 last_name,
-                home_phone,
+                phone,
                 cell_phone,
                 mail,
                 address,
@@ -52,14 +52,14 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
                 language,
                 sickness,
                 hospital,
-                medical_insurance,
+                health_maintenance_organization,
                 medical_history,
               },
             } = await response.json();
             setData({
               first_name,
               last_name,
-              home_phone,
+              phone,
               cell_phone,
               mail,
               address,
@@ -71,7 +71,7 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
               language,
               sickness,
               hospital,
-              medical_insurance,
+              health_maintenance_organization,
               medical_history,
             });
           }
@@ -118,12 +118,12 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
             />
             <FormLabel text={"טלפון בבית"} />
             <TextField
-              {...register("home_phone")}
-              error={!!errors.home_phone}
-              helperText={errors?.home_phone?.message}
-              value={data.home_phone}
+              {...register("phone")}
+              error={!!errors.phone}
+              helperText={errors?.phone?.message}
+              value={data.phone}
               onChange={(e) => {
-                setData({ ...data, home_phone: e.target.value });
+                setData({ ...data, phone: e.target.value });
               }}
             />
             <FormLabel text={"טלפון נייד"} />
