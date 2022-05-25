@@ -22,7 +22,7 @@ export function CircularProgressWithLabel(props) {
     <Box
       style={{
         backgroundColor: "white",
-
+        color: "#8ca8e0",
         borderRadius: "50%",
         boxShadow: "5px 3px 12px 1px rgba(39, 39, 39, 0.25)",
       }}
@@ -39,6 +39,9 @@ export function CircularProgressWithLabel(props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          boxShadow: "inset 1px 1px 15px 0px  rgba(39, 39, 39, 0.17)",
+          color: "#8ca8e0",
+          borderRadius: "50%",
         }}
       >
         <Typography variant="caption" component="div" color="text.secondary">

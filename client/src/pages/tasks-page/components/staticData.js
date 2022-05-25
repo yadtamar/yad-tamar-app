@@ -79,4 +79,14 @@ export const staticData = [
     createdAt: null,
     updatedAt: null,
   },
+  {
+    task_name: "השבוע",
+    task_id: 66,
+    family_id: 160,
+    helper_id: null,
+    date: "2022-05-25T00:00:00.000Z",
+    comments: "",
+    createdAt: null,
+    updatedAt: null,
+  },
 ];

@@ -54,10 +54,15 @@ function Tasks() {
         case "all":
           return setFilteredTasks(allTasks);
         case "currentUser":
-          const currentUserTasks = allTasks.filter((task) => {
-            return task.helper_id === volunteerId;
-          });
-          setFilteredTasks(currentUserTasks);
+          const currentUserTasks = allTasks.filter(
+            (task) => task.helper_id === volunteerId
+          );
+          return setFilteredTasks(currentUserTasks);
+        case "thisWeek":
+          const thisWeekTasks = allTasks.filter((task) =>
+            moment(task.date).isSame(moment(), "week")
+          );
+          return setFilteredTasks(thisWeekTasks);
       }
     }
   }, [filterBy]);
@@ -93,7 +98,14 @@ function Tasks() {
           >
             {"המשימות שלי"}
           </div>
-          <div className="task-button header-button">{"השבוע"}</div>
+          <div
+            className="task-button header-button"
+            onClick={() => {
+              setFilterBy("thisWeek");
+            }}
+          >
+            {"השבוע"}
+          </div>
         </div>
       </div>
       {loading ? (
