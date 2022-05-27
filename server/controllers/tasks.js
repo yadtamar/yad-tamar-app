@@ -1,4 +1,4 @@
-const pool = require("./../db");
+const pool = require("../db");
 //create a new task
 const createTask = (async (req, res) => {
     try {
