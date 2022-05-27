@@ -1,8 +1,8 @@
 const Pool = require("pg").Pool;
-const env = require("dotenv").config();
+require("dotenv").config();
 const fs = require("fs");
 
-const password = "aq8l6kg0m5luaitk"//process.env.Password;
+const password = process.env.Password;
 
 const pool = new Pool({
   user: "doadmin",
