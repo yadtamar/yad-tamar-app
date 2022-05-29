@@ -200,7 +200,6 @@ const updateFamily = (async (req, res, next) => {
       "UPDATE families SET sickness=$1, hospital=$2,medical_history=$3, health_maintenance_organization=$4 WHERE family_id=$5 RETURNING *",
       [sickness, hospital, medical_history, health_maintenance_organization, family_id]
     ); 
-    console.log(updatedFamily.rows[0])
     if (updatedFamily.rows[0] !== undefined) {
       const foundUserId = await pool.query(
         "SELECT * FROM roles WHERE family_id=$1 AND role = 'main'",

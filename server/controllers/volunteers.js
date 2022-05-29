@@ -70,7 +70,6 @@ const updateVoluteer = (async (req, res, next) => {
                 user_id
             ]
         );
-        console.log(upVolunt)
         if (upVolunt.rows){
             res.send("Updated");
         }else{
