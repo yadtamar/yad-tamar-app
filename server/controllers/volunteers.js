@@ -13,8 +13,8 @@ const createVoluteer = (async (req, res, next) => {
         const uniqVolunteerCode = "http://localhost:3000/tasks/" + family_id + "/"+ newVolunteer.rows[0].user_id;
 
         const setUniqCode = await pool.query(
-            "INSERT INTO users (uniq_code) VALUES ($1) RETURNING *",
-            [uniqVolunteerCode]
+            "UPDATE users SET uniq_code = $1 WHERE user_id = $2 RETURNING *",
+            [uniqVolunteerCode, newVolunteer.rows[0].user_id]
         )
         const VolunteerRole = await pool.query(
             "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
@@ -62,15 +62,20 @@ const updateVoluteer = (async (req, res, next) => {
             first_name,
             cell_phone
         } = req.body;
-        await pool.query(
-            "UPDATE users SET first_name = $1, cell_phone=$2 WHERE user_id = $3",
+        const upVolunt = await pool.query(
+            "UPDATE users SET first_name = $1, cell_phone=$2 WHERE user_id = $3 RETURNING *",
             [
                 first_name,
                 cell_phone,
                 user_id
             ]
         );
-        res.send("Updated");
+        console.log(upVolunt)
+        if (upVolunt.rows){
+            res.send("Updated");
+        }else{
+            res.send("soory, but the current volunteer didn't found")
+        }
     } catch (err) {
         next(err);
     }
