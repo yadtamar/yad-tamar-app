@@ -10,7 +10,7 @@ import DatePicker from "../../components/DatePicker/DatePicker";
 import MainGreenButton from "../../components/styled/MainGreenButton";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 
-function CreateTaskPage() {
+function CreateTask() {
   const CreateTaskLayout = () => {
     const navigate = useNavigate();
     const [value, setValue] = useState(moment());
@@ -91,4 +91,4 @@ function CreateTaskPage() {
   );
 }
 
-export default CreateTaskPage;
+export default CreateTask;

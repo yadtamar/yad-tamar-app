@@ -9,7 +9,7 @@ import "./VolunteersPage.css";
 import Volunteer from "../../components/Volunteer/Volunteer";
 import AddVolunteerPopup from "../../components/AddVolunteerPopup/AddVolunteerPopup";
 
-function VolunteersPage() {
+function Volunteers() {
   const navigate = useNavigate();
   const VolunteersPageLayout = () => {
     const [open, setOpen] = useState(false);
@@ -116,4 +116,4 @@ function VolunteersPage() {
   );
 }
 
-export default VolunteersPage;
+export default Volunteers;

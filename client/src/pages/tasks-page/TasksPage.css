@@ -1,0 +1,118 @@
+.mobile-header {
+  height: 8vh;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+}
+
+.logo-mobile {
+  width: 4.3rem;
+}
+
+.logo-text {
+  align-self: center;
+}
+
+.tasks-container {
+  text-align: center;
+  height: 100vh;
+  max-width: 60rem;
+}
+.task-element-container {
+  margin: 30px auto auto auto;
+  width: 80%;
+  box-shadow: 5px 3px 12px 1px rgba(39, 39, 39, 0.25);
+  border-radius: 10px;
+}
+.task-header {
+  background-color: #8ca8e0;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+  color: white;
+}
+.header-fill {
+  background-color: #8ca8e0;
+  padding-bottom: 20px;
+  border-radius: 0px 0px 40px 40px;
+  box-shadow: 5px 3px 12px 1px rgba(39, 39, 39, 0.3);
+}
+.task-body {
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
+  max-height: 61px;
+}
+
+.task {
+  padding: 6px;
+  background-color: #e0e0e0;
+  width: 65%;
+  text-align: right;
+  border-radius: 5px;
+}
+
+.done-until {
+  position: relative;
+  text-align: left;
+  width: 100%;
+  opacity: 0.7;
+}
+
+.task-description {
+  padding: 3px;
+}
+
+.task-button {
+  border-radius: 5px;
+  width: 25%;
+  padding: 6px 6px 0 6px;
+  cursor: pointer;
+  transition: ease 100ms;
+}
+
+.header-button {
+  font-size: 15px;
+  background-color: #e8e8e8;
+  text-align: center;
+  padding: 2px;
+  padding-bottom: 5px;
+}
+
+.buttons-header {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  margin: auto;
+  justify-content: space-between;
+  margin-top: 5%;
+}
+
+.task-button:active {
+  box-shadow: 10px 6px 12px 1px rgba(0, 0, 0, 0.1);
+  transform: translateY(4px);
+}
+
+.helper-name {
+  padding: 1px;
+  font-size: 20px;
+}
+
+.will-do-it {
+  font-size: 11.5px;
+  opacity: 0.7;
+}
+.completed-precentage-box {
+  margin: 30px auto auto auto;
+  width: 80%;
+  height: 40px;
+  display: flex;
+  justify-content: flex-start;
+  background-color: #e8e8e8;
+  border-radius: 18px;
+  align-items: center;
+}
