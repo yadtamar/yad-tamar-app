@@ -1,5 +1,5 @@
 const pool = require("./../db");
-const { body, check, validationError, validationResult } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 
 const createFamily = (async (req, res, next) => {
   try {
@@ -23,22 +23,22 @@ const createFamily = (async (req, res, next) => {
       medical_history
     } = req.body;
     body(first_name, "the first name is not valid")
-    body(last_name, "email is not valid")
-    body(home_phone, "email is not valid")
-    body(cell_phone, "email is not valid")
-    body(adress, "email is not valid").isEmail();
-    body(city, "email is not valid")
-    body(age, "email is not valid")
-    body(gender, "email is not valid")
-    body(family_status, "email is not valid")
-    body(kids_num, "email is not valid")
-    body(sickness, "email is not valid")
-    body(language, "email is not valid")
-    body(health_maintenance_organization, "email is not valid")
-    body(hospital, "email is not valid")
-    body(medical_history, "email is not valid")
-    body(medical_insurance, "email is not valid")
-    //res.send(this.msg)
+    body(last_name, "the last name is not valid")
+    body(home_phone, "the phone is not valid")
+    body(cell_phone, "the cell phone number is not valid")
+    body(adress, "the address is not valid").isEmail();
+    body(city, "the city is not valid")
+    body(age, "the age is not valid")
+    body(gender, "the gender is not valid")
+    body(family_status, "the fumily status is not valid")
+    body(kids_num, "the number of kids is not valid")
+    body(sickness, "the sickness is not valid")
+    body(language, "the language is not valid")
+    body(health_maintenance_organization, "the HMO is not valid")
+    body(hospital, "the hospital is not valid")
+    body(medical_history, "the medical history is not valid")
+    body(medical_insurance, "the insurance is not valid")
+    
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
