@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "client": "npm start --prefix ../client",
-    "start": "concurrently \"npm run watch\" \"npm run client\"",
+    "start": "node index.js",
     "start:prod": "node index.js"
   },
   "keywords": [],

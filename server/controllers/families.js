@@ -1,5 +1,5 @@
 const pool = require("./../db");
-const { body, check, validationError, validationResult } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 
 const createFamily = (async (req, res, next) => {
   try {
@@ -23,29 +23,29 @@ const createFamily = (async (req, res, next) => {
       medical_history
     } = req.body;
     body(first_name, "the first name is not valid")
-    body(last_name, "email is not valid")
-    body(home_phone, "email is not valid")
-    body(cell_phone, "email is not valid")
-    body(adress, "email is not valid").isEmail();
-    body(city, "email is not valid")
-    body(age, "email is not valid")
-    body(gender, "email is not valid")
-    body(family_status, "email is not valid")
-    body(kids_num, "email is not valid")
-    body(sickness, "email is not valid")
-    body(language, "email is not valid")
-    body(health_maintenance_organization, "email is not valid")
-    body(hospital, "email is not valid")
-    body(medical_history, "email is not valid")
-    body(medical_insurance, "email is not valid")
-    //res.send(this.msg)
+    body(last_name, "the last name is not valid")
+    body(home_phone, "the phone is not valid")
+    body(cell_phone, "the cell phone number is not valid")
+    body(adress, "the address is not valid").isEmail();
+    body(city, "the city is not valid")
+    body(age, "the age is not valid")
+    body(gender, "the gender is not valid")
+    body(family_status, "the fumily status is not valid")
+    body(kids_num, "the number of kids is not valid")
+    body(sickness, "the sickness is not valid")
+    body(language, "the language is not valid")
+    body(health_maintenance_organization, "the HMO is not valid")
+    body(hospital, "the hospital is not valid")
+    body(medical_history, "the medical history is not valid")
+    body(medical_insurance, "the insurance is not valid")
+    
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     } else {
       const newuser = await pool.query(
-        "INSERT INTO users (first_name, last_name, phone, cell_phone, mail, address, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
+        "INSERT INTO users (first_name, last_name, home_phone, cell_phone, mail, adress, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
         [
           first_name,
           last_name,
@@ -208,7 +208,7 @@ const updateFamily = (async (req, res, next) => {
       if (foundUserId.rows[0] !== undefined) {
         const user_id = foundUserId.rows[0].user_id;
         const updatedUser = await pool.query(
-          "UPDATE users SET first_name=$1, last_name=$2 ,phone=$3,cell_phone=$4,mail=$5,address=$6,city=$7, age=$8, gender=$9, family_status=$10,  kids_num=$11,language=$12 WHERE user_id=$13 RETURNING *",
+          "UPDATE users SET first_name=$1, last_name=$2 ,home_phone=$3,cell_phone=$4,mail=$5,adress=$6,city=$7, age=$8, gender=$9, family_status=$10,  kids_num=$11,language=$12 WHERE user_id=$13 RETURNING *",
           [
             first_name,
             last_name,
@@ -227,14 +227,15 @@ const updateFamily = (async (req, res, next) => {
         );
         const Role = await pool.query(
           "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
-          [updatedUser.rows[0].user_id, updatedFamily.rows[0].fumily_id, "main"]
+          [updatedUser.rows[0].user_id, family_id, "main"]
         );
 
         //update medical insurances
         const insurances = await pool.query(
-          "UPDATE insurance SET user_id=$1, insurance_name=$2 RETURNING *",
-          [updatedFamily.rows[0].user_id, medical_insurance]
-        );
+          "UPDATE insurance SET insurance_name=$1 WHERE user_id=$2 RETURNING *",
+          [medical_insurance, updatedUser.rows[0].user_id]
+        ); 
+        console.log(updatedUser.rows[0].user_id, family_id );
 
         res.send("Updated");
       }
