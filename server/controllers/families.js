@@ -232,8 +232,8 @@ const updateFamily = (async (req, res, next) => {
 
         //update medical insurances
         const insurances = await pool.query(
-          "UPDATE insurance SET user_id=$1, insurance_name=$2 RETURNING *",
-          [updatedFamily.rows[0].user_id, medical_insurance]
+          "UPDATE insurance SET insurance_name=$1 WHERE user_id=$2 RETURNING *",
+          [medical_insurance, updatedFamily.rows[0].user_id]
         );
 
         res.send("Updated");
