@@ -1,4 +1,6 @@
 const router = require('express').Router();
+expressValidator = require("express-validator");
+expressSession = require("express-session");
 const {
     createFamily,
     getSingleFamily,
@@ -7,7 +9,7 @@ const {
     deleteFamily
 } = require('../controllers/families');;
 
-router.post("/",  createFamily);
+router.post("/", createFamily);
 router.get("/", getAllFamilies);
 router.get("/:family_id", getSingleFamily);
 router.put("/:family_id", updateFamily);

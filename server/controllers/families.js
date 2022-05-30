@@ -1,7 +1,7 @@
-const pool = require("../db");
-const { body, check, validationError, validationResult } = require('express-validator');
+const pool = require("./../db");
+const { body, validationResult } = require('express-validator');
 
-const createFamily = (async (req, res) => {
+const createFamily = (async (req, res, next) => {
   try {
     const {
       first_name,
@@ -20,35 +20,32 @@ const createFamily = (async (req, res) => {
       health_maintenance_organization,
       hospital,
       medical_insurance,
-      medical_history,
+      medical_history
     } = req.body;
     body(first_name, "the first name is not valid")
-    body(last_name, "email is not valid")
-    body(home_phone, "email is not valid")
-    body(cell_phone, "email is not valid")
-    body(adress, "email is not valid").isEmail();
-    body(city, "email is not valid")
-    body(age, "email is not valid")
-    body(gender, "email is not valid")
-    body(family_status, "email is not valid")
-    body(kids_num, "email is not valid")
-    body(sickness, "email is not valid")
-    body(language, "email is not valid")
-    body(health_maintenance_organization, "email is not valid")
-    body(hospital, "email is not valid")
-    body(medical_history, "email is not valid")
-    body(medical_insurance, "email is not valid")
-    //res.send(this.msg)
+    body(last_name, "the last name is not valid")
+    body(home_phone, "the phone is not valid")
+    body(cell_phone, "the cell phone number is not valid")
+    body(adress, "the address is not valid").isEmail();
+    body(city, "the city is not valid")
+    body(age, "the age is not valid")
+    body(gender, "the gender is not valid")
+    body(family_status, "the fumily status is not valid")
+    body(kids_num, "the number of kids is not valid")
+    body(sickness, "the sickness is not valid")
+    body(language, "the language is not valid")
+    body(health_maintenance_organization, "the HMO is not valid")
+    body(hospital, "the hospital is not valid")
+    body(medical_history, "the medical history is not valid")
+    body(medical_insurance, "the insurance is not valid")
+    
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
-
     } else {
-      req.session.seccess = true;
-
       const newuser = await pool.query(
-        "INSERT INTO users (first_name, last_name, phone, cell_phone, mail, address, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
+        "INSERT INTO users (first_name, last_name, home_phone, cell_phone, mail, adress, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
         [
           first_name,
           last_name,
@@ -95,16 +92,15 @@ const createFamily = (async (req, res) => {
         insurance: insurances.rows,
         health_maintenance_organization: myhealth_maintenance_organization.rows
       }
+      res.json(data);
     }
-    res.json(data);
   } catch (err) {
-    console.error(err.message);
+    next(err.message);
   }
 });
 
-const getAllFamilies = (async (req, res) => {
+const getAllFamilies = (async (req, res, next) => {
   try {
-    const data = []
     const families = await pool.query(
       "SELECT family_id FROM families");
     //for each family get a details
@@ -119,34 +115,34 @@ const getAllFamilies = (async (req, res) => {
       let data = [];
       const familiesDtls = foundFamily.rows;
       if (familiesDtls[0]) {
-        for (let i = 0; i < familiesDtls.length; i++) {
+        familiesDtls?.forEach(i => {
           let volunteersCount = 0;
-          if (familiesDtls[i].role === 'main') {
-            for (let v = 0; v < familiesDtls.length; v++) {
-              if (familiesDtls[i].family_id === familiesDtls[v].family_id && familiesDtls[v].role === 'helper') {
-                ("volunteer of ", familiesDtls[i].last_name, " family is: ", familiesDtls[v].first_name)
+          if (i.role === 'main') {
+            familiesDtls.forEach(v => {
+              if (i.family_id === v.family_id && v.role === 'helper') {
+                ("volunteer of ", i.last_name, " family is: ", v.first_name)
                 volunteersCount++;
               }
-            }
+            })
             let details = {
               volunteersCount,
-              name_of_family: familiesDtls[i].last_name,
-              family_id: familiesDtls[i].family_id
+              name_of_family: i.last_name,
+              family_id: i.family_id
             }
             data.push(details)
           }
-        }
+        })
+        res.json(data)
+      } else {
+        res.send("one or more of the details are wrong!")
       }
-      res.json(data)
-    } else {
-      console.log("its failed!!")
     }
   } catch (err) {
-    console.error(err);
+    next(err);
   }
 });
 
-const getSingleFamily = (async (req, res) => {
+const getSingleFamily = (async (req, res, next) => {
   try {
     const { family_id } = req.params;
     const foundFamily = await pool.query(
@@ -158,27 +154,27 @@ const getSingleFamily = (async (req, res) => {
     let mainPerson;
     const familiesDtls = foundFamily.rows;
     if (familiesDtls[0]) {
-      for (let i = 0; i < familiesDtls.length; i++) {
-        if (familiesDtls[i].role === 'main') {
-          mainPerson = familiesDtls[i]
-        } else if (familiesDtls[i].role === 'helper') {
-          volunteers.push(familiesDtls[i]);
+      familiesDtls.forEach(i => {
+        if (i.role === 'main') {
+          mainPerson = i
+        } else if (i.role === 'helper') {
+          volunteers.push(i);
         }
-      }
+      });
       data = {
         mainPerson,
         volunteers
       }
       res.json(data)
     } else {
-      console.log("its failed!!")
+      res.send("one or more of the details are wrong!")
     }
   } catch (err) {
-    console.error(err);
+    next(err);
   }
 });
 
-const updateFamily = (async (req, res) => {
+const updateFamily = (async (req, res, next) => {
   const { family_id } = req.params;
   try {
     const {
@@ -203,7 +199,7 @@ const updateFamily = (async (req, res) => {
     const updatedFamily = await pool.query(
       "UPDATE families SET sickness=$1, hospital=$2,medical_history=$3, health_maintenance_organization=$4 WHERE family_id=$5 RETURNING *",
       [sickness, hospital, medical_history, health_maintenance_organization, family_id]
-    );
+    ); 
     if (updatedFamily.rows[0] !== undefined) {
       const foundUserId = await pool.query(
         "SELECT * FROM roles WHERE family_id=$1 AND role = 'main'",
@@ -212,7 +208,7 @@ const updateFamily = (async (req, res) => {
       if (foundUserId.rows[0] !== undefined) {
         const user_id = foundUserId.rows[0].user_id;
         const updatedUser = await pool.query(
-          "UPDATE users SET first_name=$1, last_name=$2 ,phone=$3,cell_phone=$4,mail=$5,address=$6,city=$7, age=$8, gender=$9, family_status=$10,  kids_num=$11,language=$12 WHERE user_id=$13 RETURNING *",
+          "UPDATE users SET first_name=$1, last_name=$2 ,home_phone=$3,cell_phone=$4,mail=$5,adress=$6,city=$7, age=$8, gender=$9, family_status=$10,  kids_num=$11,language=$12 WHERE user_id=$13 RETURNING *",
           [
             first_name,
             last_name,
@@ -231,37 +227,30 @@ const updateFamily = (async (req, res) => {
         );
         const Role = await pool.query(
           "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
-          [updatedUser.rows[0].user_id, updatedFamily.rows[0].fumily_id, "main"]
+          [updatedUser.rows[0].user_id, family_id, "main"]
         );
 
         //update medical insurances
         const insurances = await pool.query(
-          "UPDATE insurance SET user_id=$1, insurance_name=$2 RETURNING *",
-          [updatedFamily.rows[0].user_id, medical_insurance]
-        );
-        //update names of hospitals (and health_maintenance_organizations)
-        const hospi = await pool.query(
-          "SELECT name FROM hospitals WHERE hospital_id = $1 OR hospital_id = $2",
-          [updatedFamily.rows[0].hospital, updatedFamily.rows[0].health_maintenance_organization]
-        );
+          "UPDATE insurance SET insurance_name=$1 WHERE user_id=$2 RETURNING *",
+          [medical_insurance, updatedUser.rows[0].user_id]
+        ); 
         res.send("Updated");
       }
-    } else { console.log("can not update!") }
-
-
+    }
   } catch (err) {
-    console.error(err);
+    next(err);
   }
 })
 
-const deleteFamily = (async (req, res) => {
+const deleteFamily = (async (req, res, next) => {
   try {
     const { family_id } = req.params;
     await pool.query("DELETE FROM families WHERE family_id=$1",
       [family_id]);
     res.send("deleted succsessfuly");
   } catch (err) {
-    console.error(err);
+    next(err);
   }
 });
 
