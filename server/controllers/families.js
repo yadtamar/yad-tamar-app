@@ -227,14 +227,15 @@ const updateFamily = (async (req, res, next) => {
         );
         const Role = await pool.query(
           "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
-          [updatedUser.rows[0].user_id, updatedFamily.rows[0].fumily_id, "main"]
+          [updatedUser.rows[0].user_id, family_id, "main"]
         );
 
         //update medical insurances
         const insurances = await pool.query(
           "UPDATE insurance SET insurance_name=$1 WHERE user_id=$2 RETURNING *",
-          [medical_insurance, updatedFamily.rows[0].user_id]
-        );
+          [medical_insurance, updatedUser.rows[0].user_id]
+        ); 
+        console.log(updatedUser.rows[0].user_id, family_id );
 
         res.send("Updated");
       }
