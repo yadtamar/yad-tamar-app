@@ -45,7 +45,7 @@ const createFamily = (async (req, res, next) => {
       return res.status(400).json({ errors: errors.array() });
     } else {
       const newuser = await pool.query(
-        "INSERT INTO users (first_name, last_name, phone, cell_phone, mail, address, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
+        "INSERT INTO users (first_name, last_name, home_phone, cell_phone, mail, adress, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
         [
           first_name,
           last_name,
@@ -208,7 +208,7 @@ const updateFamily = (async (req, res, next) => {
       if (foundUserId.rows[0] !== undefined) {
         const user_id = foundUserId.rows[0].user_id;
         const updatedUser = await pool.query(
-          "UPDATE users SET first_name=$1, last_name=$2 ,phone=$3,cell_phone=$4,mail=$5,address=$6,city=$7, age=$8, gender=$9, family_status=$10,  kids_num=$11,language=$12 WHERE user_id=$13 RETURNING *",
+          "UPDATE users SET first_name=$1, last_name=$2 ,home_phone=$3,cell_phone=$4,mail=$5,adress=$6,city=$7, age=$8, gender=$9, family_status=$10,  kids_num=$11,language=$12 WHERE user_id=$13 RETURNING *",
           [
             first_name,
             last_name,
