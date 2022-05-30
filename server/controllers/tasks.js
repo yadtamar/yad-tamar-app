@@ -19,9 +19,22 @@ const createTask = (async (req, res, next) => {
 const getTasksForFamily = (async (req, res, next) => {
     try {
         const { family_id } = req.params;
-        const familyTasks = await pool.query("SELECT * FROM tasks WHERE family_id=$1",
+        const dateNow = Date.now();
+        const familyTasks = await pool.query("SELECT * FROM tasks WHERE family_id=$1 ORDER BY date",
             [family_id]);
-        (familyTasks.rows[0] !== undefined ? res.json(familyTasks.rows) : res.send("no tasks for this family"));
+            let tasks = familyTasks.rows
+            let relevantTasks = tasks.filter(task => {
+                return task.date > dateNow
+                // if (task.date > dateNow){
+                //     let newArr =+ task;
+                //     relevantTasks.push(task);
+                // }else{
+                //     console.log("the task ",tasks.rows,"it past!")
+                // }
+            
+            })
+            
+        (relevantTasks !== undefined ? res.json( relevantTasks) : res.send("no tasks for this family"));
     } catch (err) {
         next(err);
     }

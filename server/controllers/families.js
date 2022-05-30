@@ -235,8 +235,6 @@ const updateFamily = (async (req, res, next) => {
           "UPDATE insurance SET insurance_name=$1 WHERE user_id=$2 RETURNING *",
           [medical_insurance, updatedUser.rows[0].user_id]
         ); 
-        console.log(updatedUser.rows[0].user_id, family_id );
-
         res.send("Updated");
       }
     }
