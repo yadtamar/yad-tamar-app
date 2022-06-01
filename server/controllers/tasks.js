@@ -19,22 +19,41 @@ const createTask = (async (req, res, next) => {
 const getTasksForFamily = (async (req, res, next) => {
     try {
         const { family_id } = req.params;
-        const dateNow = Date.now();
-        const familyTasks = await pool.query("SELECT * FROM tasks WHERE family_id=$1 ORDER BY date",
+        let familyTasks = await pool.query("SELECT * FROM tasks WHERE family_id=$1 ORDER BY date",
             [family_id]);
-            let tasks = familyTasks.rows
-            let relevantTasks = tasks.filter(task => {
-                return task.date > dateNow
-                // if (task.date > dateNow){
-                //     let newArr =+ task;
-                //     relevantTasks.push(task);
-                // }else{
-                //     console.log("the task ",tasks.rows,"it past!")
-                // }
-            
-            })
-            
-        (relevantTasks !== undefined ? res.json( relevantTasks) : res.send("no tasks for this family"));
+        //familyTasks = familyTasks.rows
+        (familyTasks !== undefined ? res.json(familyTasks.rows) : res.send("no tasks for this family"));
+    } catch (err) {
+        next(err);
+    }
+});
+
+const getVolunteerAndFamilyEmptyTasks = (async (req, res, next) => {
+    try {
+        const { family_id } = req.params;
+        const { volunteer_id } = req.params;
+        let familyTasks = await pool.query(
+            "SELECT * FROM tasks WHERE family_id=$1 ORDER BY date",
+            [family_id]);
+        familyTasks = familyTasks.rows;
+        familyTasks = await familyTasks.filter(task => {
+            return task.helper_id === null || task.helper_id == volunteer_id
+        })
+
+        familyTasks !== undefined ? res.json(familyTasks) : res.send("no tasks to do for this family");
+    } catch (err) {
+        next(err);
+    }
+});
+
+const getVolunteerTasks = (async (req, res, next) => {
+    try {
+        const { volunteer_id } = req.params;
+        const foundTasks = await pool.query(
+            "SELECT * FROM tasks WHERE helper_id=$1",
+            [volunteer_id]
+        );
+        res.json(foundTasks.rows);
     } catch (err) {
         next(err);
     }
@@ -95,6 +114,8 @@ module.exports = {
     createTask,
     getTasksForFamily,
     getSingleTask,
+    getVolunteerTasks,
+    getVolunteerAndFamilyEmptyTasks,
     updateTask,
     deleteTask
 };
