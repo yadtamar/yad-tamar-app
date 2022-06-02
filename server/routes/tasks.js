@@ -4,6 +4,7 @@ const {
     getTasksForFamily,
     getVolunteerAndFamilyEmptyTasks,
     getSingleTask,
+    getVolunteerTasks,
     updateTask,
     deleteTask
 } = require('../controllers/tasks');
@@ -11,6 +12,7 @@ const {
 router.post("/", createTask);
 router.get("/tasks-for-family/:family_id", getTasksForFamily);
 router.get("/voluteer-tasks/:family_id/:volunteer_id", getVolunteerAndFamilyEmptyTasks);
+router.get("/voluteer-tasks/:volunteer_id", getVolunteerTasks);
 router.get("/:task_id", getSingleTask);
 router.put("/:task_id", updateTask);
 router.delete("/:task_id", deleteTask);

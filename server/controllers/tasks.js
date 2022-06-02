@@ -21,8 +21,7 @@ const getTasksForFamily = (async (req, res, next) => {
         const { family_id } = req.params;
         let familyTasks = await pool.query("SELECT * FROM tasks WHERE family_id=$1 ORDER BY date",
             [family_id]);
-        //familyTasks = familyTasks.rows
-        (familyTasks !== undefined ? res.json(familyTasks.rows) : res.send("no tasks for this family"));
+        familyTasks !== undefined ? res.json(familyTasks.rows) : res.send("no tasks for this family");
     } catch (err) {
         next(err);
     }
@@ -50,7 +49,7 @@ const getVolunteerTasks = (async (req, res, next) => {
     try {
         const { volunteer_id } = req.params;
         const foundTasks = await pool.query(
-            "SELECT * FROM tasks WHERE helper_id=$1",
+            "SELECT * FROM tasks WHERE helper_id=$1 ORDER BY date",
             [volunteer_id]
         );
         res.json(foundTasks.rows);
