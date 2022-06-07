@@ -1,4 +1,4 @@
-const pool = require("./../db");
+const pool = require("../db");
 //create a new task
 const createTask = (async (req, res, next) => {
     try {
@@ -19,9 +19,40 @@ const createTask = (async (req, res, next) => {
 const getTasksForFamily = (async (req, res, next) => {
     try {
         const { family_id } = req.params;
-        const familyTasks = await pool.query("SELECT * FROM tasks WHERE family_id=$1",
+        let familyTasks = await pool.query("SELECT * FROM tasks WHERE family_id=$1 ORDER BY date",
             [family_id]);
-        (familyTasks.rows[0] !== undefined ? res.json(familyTasks.rows) : res.send("no tasks for this family"));
+        familyTasks !== undefined ? res.json(familyTasks.rows) : res.send("no tasks for this family");
+    } catch (err) {
+        next(err);
+    }
+});
+
+const getVolunteerAndFamilyEmptyTasks = (async (req, res, next) => {
+    try {
+        const { family_id } = req.params;
+        const { volunteer_id } = req.params;
+        let familyTasks = await pool.query(
+            "SELECT * FROM tasks WHERE family_id=$1 ORDER BY date",
+            [family_id]);
+        familyTasks = familyTasks.rows;
+        familyTasks = await familyTasks.filter(task => {
+            return task.helper_id === null || task.helper_id == volunteer_id
+        })
+
+        familyTasks !== undefined ? res.json(familyTasks) : res.send("no tasks to do for this family");
+    } catch (err) {
+        next(err);
+    }
+});
+
+const getVolunteerTasks = (async (req, res, next) => {
+    try {
+        const { volunteer_id } = req.params;
+        const foundTasks = await pool.query(
+            "SELECT * FROM tasks WHERE helper_id=$1 ORDER BY date",
+            [volunteer_id]
+        );
+        res.json(foundTasks.rows);
     } catch (err) {
         next(err);
     }
@@ -82,6 +113,8 @@ module.exports = {
     createTask,
     getTasksForFamily,
     getSingleTask,
+    getVolunteerTasks,
+    getVolunteerAndFamilyEmptyTasks,
     updateTask,
     deleteTask
 };
