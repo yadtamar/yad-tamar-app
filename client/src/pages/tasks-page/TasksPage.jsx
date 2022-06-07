@@ -6,29 +6,53 @@ import moment from "moment";
 import logo from "../../assets/yad-tamar-logo.png";
 import TasksList from "./components/TasksList";
 import "./TasksPage.css";
-import { staticData } from "./components/staticData";
 import { CircularProgressWithLabel } from "../tasks-page/components/CircularProgress";
+
 const volunteerId = 1;
 
 function Tasks() {
   const [loading, setLoading] = useState(true);
   const [filterBy, setFilterBy] = useState("all");
-  const [allTasks, setAllTasks] = useState(staticData);
+  const [allTasks, setAllTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState(allTasks);
   const [sortedTasks, setSortedTask] = useState([]);
   const [completedPrecent, setCompletedPrecent] = useState();
+  const { family_id } = useParams();
+
+  useEffect(() => {
+    fetchAllTasks();
+  }, []);
+
+  const fetchAllTasks = async () => {
+    try {
+      const tasksResponse = await fetch(
+        `http://18.197.147.245/api/tasks/tasks-for-family/${family_id}`
+      );
+      if (tasksResponse.ok) {
+        const tasksData = await tasksResponse.json();
+        setAllTasks(tasksData);
+      }
+    } catch (error) {
+      throw new Error("something went wrong while fetching tasks");
+    }
+  };
+
   var newArr = [];
   const splitTasks = (tasks) => {
     if (!tasks[0]) {
       return newArr;
     } else {
-      const currentDate = tasks[0].date;
+      const currentDate = moment(parseInt(tasks[0].date)).format();
       const filteredTasks = tasks.filter((task) =>
-        moment(task.date).isSame(currentDate, "day")
+        moment(moment(parseInt(task.date)).format()).isSame(currentDate, "day")
       );
       newArr.unshift({ date: currentDate, tasks: filteredTasks });
       const newTasks = tasks.filter(
-        (task) => !moment(task.date).isSame(currentDate, "day")
+        (task) =>
+          !moment(moment(parseInt(task.date)).format()).isSame(
+            currentDate,
+            "day"
+          )
       );
       splitTasks(newTasks);
     }
@@ -43,8 +67,8 @@ function Tasks() {
 
   useEffect(() => {
     calculateCompleted();
-    splitTasks(filteredTasks);
     setSortedTask(newArr);
+    splitTasks(filteredTasks);
     setLoading(false);
   }, [allTasks, filterBy, filteredTasks]);
 
@@ -65,9 +89,11 @@ function Tasks() {
           return setFilteredTasks(thisWeekTasks);
       }
     }
-  }, [filterBy]);
+  }, [filterBy, allTasks]);
 
-  return (
+  return completedPrecent === "NaN" || NaN ? (
+    <Spinner />
+  ) : (
     <>
       <div className="header-fill">
         <div className="mobile-header">
@@ -140,6 +166,7 @@ function Tasks() {
                     tasks={tasks}
                     allTasks={allTasks}
                     setAllTasks={setAllTasks}
+                    fetchAllTasks={fetchAllTasks}
                   ></TasksList>
                 );
               })}

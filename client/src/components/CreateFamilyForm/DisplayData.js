@@ -17,10 +17,10 @@ const DisplayData = ({ data, image, setStep }) => {
     personalInfo: [
       { fieldName: "שם פרטי", fieldValue: data.first_name },
       { fieldName: "שם משפחה", fieldValue: data.last_name },
-      { fieldName: "טלפון בבית", fieldValue: data.phone },
+      { fieldName: "טלפון בבית", fieldValue: data.home_phone },
       { fieldName: "טלפון נייד", fieldValue: data.cell_phone },
       { fieldName: "דוא''ל", fieldValue: data.mail },
-      { fieldName: "כתובת", fieldValue: data.address },
+      { fieldName: "כתובת", fieldValue: data.adress },
       { fieldName: "יישוב", fieldValue: data.city },
       { fieldName: "גיל", fieldValue: data.age },
       { fieldName: "מגדר", fieldValue: gendrerOptions[data.gender - 1].option },
@@ -50,10 +50,14 @@ const DisplayData = ({ data, image, setStep }) => {
   };
 
   const handleUpdateFamily = () => {
+    console.log(data);
     if (id) {
       fetch(`http://18.197.147.245/api/families/${id}`, {
         method: "PUT",
-
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
       }).then((response) => {
         console.log(response);

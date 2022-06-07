@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { borderRadius } from "@mui/system";
 
 export function CircularProgressWithLabel(props) {
   const [progress, setProgress] = useState(0);
@@ -10,7 +9,7 @@ export function CircularProgressWithLabel(props) {
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prevProgress) =>
-        prevProgress === props.value ? props.value : prevProgress + 1
+        prevProgress >= props.value ? props.value : prevProgress + 1
       );
     }, 100);
     return () => {
