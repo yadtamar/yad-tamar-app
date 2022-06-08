@@ -14,6 +14,7 @@ const SelectField = ({
   registerAs,
   value,
 }) => {
+  console.log(options, value);
   return (
     <Box style={{ width: "90%" }}>
       <FormControl fullWidth>

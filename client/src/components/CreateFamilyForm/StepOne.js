@@ -22,9 +22,12 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(stepOneSchema), mode: "onBlur" });
-  const [preview, setPreview] = useState();
+  } = useForm({
+    resolver: yupResolver(stepOneSchema),
+    mode: "onBlur",
+  });
 
+  const [preview, setPreview] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -43,7 +46,7 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
                 home_phone,
                 cell_phone,
                 mail,
-                address,
+                adress,
                 city,
                 age,
                 gender,
@@ -52,7 +55,7 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
                 language,
                 sickness,
                 hospital,
-                medical_insurance,
+                health_maintenance_organization,
                 medical_history,
               },
             } = await response.json();
@@ -62,7 +65,7 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
               home_phone,
               cell_phone,
               mail,
-              address,
+              adress,
               city,
               age,
               gender,
@@ -71,7 +74,7 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
               language,
               sickness,
               hospital,
-              medical_insurance,
+              health_maintenance_organization,
               medical_history,
             });
           }
@@ -148,12 +151,12 @@ const FormStepOne = ({ setStep, data, setData, image, setImage }) => {
             />
             <FormLabel text={"כתובת"} />
             <TextField
-              {...register("address")}
-              error={!!errors.address}
-              helperText={errors?.address?.message}
-              value={data.address}
+              {...register("adress")}
+              error={!!errors.adress}
+              helperText={errors?.adress?.message}
+              value={data.adress}
               onChange={(e) => {
-                setData({ ...data, address: e.target.value });
+                setData({ ...data, adress: e.target.value });
               }}
             />
             <FormLabel text={"עיר"} />

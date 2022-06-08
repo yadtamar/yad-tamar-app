@@ -32,7 +32,7 @@ export default function AddVolunteerPopup({ open, setOpen, family_id }) {
   };
 
   const createVolunteer = () => {
-    fetch("http://18.197.147.245/api/volunteers/create-volunteer", {
+    fetch("http://18.197.147.245/api/volunteers/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(volunteer),

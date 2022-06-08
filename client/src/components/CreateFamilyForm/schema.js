@@ -25,7 +25,7 @@ export const stepOneSchema = yup.object().shape({
     .string()
     .email("נא להקליד כתובת תקינה")
     .required("שדה זה הינו שדה חובה"),
-  address: yup.string().required("שדה זה הינו שדה חובה"),
+  adress: yup.string().required("שדה זה הינו שדה חובה"),
   city: yup.string().required("שדה זה הינו שדה חובה"),
 });
 
@@ -62,7 +62,9 @@ export const stepThreeSchema = yup.object().shape({
     .typeError("שדה זה הינה שדה חובה")
     .required("שדה זה הינו שדה חובה"),
 
-  medical_insurance: yup.string().required("שדה זה הינו שדה חובה"),
+  health_maintenance_organization: yup
+    .string()
+    .required("שדה זה הינו שדה חובה"),
   medical_history: yup.string().required("שדה זה הינו שדה חובה"),
 });
 export const addVolunteerSchema = yup.object().shape({

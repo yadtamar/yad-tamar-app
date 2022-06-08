@@ -6,7 +6,7 @@ import DisplayData from "../../components/CreateFamilyForm/DisplayData";
 import FormStepThree from "../../components/CreateFamilyForm/StepThree";
 import { useParams } from "react-router-dom";
 
-const CreateFamilyPage = () => {
+const CreateFamily = () => {
   const { id } = useParams();
   const [step, setStep] = useState(1);
   const [image, setImage] = useState(null);
@@ -16,7 +16,7 @@ const CreateFamilyPage = () => {
     home_phone: "",
     cell_phone: "",
     mail: "",
-    address: "",
+    adress: "",
     city: "",
     age: "",
     gender: "",
@@ -25,7 +25,7 @@ const CreateFamilyPage = () => {
     language: "",
     sickness: "",
     hospital: "",
-    medical_insurance: "",
+    health_maintenance_organization: "",
     medical_history: "",
   });
 
@@ -55,7 +55,7 @@ const CreateFamilyPage = () => {
     />
   );
 };
-export default CreateFamilyPage;
+export default CreateFamily;
 {
   /* <DisplayData data={data} image={image} /> */
 }
