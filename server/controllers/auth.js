@@ -1,8 +1,11 @@
 const pool = require("../db");
-//create a new task
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const salt = bcrypt.genSaltSync(10);
+const hash = bcrypt.hashSync("B4c0/\/", salt);
 const register = (async (req, res, next) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, role, family_id } = req.body;
         if (!(email && password)) {
             res.status(400).send("All input is required");
           }
@@ -13,7 +16,8 @@ const register = (async (req, res, next) => {
             "SELECT * FROM users WHERE mail=$1",
             [email]
         );
-          if (oldUser) {
+          if (oldUser.rows[0] !== undefined) {
+            console.log(oldUser.rows)
             return res.status(409).send("User Already Exist. Please Login");
           }
       
@@ -21,10 +25,14 @@ const register = (async (req, res, next) => {
           encryptedPassword = await bcrypt.hash(password, 10);
       
           // Create user in our database
-          const user = await User.create({
-            email: email.toLowerCase(), // sanitize: convert email to lowercase
-            password: encryptedPassword,
-          });
+          let user = await pool.query(
+            "INSERT INTO users ( mail, password) VALUES ($1,$2) RETURNING *",
+            [email, password]
+          );
+          const userRole = await pool.query(
+            "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
+            [user.rows[0].user_id, family_id, role]
+          );
       
           // Create token
           const token = jwt.sign(
@@ -42,10 +50,9 @@ const register = (async (req, res, next) => {
         } catch (err) {
           console.log(err);
         }
-        // Our register logic ends here
       });
       
-      // ...
+
       
 const login = (async (req, res, next) => {
     try {
