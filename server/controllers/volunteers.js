@@ -1,5 +1,5 @@
 const pool = require("../db");
-
+const axios = require('axios').default;
 const createVoluteer = (async (req, res, next) => {
     try {
         const {
@@ -10,7 +10,7 @@ const createVoluteer = (async (req, res, next) => {
             "INSERT INTO users ( first_name, cell_phone) VALUES ($1,$2) RETURNING *",
             [name, phone]
         );
-        const uniqVolunteerCode = "http://localhost:3000/tasks/" + family_id + "/"+ newVolunteer.rows[0].user_id;
+        const uniqVolunteerCode = "http://localhost:3000/tasks/" + family_id + "/" + newVolunteer.rows[0].user_id;
 
         const setUniqCode = await pool.query(
             "UPDATE users SET uniq_code = $1 WHERE user_id = $2 RETURNING *",
@@ -20,11 +20,11 @@ const createVoluteer = (async (req, res, next) => {
             "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
             [newVolunteer.rows[0].user_id, family_id, "helper"]
         );
-        res.json({ 
-            user: newVolunteer.rows, 
-            role: VolunteerRole.rows[0], 
-            community: VolunteerRole.rows[0].family_id, 
-            uniqode: setUniqCode.rows[0].uniq_code 
+        res.json({
+            user: newVolunteer.rows,
+            role: VolunteerRole.rows[0],
+            community: VolunteerRole.rows[0].family_id,
+            uniqode: setUniqCode.rows[0].uniq_code
         });
     } catch (err) {
         next(err.message);
@@ -70,9 +70,9 @@ const updateVoluteer = (async (req, res, next) => {
                 user_id
             ]
         );
-        if (upVolunt.rows){
+        if (upVolunt.rows) {
             res.send("Updated");
-        }else{
+        } else {
             res.send("soory, but the current volunteer didn't found")
         }
     } catch (err) {
@@ -80,28 +80,78 @@ const updateVoluteer = (async (req, res, next) => {
     }
 });
 
+const sendSms = async (req, res) => {
+    const {
+        to, message
+    } = req.body;
+    
+	const body = `<?xml version="1.0" encoding="UTF-8"?> 
+	<sms> 
+	<user>  
+	<username>YadTamar</username>  
+	<password>E13Sr5pP</password> 
+	</user>  
+	<source>Yad Tamar</source> 
+	<destinations> 
+	<phone>${to}</phone> 
+	</destinations> 
+	<message>
+	${message}
+	</message>
+	<response>0</response> 
+	</sms> 
+	`;
+	const config = {
+		headers: {
+			'Content-Type': 'text/xml',
+			'X-Requested-With': 'XMLHttpRequest',
+		},
+	};
+    let url = "https://www.019sms.co.il:8090/api/test"
+	try {
+		const rest = await axios.post(
+			'https://www.019sms.co.il:8090/api/test', //process.env.SMS_PROVIDER_URL,
+			body,
+			config,
+		);
+        process.on('warning', e => console.warn(e.stack, e.message));
+            
+		if (rest.data.status !== 0) {
+			throw new Error('sms provider - send status faild', console.log(rest.data));
+		}
+        console.log(req.body, rest)
+        //res.send(rest.data)
+		return;
+	} catch (err) {
+		throw new Error('sms provider error');
+	}
+
+};
+
 const deleteVolunteer = (async (req, res, next) => {
     try {
         const { user_id } = req.params;
         await pool.query("DELETE FROM users WHERE user_id=$1", [user_id]);
         res.send("deleted succsessfuly");
-      } catch (err) {
+    } catch (err) {
         next(err);
-      }
+    }
 });
 
 const getUser = (async (req, res, next) => {
     try {
         const { user_id } = req.params;
         const foundUser = await pool.query(
-          "SELECT * FROM users WHERE user_id=$1",
-          [user_id]
+            "SELECT * FROM users WHERE user_id=$1",
+            [user_id]
         );
         res.json(foundUser.rows);
-      } catch (err) {
+    } catch (err) {
         next(err);
-      }
+    }
 });
+
+//sendSms("+972534290613", "hello yad tamar!")
 
 module.exports = {
     createVoluteer,
@@ -109,5 +159,6 @@ module.exports = {
     getUsers,
     getUser,
     updateVoluteer,
-    deleteVolunteer
+    deleteVolunteer,
+    sendSms
 }

@@ -9,6 +9,7 @@ const router = require('express').Router();
 const voluneerRouter = require('./routes/volunteers');
 const familyRouter = require('./routes/families');
 const taskRouter = require('./routes/tasks');
+const auth = require('./routes/auth');
 const bodyParser = require("body-parser")
 const expressValidator = require("express-validator");
 const expressSession = require("express-session");
@@ -32,6 +33,6 @@ router.get("/", (req, res, next) => {
  app.use("/volunteers", voluneerRouter);
  app.use("/tasks", taskRouter)
  app.use("/families", familyRouter);
- //app.use("/dev", devRouter)
+ app.use("/auth", auth)
 
 module.exports.handler = serverless(app);

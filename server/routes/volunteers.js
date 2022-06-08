@@ -5,10 +5,12 @@ const {
     getUsers,
     getUser,
     updateVoluteer,
-    deleteVolunteer
+    deleteVolunteer,
+    sendSms
 } = require('../controllers/volunteers');
 
 router.post("/", createVoluteer);
+router.post("/send-sms", sendSms);
 router.get("/volunteers-for-family/:family_id", getFamilyVolunteers);
 router.get("/all-users", getUsers);
 router.get("/:user_id", getUser);

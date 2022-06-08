@@ -29,16 +29,13 @@ const getTasksForFamily = (async (req, res, next) => {
 
 const getVolunteerAndFamilyEmptyTasks = (async (req, res, next) => {
     try {
+
         const { family_id } = req.params;
         const { volunteer_id } = req.params;
         let familyTasks = await pool.query(
-            "SELECT * FROM tasks WHERE family_id=$1 ORDER BY date",
-            [family_id]);
+            "SELECT * FROM tasks WHERE family_id=$1 AND (helper_id=$2 OR helper_id IS NULL) ORDER BY date",
+            [family_id, volunteer_id]);
         familyTasks = familyTasks.rows;
-        familyTasks = await familyTasks.filter(task => {
-            return task.helper_id === null || task.helper_id == volunteer_id
-        })
-
         familyTasks !== undefined ? res.json(familyTasks) : res.send("no tasks to do for this family");
     } catch (err) {
         next(err);
