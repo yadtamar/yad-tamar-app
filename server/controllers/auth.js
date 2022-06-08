@@ -33,7 +33,8 @@ const register = (async (req, res, next) => {
             "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
             [user.rows[0].user_id, family_id, role]
           );
-      
+          data= {user , userRole};
+          console.log(user)
           // Create token
           const token = jwt.sign(
             { user_id: user._id, email },
@@ -46,7 +47,7 @@ const register = (async (req, res, next) => {
           user.token = token;
       
           // return new user
-          res.status(201).json(user);
+          res.status(201).json(data);
         } catch (err) {
           console.log(err);
         }
