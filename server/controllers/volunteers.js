@@ -84,12 +84,12 @@ const sendSms = async (req, res) => {
     const {
         to, message
     } = req.body;
-    
+    console.log(to , message)
 	const body = `<?xml version="1.0" encoding="UTF-8"?> 
 	<sms> 
 	<user>  
 	<username>YadTamar</username>  
-	<password>E13Sr5pP</password> 
+	<password>Misha$123</password> 
 	</user>  
 	<source>Yad Tamar</source> 
 	<destinations> 
@@ -107,7 +107,7 @@ const sendSms = async (req, res) => {
 			'X-Requested-With': 'XMLHttpRequest',
 		},
 	};
-    let url = "https://www.019sms.co.il:8090/api/test"
+    let url = "https://www.019sms.co.il:8090/api"
 	try {
 		const rest = await axios.post(
 			'https://www.019sms.co.il:8090/api/test', //process.env.SMS_PROVIDER_URL,
@@ -119,7 +119,7 @@ const sendSms = async (req, res) => {
 		if (rest.data.status !== 0) {
 			throw new Error('sms provider - send status faild', console.log(rest.data));
 		}
-        console.log(req.body, rest)
+        console.log( rest)
         //res.send(rest.data)
 		return;
 	} catch (err) {
