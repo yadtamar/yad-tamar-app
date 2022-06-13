@@ -34,6 +34,7 @@ const register = (async (req, res) => {
       "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
       [user.rows[0].user_id, family_id, role]
     );
+    user = user.rows[0]
     data = { user, userRole };
     console.log(user)
     // Create token
