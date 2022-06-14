@@ -30,11 +30,12 @@ const register = (async (req, res) => {
       "INSERT INTO users ( mail, password) VALUES ($1,$2) RETURNING *",
       [email, password]
     );
-    const userRole = await pool.query(
+    let userRole = await pool.query(
       "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
       [user.rows[0].user_id, family_id, role]
     );
-    user = user.rows[0]
+    user = user.rows[0];
+    userRole = userRole.rows[0];
     data = { user, userRole };
     console.log(user)
     // Create token
@@ -49,7 +50,7 @@ const register = (async (req, res) => {
     user.token = token;
 
     // return new user
-    res.status(201).json(data);
+    res.status(201).json(200);
   } catch (err) {
     console.log(err);
   }
@@ -85,16 +86,39 @@ const login = (async (req, res) => {
 
       // user
       res.status(200)?.json(user);
-    }else{
-    console.log(res.status)
-    res.status(400)?.send("Invalid Credentials");
+    } else {
+      console.log(res.status)
+      res.status(400)?.send("Invalid Credentials");
     }
   } catch (err) {
     console.log(err);
   }
-})
+});
+
+const getUserData = (async (req, res) => {
+  const token = req.headers.token
+
+  const decodedToken = jwt.decode(token, {
+    complete: true
+  });
+  //console.log(decodedToken)
+  let foundUser = await pool.query(
+    "SELECT * FROM users INNER JOIN roles ON users.mail=$1 AND roles.user_id = users.user_id",
+    [decodedToken.payload.email]
+  );
+  foundUser = foundUser.rows[0]
+  //console.log(foundUser.user_id)
+  const data = {
+    user_id: foundUser.user_id, 
+    family_id: foundUser.family_id, 
+    role: foundUser.role
+  };
+  res.json(data)
+
+});
 
 module.exports = {
   login,
-  register
+  register,
+  getUserData
 };
