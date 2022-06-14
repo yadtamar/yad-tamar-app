@@ -6,7 +6,8 @@ const {
     getSingleTask,
     getVolunteerTasks,
     updateTask,
-    deleteTask
+    deleteTask,
+    taskPercent
 } = require('../controllers/tasks');
 
 router.post("/", createTask);
@@ -15,6 +16,7 @@ router.get("/voluteer-tasks/:family_id/:volunteer_id", getVolunteerAndFamilyEmpt
 router.get("/voluteer-tasks/:volunteer_id", getVolunteerTasks);
 router.get("/:task_id", getSingleTask);
 router.put("/:task_id", updateTask);
+router.get("/task-percent/:family_id", taskPercent);
 router.delete("/:task_id", deleteTask);
 
 module.exports = router;
