@@ -55,8 +55,7 @@ const register = (async (req, res) => {
 });
 
 const authorization = (async (req, res, next) => {
-  console.log("hiii");
-  const token = req.headers.token
+  const token = req.headers.authorization
   try {
     if (token !== undefined) {
       const decodedToken = jwt.decode(token, {
@@ -107,7 +106,7 @@ const login = (async (req, res) => {
 
       // save user token
       user.token = token;
-
+        
       // user
       res.status(200)?.json(user);
     } else {
@@ -120,7 +119,8 @@ const login = (async (req, res) => {
 });
 
 const getUserData = (async (req, res) => {
-  const token = req.headers.token
+  try{
+  const token = req.headers.authorization
 
   const decodedToken = jwt.decode(token, {
     complete: true
@@ -138,7 +138,9 @@ const getUserData = (async (req, res) => {
     role: foundUser.role
   };
   res.json(data)
-
+  } catch(err){
+    res.send(err)
+  }
 });
 
 module.exports = {
