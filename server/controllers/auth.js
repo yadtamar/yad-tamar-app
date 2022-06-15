@@ -69,7 +69,7 @@ const authorization = (async (req, res, next) => {
         );
         return next()
       } else {
-        res.send(403)
+        res.sendStatus(403)
       }
     }
   } catch (err) {
