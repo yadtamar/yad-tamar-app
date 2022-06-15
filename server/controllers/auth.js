@@ -71,6 +71,8 @@ const authorization = (async (req, res, next) => {
       } else {
         res.sendStatus(403)
       }
+    }else {
+      res.sendStatus(403)
     }
   } catch (err) {
     //res.send(err)
