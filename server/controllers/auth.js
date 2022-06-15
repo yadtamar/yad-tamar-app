@@ -18,7 +18,6 @@ const register = (async (req, res) => {
       [email]
     );
     if (oldUser.rows[0] !== undefined) {
-      console.log(oldUser.rows)
       return res.status(409).send("User Already Exist. Please Login");
     }
 
@@ -37,7 +36,6 @@ const register = (async (req, res) => {
     user = user.rows[0];
     userRole = userRole.rows[0];
     data = { user, userRole };
-    console.log(user)
     // Create token
     const token = jwt.sign(
       { user_id: user._id, email },
@@ -56,7 +54,31 @@ const register = (async (req, res) => {
   }
 });
 
+const authorization = (async (req, res, next) => {
+  console.log("hiii");
+  const token = req.headers.token
+  try {
+    if (token !== undefined) {
+      const decodedToken = jwt.decode(token, {
+        complete: true
+      });
+      if (decodedToken !== null) {
+        let foundUser = await pool.query(
+          "SELECT * FROM users WHERE users.mail=$1",
+          [decodedToken.payload.email]
+        );
+        return next()
+      } else {
+        res.send(403)
+      }
+    }
+  } catch (err) {
+    //res.send(err)
+    console.log(err)
+    return next(err)
+  }
 
+})
 
 const login = (async (req, res) => {
   try {
@@ -109,8 +131,8 @@ const getUserData = (async (req, res) => {
   foundUser = foundUser.rows[0]
   //console.log(foundUser.user_id)
   const data = {
-    user_id: foundUser.user_id, 
-    family_id: foundUser.family_id, 
+    user_id: foundUser.user_id,
+    family_id: foundUser.family_id,
     role: foundUser.role
   };
   res.json(data)
@@ -120,5 +142,6 @@ const getUserData = (async (req, res) => {
 module.exports = {
   login,
   register,
-  getUserData
+  getUserData,
+  authorization
 };

@@ -3,12 +3,12 @@ const pool = require("../db");
 const createTask = (async (req, res, next) => {
     try {
         const {
-            family_id, task_name, helper_id, date, comments
+            family_id, task_name, helper_id, date, comments, was_completed
         } = req.body;
 
         const newTask = await pool.query(
-            "INSERT INTO tasks (family_id, task_name, helper_id, date, comments) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-            [family_id, task_name, helper_id, date, comments]
+            "INSERT INTO tasks (family_id, task_name, helper_id, date, comments, was_completed) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
+            [family_id, task_name, helper_id, date, comments, was_completed]
         );
         res.json(newTask.rows);
     } catch (err) {
@@ -27,13 +27,13 @@ const getTasksForFamily = (async (req, res, next) => {
     }
 });
 
-const taskPercent = (async (req, res) =>{
+const taskPercent = (async (req, res, next) => {
     try {
         const { family_id } = req.params;
-        let familyTasks = await pool.query("SELECT 100.0 * SUM(CASE WHEN helper_id IS NOT NULL THEN 1 ELSE 0 END) / COUNT(*) AS takenPercent FROM tasks WHERE family_id=$1" , //"SELECT * FROM tasks WHERE family_id=$1",
+        let familyTasks = await pool.query("SELECT 100.0 * SUM(CASE WHEN helper_id IS NOT NULL THEN 1 ELSE 0 END) / COUNT(*) AS takenPercent FROM tasks WHERE family_id=$1", //"SELECT * FROM tasks WHERE family_id=$1",
             [family_id]);
-            const takenProcent = Math.round(familyTasks.rows[0].takenpercent);
-            familyTasks == undefined? res.send("no tasks for this family"): res.json(takenProcent);
+        const takenProcent = Math.round(familyTasks.rows[0].takenpercent);
+        familyTasks == undefined ? res.send("no tasks for this family") : res.json(takenProcent);
     } catch (err) {
         next(err);
     }
@@ -88,16 +88,18 @@ const updateTask = (async (req, res, next) => {
             task_name,
             helper_id,
             date,
-            comments
+            comments,
+            was_completed
         } = req.body;
         await pool.query(
-            "UPDATE tasks SET family_id = $1, task_name=$2, helper_id=$3, date=$4, comments=$5 WHERE task_id = $6",
+            "UPDATE tasks SET family_id = $1, task_name=$2, helper_id=$3, date=$4, comments=$5, was_completed=$6 WHERE task_id=$7",
             [
                 family_id,
                 task_name,
                 helper_id,
                 date,
                 comments,
+                was_completed,
                 task_id
             ]
         );

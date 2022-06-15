@@ -10,6 +10,7 @@ const voluneerRouter = require('./routes/volunteers');
 const familyRouter = require('./routes/families');
 const taskRouter = require('./routes/tasks');
 const auth = require('./routes/auth');
+//const authorization = require('')
 const bodyParser = require("body-parser")
 const expressValidator = require("express-validator");
 const expressSession = require("express-session");
@@ -26,8 +27,9 @@ app.listen(port, function (err) {
   }
 })
 router.get("/", (req, res, next) => {
-  res.render('index', {title:"validation", seccess: req.session.seccess, errors: req.session.errors})
-  req.session.errors = null;
+  // res.render('index', {title:"validation", seccess: req.session.seccess, errors: req.session.errors})
+  // req.session.errors = null;
+  app.use("/auth", auth.authorization)
 })
 
  app.use("/volunteers", voluneerRouter);

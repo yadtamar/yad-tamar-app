@@ -3,7 +3,8 @@ const router = require('express').Router();
 const {
    register,
    login,
-   getUserData
+   getUserData,
+   authorization
 } = require('../controllers/auth');;
 
 router.post("/register", register);

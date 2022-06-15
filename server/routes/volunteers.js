@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const auth = require('../controllers/auth');
+
 const {
     createVoluteer,
     getFamilyVolunteers,
@@ -9,12 +11,12 @@ const {
     sendSms
 } = require('../controllers/volunteers');
 
-router.post("/", createVoluteer);
-router.post("/send-sms", sendSms);
-router.get("/volunteers-for-family/:family_id", getFamilyVolunteers);
-router.get("/all-users", getUsers);
-router.get("/:user_id", getUser);
-router.put("/:user_id", updateVoluteer);
-router.delete("/:user_id", deleteVolunteer);
+router.post("/", auth.authorization, createVoluteer);
+router.post("/send-sms", auth.authorization, sendSms);
+router.get("/volunteers-for-family/:family_id", auth.authorization, getFamilyVolunteers);
+router.get("/all-users", auth.authorization, getUsers);
+router.get("/:user_id", auth.authorization, getUser);
+router.put("/:user_id", auth.authorization, updateVoluteer);
+router.delete("/:user_id", auth.authorization, deleteVolunteer);
 
 module.exports = router;
