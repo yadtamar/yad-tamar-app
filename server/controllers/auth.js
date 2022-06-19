@@ -6,7 +6,7 @@ const hash = bcrypt.hashSync("B4c0/\/", salt);
 
 const register = (async (req, res) => {
   try {
-    const { email, password, role, family_id } = req.body;
+    const { cell_phone, last_name, role, family_id } = req.body;
     if (!(email && password)) {
       res.status(400).send("All input is required");
     }
@@ -14,34 +14,30 @@ const register = (async (req, res) => {
     // check if user already exist
     // Validate if user exist in our database
     const oldUser = await pool.query(
-      "SELECT * FROM users WHERE mail=$1",
-      [email]
+      "SELECT * FROM users WHERE cell_phone=$1",
+      [cell_phone]
     );
     if (oldUser.rows[0] !== undefined) {
       return res.status(409).send("User Already Exist. Please Login");
     }
 
     //Encrypt user password
-    encryptedPassword = await bcrypt.hash(password, 10);
+    encryptedPassword = await bcrypt.hash(last_name, 10);
 
     // Create user in our database
     let user = await pool.query(
-      "INSERT INTO users ( mail, password) VALUES ($1,$2) RETURNING *",
-      [email, password]
+      "INSERT INTO users ( last_name, cell_phone) VALUES ($1,$2) RETURNING *",
+      [last_name, cell_phone]
     );
-    let userRole = await pool.query(
-      "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
-      [user.rows[0].user_id, family_id, role]
-    );
+
     user = user.rows[0];
-    userRole = userRole.rows[0];
-    data = { user, userRole };
+    data = { user };
     // Create token
     const token = jwt.sign(
-      { user_id: user._id, email },
+      { user_id: user._id, cell_phone },
       process.env.TOKEN_KEY,
       {
-        expiresIn: "2h",
+        expiresIn: "3650d",
       }
     );
     // save user token
@@ -66,6 +62,9 @@ const authorization = (async (req, res, next) => {
           "SELECT * FROM users WHERE users.mail=$1",
           [decodedToken.payload.email]
         );
+        console.log()
+        res.locals.user = foundUser;
+        res.locals.authenticated = !foundUser.anonymous;
         return next()
       } else {
         res.sendStatus(403)
