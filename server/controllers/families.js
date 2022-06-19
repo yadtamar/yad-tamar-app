@@ -91,7 +91,7 @@ const getAllFamilies = (async (req, res, next) => {
             })
             let details = {
               volunteersCount,
-              name_of_family: i.last_name,
+              last_name: i.last_name,
               family_id: i.family_id
             }
             data.push(details)
@@ -179,6 +179,7 @@ const getSingleFamily = (async (req, res, next) => {
       data = {
         name: mainPerson.last_name,
         phone: mainPerson.cell_phone,
+        token: foundFamily.rows[0].token,
         volunteers
       }
       res.json(data)

@@ -7,7 +7,7 @@ const hash = bcrypt.hashSync("B4c0/\/", salt);
 const register = (async (req, res) => {
   try {
     const { cell_phone, last_name, role, family_id } = req.body;
-    if (!(email && password)) {
+    if (!(cell_phone && last_name)) {
       res.status(400).send("All input is required");
     }
 
