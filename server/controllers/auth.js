@@ -50,7 +50,7 @@ const register = (async (req, res) => {
     // return new user
     res.status(201).json(200);
   } catch (err) {
-    console.log(err);
+    res.send(err);
   }
 });
 
@@ -74,8 +74,6 @@ const authorization = (async (req, res, next) => {
       res.sendStatus(403)
     }
   } catch (err) {
-    //res.send(err)
-    console.log(err)
     return next(err)
   }
 
@@ -108,13 +106,12 @@ const login = (async (req, res) => {
       user.token = token;
         
       // user
-      res.status(200)?.json(user);
+      res.status(200)?.json(token);
     } else {
-      console.log(res.status)
       res.status(400)?.send("Invalid Credentials");
     }
   } catch (err) {
-    console.log(err);
+    res.send(err);
   }
 });
 
@@ -125,16 +122,13 @@ const getUserData = (async (req, res) => {
   const decodedToken = jwt.decode(token, {
     complete: true
   });
-  //console.log(decodedToken)
   let foundUser = await pool.query(
     "SELECT * FROM users INNER JOIN roles ON users.mail=$1 AND roles.user_id = users.user_id",
     [decodedToken.payload.email]
   );
   foundUser = foundUser.rows[0]
-  //console.log(foundUser.user_id)
   const data = {
     user_id: foundUser.user_id,
-    family_id: foundUser.family_id,
     role: foundUser.role
   };
   res.json(data)

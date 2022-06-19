@@ -4,95 +4,35 @@ const { body, validationResult } = require('express-validator');
 const createFamily = (async (req, res, next) => {
   try {
     const {
-      first_name,
       last_name,
-      home_phone,
-      cell_phone,
-      mail,
-      adress,
-      city,
-      age,
-      gender,
-      family_status,
-      kids_num,
-      language,
-      sickness,
-      health_maintenance_organization,
-      hospital,
-      medical_insurance,
-      medical_history
+      cell_phone
     } = req.body;
-    body(first_name, "the first name is not valid")
-    body(last_name, "the last name is not valid")
-    body(home_phone, "the phone is not valid")
+    body(last_name, "the first name is not valid")
     body(cell_phone, "the cell phone number is not valid")
-    body(adress, "the address is not valid").isEmail();
-    body(city, "the city is not valid")
-    body(age, "the age is not valid")
-    body(gender, "the gender is not valid")
-    body(family_status, "the fumily status is not valid")
-    body(kids_num, "the number of kids is not valid")
-    body(sickness, "the sickness is not valid")
-    body(language, "the language is not valid")
-    body(health_maintenance_organization, "the HMO is not valid")
-    body(hospital, "the hospital is not valid")
-    body(medical_history, "the medical history is not valid")
-    body(medical_insurance, "the insurance is not valid")
-    
+
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     } else {
       const newuser = await pool.query(
-        "INSERT INTO users (first_name, last_name, home_phone, cell_phone, mail, adress, city, age, gender, family_status, kids_num, language) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *",
+        "INSERT INTO users (last_name, cell_phone) VALUES ($1,$2) RETURNING *",
         [
-          first_name,
           last_name,
-          home_phone,
           cell_phone,
-          mail,
-          adress,
-          city,
-          age,
-          gender,
-          family_status,
-          kids_num,
-          language
         ]
       );
       const newFamily = await pool.query(
-        "INSERT INTO families (sickness, hospital, medical_history, health_maintenance_organization ) VALUES ($1,$2,$3,$4) RETURNING *",
-        [sickness, hospital, medical_history, health_maintenance_organization]
+        "INSERT INTO families (last_name) VALUES ($1) RETURNING *",
+        [last_name]
       );
       //find the main person of the family
       const mainRole = await pool.query(
         "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
         [newuser.rows[0].user_id, newFamily.rows[0].family_id, "main"]
       );
-      //insert medical insurances
-      const insurances = await pool.query(
-        "INSERT INTO insurance (user_id, insurance_name) VALUES ($1,$2) RETURNING *",
-        [newuser.rows[0].user_id, medical_insurance]
-      );
-      //insert names of hospitals (and health_maintenance_organizations)
-      const hospi = await pool.query(
-        "SELECT hospital_name FROM hospitals WHERE hospitals.hospital_id = $1",
-        [newFamily.rows[0].hospital]
-      );
-      const myhealth_maintenance_organization = await pool.query(
-        "SELECT health_maintenance_organization_name FROM health_maintenance_organization WHERE health_maintenance_organization.id = $1",
-        [newFamily.rows[0].health_maintenance_organization]
-      );
-      const data = {
-        family: newFamily.rows,
-        user: newuser.rows,
-        role: mainRole.rows,
-        hospital: hospi.rows,
-        insurance: insurances.rows,
-        health_maintenance_organization: myhealth_maintenance_organization.rows
-      }
-      res.json(data);
+
+      res.sendStatus(200);
     }
   } catch (err) {
     next(err.message);
@@ -142,6 +82,48 @@ const getAllFamilies = (async (req, res, next) => {
   }
 });
 
+const getCoordinatorsFamilies = (async (req, res, next) => {
+  try {
+    let coordinatorFamilies = await pool.query(
+      "SELECT family_id FROM roles WHERE user_id=$1 AND role='coordinator'",
+      [205]
+    );
+     coordinatorFamilies = coordinatorFamilies.rows
+     let arrFam = coordinatorFamilies.map(i => {return i.family_id })
+    const foundFamily = await pool.query(
+      "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id WHERE families.family_id = ANY($1::int[]) ORDER BY families.family_id",
+      [arrFam]
+    );
+    let data = [];
+    const familiesDtls = foundFamily.rows;
+    if (familiesDtls[0]) {
+      familiesDtls?.forEach(i => {
+        let volunteersCount = 0;
+        if (i.role === 'main') {
+          familiesDtls.forEach(v => {
+            if (i.family_id === v.family_id && v.role === 'helper') {
+              ("volunteer of ", i.last_name, " family is: ", v.first_name)
+              volunteersCount++;
+            }
+          })
+          let details = {
+            volunteersCount,
+            name_of_family: i.last_name,
+            family_id: i.family_id
+          }
+          data.push(details)
+        }
+      })
+      res.json(data)
+      //} else {
+      //res.send("one or more of the details are wrong!")
+      //}
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
 const getSingleFamily = (async (req, res, next) => {
   try {
     const { family_id } = req.params;
@@ -161,8 +143,10 @@ const getSingleFamily = (async (req, res, next) => {
           volunteers.push(i);
         }
       });
+
       data = {
-        mainPerson,
+        name: mainPerson.last_name,
+        phone: mainPerson.cell_phone,
         volunteers
       }
       res.json(data)
@@ -178,28 +162,13 @@ const updateFamily = (async (req, res, next) => {
   const { family_id } = req.params;
   try {
     const {
-      first_name,
       last_name,
-      home_phone,
-      cell_phone,
-      mail,
-      adress,
-      city,
-      age,
-      gender,
-      family_status,
-      kids_num,
-      language,
-      sickness,
-      health_maintenance_organization,
-      hospital,
-      medical_insurance,
-      medical_history,
+      cell_phone
     } = req.body;
     const updatedFamily = await pool.query(
-      "UPDATE families SET sickness=$1, hospital=$2,medical_history=$3, health_maintenance_organization=$4 WHERE family_id=$5 RETURNING *",
-      [sickness, hospital, medical_history, health_maintenance_organization, family_id]
-    ); 
+      "UPDATE families SET last_name=$1 WHERE family_id=$2",
+      [last_name, family_id]
+    );
     if (updatedFamily.rows[0] !== undefined) {
       const foundUserId = await pool.query(
         "SELECT * FROM roles WHERE family_id=$1 AND role = 'main'",
@@ -208,34 +177,14 @@ const updateFamily = (async (req, res, next) => {
       if (foundUserId.rows[0] !== undefined) {
         const user_id = foundUserId.rows[0].user_id;
         const updatedUser = await pool.query(
-          "UPDATE users SET first_name=$1, last_name=$2 ,home_phone=$3,cell_phone=$4,mail=$5,adress=$6,city=$7, age=$8, gender=$9, family_status=$10,  kids_num=$11,language=$12 WHERE user_id=$13 RETURNING *",
+          "UPDATE users SET last_name=$1, cell_phone=$2, WHERE user_id=$3 RETURNING *",
           [
-            first_name,
             last_name,
-            home_phone,
             cell_phone,
-            mail,
-            adress,
-            city,
-            age,
-            gender,
-            family_status,
-            kids_num,
-            language,
             user_id
           ]
         );
-        const Role = await pool.query(
-          "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
-          [updatedUser.rows[0].user_id, family_id, "main"]
-        );
-
-        //update medical insurances
-        const insurances = await pool.query(
-          "UPDATE insurance SET insurance_name=$1 WHERE user_id=$2 RETURNING *",
-          [medical_insurance, updatedUser.rows[0].user_id]
-        ); 
-        res.send("Updated");
+        res.sendStatus(200);
       }
     }
   } catch (err) {
@@ -258,6 +207,7 @@ module.exports = {
   createFamily,
   getSingleFamily,
   getAllFamilies,
+  getCoordinatorsFamilies,
   updateFamily,
   deleteFamily
 }
