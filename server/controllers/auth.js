@@ -18,7 +18,7 @@ const register = (async (req, res) => {
       [cell_phone]
     );
     if (oldUser.rows[0] !== undefined) {
-      return res.status(409).send("User Already Exist. Please Login");
+      return res.status(409).send("User Already Exist. Please Login by youruniq message");
     }
 
     //Encrypt user password
@@ -44,7 +44,7 @@ const register = (async (req, res) => {
     user.token = token;
 
     // return new user
-    res.status(201).json(200);
+    res.json(token);
   } catch (err) {
     res.send(err);
   }
@@ -59,8 +59,8 @@ const authorization = (async (req, res, next) => {
       });
       if (decodedToken !== null) {
         let foundUser = await pool.query(
-          "SELECT * FROM users WHERE users.mail=$1",
-          [decodedToken.payload.email]
+          "SELECT * FROM users WHERE users.cell_phone=$1",
+          [decodedToken.payload.cell_phone]
         );
         console.log()
         res.locals.user = foundUser;
@@ -122,8 +122,8 @@ const getUserData = (async (req, res) => {
     complete: true
   });
   let foundUser = await pool.query(
-    "SELECT * FROM users INNER JOIN roles ON users.mail=$1 AND roles.user_id = users.user_id",
-    [decodedToken.payload.email]
+    "SELECT * FROM users INNER JOIN roles ON users.cell_phone=$1 AND roles.user_id = users.user_id",
+    [decodedToken.payload.cell_phone]
   );
   foundUser = foundUser.rows[0]
   const data = {
