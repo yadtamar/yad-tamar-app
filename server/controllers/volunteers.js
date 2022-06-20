@@ -107,7 +107,7 @@ const sendSms = async (req, res) => {
 			'X-Requested-With': 'XMLHttpRequest',
 		},
 	};
-    let url = "https://www.019sms.co.il:8090/api/test"
+    let url = "https://www.019sms.co.il:8090/api"
 	try {
 		const rest = await axios.post(
 			url, //process.env.SMS_PROVIDER_URL,
@@ -150,8 +150,6 @@ const getUser = (async (req, res, next) => {
         next(err);
     }
 });
-
-//sendSms("+972534290613", "hello yad tamar!")
 
 module.exports = {
     createVoluteer,
