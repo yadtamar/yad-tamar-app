@@ -15,6 +15,7 @@ const createFamily = (async (req, res, next) => {
     body(last_name, "the first name is not valid")
     body(cell_phone, "the cell phone number is not valid")
     let coordinatorId = res.locals.user.rows[0].user_id;
+    console.log(coordinatorId, cell_phone)
     if (coordinatorId) {
       let errors = validationResult(req);
       encryptedName = await bcrypt.hash(last_name, 10);
@@ -24,11 +25,9 @@ const createFamily = (async (req, res, next) => {
       } else {
         const newuser = await pool.query(
           "INSERT INTO users (last_name, cell_phone) VALUES ($1,$2) RETURNING *",
-          [
-            last_name,
-            cell_phone,
-          ]
+          [last_name, cell_phone]
         );
+        console.log(newuser.rows[0])
         const newFamily = await pool.query(
           "INSERT INTO families (last_name) VALUES ($1) RETURNING *",
           [last_name]
@@ -41,7 +40,7 @@ const createFamily = (async (req, res, next) => {
         //set the coordinator for the new family
         const coordinator = await pool.query(
           "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
-          [coordinatorId, newFamily.rows[0].family_id, "main"]
+          [coordinatorId, newFamily.rows[0].family_id, "coordinator"]
         );
         const token = jwt.sign(
           { family_id: newFamily.rows[0].family_id, cell_phone },

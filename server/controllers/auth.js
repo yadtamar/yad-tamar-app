@@ -59,7 +59,7 @@ const authorization = (async (req, res, next) => {
       });
       if (decodedToken !== null) {
         let foundUser = await pool.query(
-          "SELECT * FROM users WHERE users.cell_phone=$1",
+          "SELECT * FROM users WHERE cell_phone=$1",
           [decodedToken.payload.cell_phone]
         );
         console.log()
@@ -122,10 +122,11 @@ const getUserData = (async (req, res) => {
     complete: true
   });
   let foundUser = await pool.query(
-    "SELECT * FROM users INNER JOIN roles ON users.cell_phone=$1 AND roles.user_id = users.user_id",
-    [decodedToken.payload.cell_phone]
+    "SELECT * FROM users INNER JOIN roles ON users.mail=$1 AND roles.user_id = users.user_id",
+    [decodedToken.payload.email]
   );
   foundUser = foundUser.rows[0]
+  console.log(foundUser)
   const data = {
     user_id: foundUser.user_id,
     role: foundUser.role
