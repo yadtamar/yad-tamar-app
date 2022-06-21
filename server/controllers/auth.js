@@ -69,7 +69,7 @@ const authorization = (async (req, res, next) => {
       } else {
         res.sendStatus(403)
       }
-    }else {
+    } else {
       res.sendStatus(403)
     }
   } catch (err) {
@@ -103,7 +103,7 @@ const login = (async (req, res) => {
 
       // save user token
       user.token = token;
-        
+
       // user
       res.status(200)?.json(token);
     } else {
@@ -115,24 +115,29 @@ const login = (async (req, res) => {
 });
 
 const getUserData = (async (req, res) => {
-  try{
-  const token = req.headers.authorization
+  try {
+    const token = req.headers.authorization
 
-  const decodedToken = jwt.decode(token, {
-    complete: true
-  });
-  let foundUser = await pool.query(
-    "SELECT * FROM users INNER JOIN roles ON users.mail=$1 AND roles.user_id = users.user_id",
-    [decodedToken.payload.email]
-  );
-  foundUser = foundUser.rows[0]
-  console.log(foundUser)
-  const data = {
-    user_id: foundUser.user_id,
-    role: foundUser.role
-  };
-  res.json(data)
-  } catch(err){
+    const decodedToken = jwt.decode(token, {
+      complete: true
+    });
+    let foundUser = await pool.query(
+      "SELECT * FROM users INNER JOIN roles ON users.cell_phone=$1 AND roles.user_id = users.user_id",
+      [decodedToken.payload.cell_phone]
+    );
+    foundUser = foundUser.rows[0]
+    if (foundUser == undefined) {
+      res.send("the user don't exist")
+    } else {
+      console.log(foundUser)
+      const data = {
+        user_id: foundUser.user_id,
+        role: foundUser.role
+      };
+      res.json(data)
+    }
+
+  } catch (err) {
     res.send(err)
   }
 });
