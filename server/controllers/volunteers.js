@@ -107,7 +107,7 @@ const sendSms = async (req, res) => {
 			'X-Requested-With': 'XMLHttpRequest',
 		},
 	};
-    let url = "https://www.019sms.co.il:8090/api"
+    let url = "https://www.019sms.co.il:8090/api/test"
 	try {
 		const rest = await axios.post(
 			url, //process.env.SMS_PROVIDER_URL,

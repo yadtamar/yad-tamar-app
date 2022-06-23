@@ -114,6 +114,7 @@ const getCoordinatorsFamilies = (async (req, res, next) => {
         "SELECT family_id FROM roles WHERE user_id=$1 AND role='coordinator'",
         [userId]
       );
+      console.log(coordinatorFamilies)
       if (coordinatorFamilies.rows[0]) {
         coordinatorFamilies = coordinatorFamilies.rows
         let arrFam = coordinatorFamilies.map(i => { return i.family_id })
@@ -147,7 +148,7 @@ const getCoordinatorsFamilies = (async (req, res, next) => {
           res.send("one or more of the details are wrong!")
         }
       } else {
-        res.send("the coordinator not defind")
+        res.send("the coordinator don't have any families yet")
       }
     }
   } catch (err) {
