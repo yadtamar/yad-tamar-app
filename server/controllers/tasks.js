@@ -41,7 +41,6 @@ const taskPercent = (async (req, res, next) => {
 
 const getVolunteerAndFamilyEmptyTasks = (async (req, res, next) => {
     try {
-
         const { family_id } = req.params;
         const { volunteer_id } = req.params;
         let familyTasks = await pool.query(

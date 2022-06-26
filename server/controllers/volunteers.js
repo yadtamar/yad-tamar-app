@@ -145,7 +145,8 @@ const getUser = (async (req, res, next) => {
             "SELECT * FROM users WHERE user_id=$1",
             [user_id]
         );
-        res.json(foundUser.rows);
+        foundUser = foundUser.rows[0];
+        foundUser !== undefined ? res.json(foundUser) : res.send("the volunteer not exists");
     } catch (err) {
         next(err);
     }
