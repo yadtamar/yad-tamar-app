@@ -132,6 +132,7 @@ const getUserData = (async (req, res) => {
       console.log(foundUser)
       const data = {
         user_id: foundUser.user_id,
+        name: foundUser.first_name || foundUser.last_name,
         role: foundUser.role
       };
       res.json(data)

@@ -141,7 +141,7 @@ const deleteVolunteer = (async (req, res, next) => {
 const getUser = (async (req, res, next) => {
     try {
         const { user_id } = req.params;
-        const foundUser = await pool.query(
+        let foundUser = await pool.query(
             "SELECT * FROM users WHERE user_id=$1",
             [user_id]
         );

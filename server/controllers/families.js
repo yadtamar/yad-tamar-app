@@ -111,10 +111,10 @@ const getCoordinatorsFamilies = (async (req, res, next) => {
     let userId = res.locals.user.rows[0].user_id;
     if (userId) {
       let coordinatorFamilies = await pool.query(
-        "SELECT family_id FROM roles WHERE user_id=$1 AND role='coordinator'",
+        "SELECT family_id FROM roles WHERE user_id=$1 AND role='coordinator' ORDER BY user_id",
         [userId]
       );
-      console.log(coordinatorFamilies)
+      console.log(coordinatorFamilies.rows)
       if (coordinatorFamilies.rows[0]) {
         coordinatorFamilies = coordinatorFamilies.rows
         let arrFam = coordinatorFamilies.map(i => { return i.family_id })
@@ -142,11 +142,11 @@ const getCoordinatorsFamilies = (async (req, res, next) => {
               }
               data.push(details)
             }
-            res.json(data)
           })
         } else {
-          res.send("one or more of the details are wrong!")
+          data = "one or more of the details are wrong!"
         }
+        res.json(data)
       } else {
         res.send("the coordinator don't have any families yet")
       }

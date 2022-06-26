@@ -30,7 +30,7 @@ const getTasksForFamily = (async (req, res, next) => {
 const taskPercent = (async (req, res, next) => {
     try {
         const { family_id } = req.params;
-        let familyTasks = await pool.query("SELECT 100.0 * SUM(CASE WHEN helper_id IS NOT NULL THEN 1 ELSE 0 END) / COUNT(*) AS takenPercent FROM tasks WHERE family_id=$1", //"SELECT * FROM tasks WHERE family_id=$1",
+        let familyTasks = await pool.query("SELECT 100.0 * SUM(CASE WHEN helper_id IS NOT NULL THEN 1 ELSE 0 END) / COUNT(*) AS takenPercent FROM tasks WHERE family_id=$1",
             [family_id]);
         const takenProcent = Math.round(familyTasks.rows[0].takenpercent);
         familyTasks == undefined ? res.send("no tasks for this family") : res.json(takenProcent);
