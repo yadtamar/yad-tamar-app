@@ -119,7 +119,7 @@ const getCoordinatorsFamilies = (async (req, res, next) => {
         coordinatorFamilies = coordinatorFamilies.rows
         let arrFam = coordinatorFamilies.map(i => { return i.family_id })
         const foundFamily = await pool.query(
-          "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id WHERE families.family_id = ANY($1::int[]) ORDER BY families.family_id",
+          "SELECT * FROM families INNER JOIN roles ON families.family_id = roles.family_id INNER JOIN users ON users.user_id = roles.user_id WHERE families.family_id = ANY($1::int[]) ORDER BY families.family_id DESC",
           [arrFam]
         );
         let data = [];

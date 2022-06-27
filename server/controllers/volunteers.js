@@ -146,7 +146,12 @@ const getUser = (async (req, res, next) => {
             [user_id]
         );
         foundUser = foundUser.rows[0];
-        foundUser !== undefined ? res.json(foundUser) : res.send("the volunteer not exists");
+        let data = {
+            name: foundUser.first_name,
+            phone: foundUser.cell_phone,
+            userId: foundUser.user_id
+        }
+        foundUser !== undefined ? res.json(data) : res.send("the volunteer not exists");
     } catch (err) {
         next(err);
     }

@@ -90,8 +90,8 @@ const updateTask = (async (req, res, next) => {
             comments,
             was_completed
         } = req.body;
-        await pool.query(
-            "UPDATE tasks SET family_id = $1, task_name=$2, helper_id=$3, date=$4, comments=$5, was_completed=$6 WHERE task_id=$7",
+        let updatedTask = await pool.query(
+            "UPDATE tasks SET family_id = $1, task_name=$2, helper_id=$3, date=$4, comments=$5, was_completed=$6 WHERE task_id=$7 RETURNING *",
             [
                 family_id,
                 task_name,
@@ -102,7 +102,8 @@ const updateTask = (async (req, res, next) => {
                 task_id
             ]
         );
-        res.send("the task was Updated");
+        updatedTask = updatedTask.rows[0]
+        res.send( updatedTask);
     } catch (err) {
         next(err);
     }
