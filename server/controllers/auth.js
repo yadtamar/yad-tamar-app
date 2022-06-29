@@ -34,7 +34,7 @@ const register = (async (req, res) => {
     data = { user };
     // Create token
     const token = jwt.sign(
-      { user_id: user._id, cell_phone },
+      { user_id: user.user_id, cell_phone },
       process.env.TOKEN_KEY,
       {
         expiresIn: "3650d",
@@ -117,27 +117,41 @@ const login = (async (req, res) => {
 const getUserData = (async (req, res) => {
   try {
     const token = req.headers.authorization
-
     const decodedToken = jwt.decode(token, {
       complete: true
     });
+    console.log(decodedToken.payload.user_id)
     let foundUser = await pool.query(
-      "SELECT * FROM users INNER JOIN roles ON users.cell_phone=$1 AND roles.user_id = users.user_id",
-      [decodedToken.payload.cell_phone]
+      "SELECT * FROM users WHERE users.user_id=$1",
+      [decodedToken.payload.user_id]
     );
-    foundUser = foundUser.rows[0]
-    if (foundUser == undefined) {
+    let userRole;
+    let role;
+    if (userRole = await pool.query(
+      "SELECT * FROM roles WHERE roles.user_id=$1",
+      [decodedToken.payload.user_id]
+    )) {
+      if (userRole.rows[0] === undefined) {
+        role = "coordunator";
+        //console.log(userRole)
+      } else {
+        role = userRole.rows[0].role;
+      }
+    }
+    foundUser = foundUser.rows[0];
+    console.log(role)
+    if (foundUser === undefined) {
       res.send("the user don't exist")
     } else {
-      console.log(foundUser)
       const data = {
         user_id: foundUser.user_id,
         name: foundUser.first_name || foundUser.last_name,
-        role: foundUser.role
+        role,
+        phone: foundUser.cell_phone
       };
+      console.log(data)
       res.json(data)
     }
-
   } catch (err) {
     res.send(err)
   }
