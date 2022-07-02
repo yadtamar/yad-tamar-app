@@ -71,7 +71,7 @@ const updateVoluteer = (async (req, res, next) => {
             ]
         );
         if (upVolunt.rows) {
-            res.send("Updated");
+            res.send( upVolunt.rows[0]);
         } else {
             res.send("soory, but the current volunteer didn't found")
         }

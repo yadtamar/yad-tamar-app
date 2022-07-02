@@ -3,12 +3,12 @@ const pool = require("../db");
 const createTask = (async (req, res, next) => {
     try {
         const {
-            family_id, task_name, helper_id, date, comments, was_completed
+            family_id, task_name, helper_id, date, comments, was_completed,time_type
         } = req.body;
 
         const newTask = await pool.query(
-            "INSERT INTO tasks (family_id, task_name, helper_id, date, comments, was_completed) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
-            [family_id, task_name, helper_id, date, comments, was_completed]
+            "INSERT INTO tasks (family_id, task_name, helper_id, date, comments, was_completed,  time_type) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *",
+            [family_id, task_name, helper_id, date, comments, was_completed, time_type]
         );
         res.json(newTask.rows);
     } catch (err) {
@@ -88,10 +88,11 @@ const updateTask = (async (req, res, next) => {
             helper_id,
             date,
             comments,
-            was_completed
+            was_completed,
+            time_type
         } = req.body;
         let updatedTask = await pool.query(
-            "UPDATE tasks SET family_id = $1, task_name=$2, helper_id=$3, date=$4, comments=$5, was_completed=$6 WHERE task_id=$7 RETURNING *",
+            "UPDATE tasks SET family_id = $1, task_name=$2, helper_id=$3, date=$4, comments=$5, was_completed=$6,  time_type=$7 WHERE task_id=$8 RETURNING *",
             [
                 family_id,
                 task_name,
@@ -99,6 +100,7 @@ const updateTask = (async (req, res, next) => {
                 date,
                 comments,
                 was_completed,
+                time_type,
                 task_id
             ]
         );
