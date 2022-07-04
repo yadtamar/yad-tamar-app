@@ -6,28 +6,41 @@ const hash = bcrypt.hashSync("B4c0/\/", salt);
 
 const register = (async (req, res) => {
   try {
-    const { cell_phone, last_name, role, family_id } = req.body;
-    if (!(cell_phone && last_name)) {
+    const { cell_phone, last_name, user_name } = req.body;
+    if (!(cell_phone && last_name && user_name)) {
       res.status(400).send("All input is required");
     }
 
     // check if user already exist
     // Validate if user exist in our database
     const oldUser = await pool.query(
-      "SELECT * FROM users WHERE cell_phone=$1",
-      [cell_phone]
+      "SELECT * FROM users WHERE user_name=$1",
+      [user_name]
     );
     if (oldUser.rows[0] !== undefined) {
-      return res.status(409).send("User Already Exist. Please Login by youruniq message");
+      if (oldUser.rows[0].cell_phone == cell_phone){
+        return res.status(409).send("User Already Exist. Please Login by your uniq message");
+      } else {
+        return res.status(409).send("this username is already in use. please try another one")
+      }
     }
 
     //Encrypt user password
-    encryptedPassword = await bcrypt.hash(last_name, 10);
-
+    
+      let password = "";
+      let possible = "0123456789";
+    
+      for (var i = 0; i < 6; i++)
+        password += possible.charAt(Math.floor(Math.random() * possible.length));
+     console.log(password)
+    
+    //console.log(password, "code : ")//, makeCode)
+     encryptedPassword = await bcrypt.hash(last_name, 5);
+    // console.log(encryptedPassword)
     // Create user in our database
     let user = await pool.query(
-      "INSERT INTO users ( last_name, cell_phone) VALUES ($1,$2) RETURNING *",
-      [last_name, cell_phone]
+      "INSERT INTO users ( last_name, cell_phone, user_name, password) VALUES ($1,$2,$3,$4) RETURNING *",
+      [last_name, cell_phone, user_name, password]
     );
 
     user = user.rows[0];
@@ -44,7 +57,7 @@ const register = (async (req, res) => {
     user.token = token;
 
     // return new user
-    res.json(token);
+    res.json(data);
   } catch (err) {
     res.send(err);
   }
