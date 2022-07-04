@@ -70,7 +70,7 @@ const getSingleTask = (async (req, res, next) => {
     try {
         const { task_id } = req.params;
         const foundTask = await pool.query(
-            "SELECT * FROM tasks WHERE task_id=$1",
+            "SELECT * FROM tasks INNER JOIN users ON tasks.helper_id = users.user_id WHERE task_id=$1",
             [task_id]
         );
         res.json(foundTask.rows);

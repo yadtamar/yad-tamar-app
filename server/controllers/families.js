@@ -10,22 +10,42 @@ const createFamily = (async (req, res, next) => {
   try {
     const {
       last_name,
-      cell_phone
+      cell_phone,
+      user_name
     } = req.body;
-    body(last_name, "the first name is not valid")
-    body(cell_phone, "the cell phone number is not valid")
+
+    if (!(cell_phone && last_name && user_name)) {
+      res.status(400).send("All the inputs are required");
+    }
+
+    const oldUser = await pool.query(
+      "SELECT * FROM users WHERE user_name=$1",
+      [user_name]
+    ); 
+    console.log(oldUser)
+    if (oldUser.rows[0] !== undefined) {
+      if (oldUser.rows[0].cell_phone == cell_phone) {
+        return res.status(409).send("User Already Exist. Please Login by your uniq message");
+      } else {
+        return res.status(409).send("this username is already in use. please try another one")
+      }
+    }
     let coordinatorId = res.locals.user.rows[0].user_id;
-    console.log(coordinatorId, cell_phone)
     if (coordinatorId) {
       let errors = validationResult(req);
       encryptedName = await bcrypt.hash(last_name, 10);
+      let password = "";
+      let possible = "0123456789";
+
+      for (var i = 0; i < 8; i++)
+        password += possible.charAt(Math.floor(Math.random() * possible.length));
 
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       } else {
         const newuser = await pool.query(
-          "INSERT INTO users (last_name, cell_phone) VALUES ($1,$2) RETURNING *",
-          [last_name, cell_phone]
+          "INSERT INTO users (last_name, cell_phone, user_name, password) VALUES ($1,$2,$3,$4) RETURNING *",
+          [last_name, cell_phone, user_name, password]
         );
         console.log(newuser.rows[0])
         const newFamily = await pool.query(
@@ -52,10 +72,11 @@ const createFamily = (async (req, res, next) => {
         // save user token
         newuser.rows[0].token = token;
         const setToken = await pool.query(
-          "UPDATE families SET token=$1 WHERE family_id=$2",
+          "UPDATE families SET token=$1 WHERE family_id=$2 RETURNING * ",
           [token, newFamily.rows[0].family_id]
         );
-        res.sendStatus(201)//.json(200);
+        console.log(newuser.rows[0], mainRole.rows[0], coordinator.rows[0], setToken.rows[0])
+        res.status(201).json(newuser.rows[0], mainRole.rows[0], coordinator.rows[0], setToken.rows[0]);
       }
     }
   } catch (err) {
@@ -114,7 +135,7 @@ const getCoordinatorsFamilies = (async (req, res, next) => {
         "SELECT family_id FROM roles WHERE user_id=$1 AND role='coordinator' ORDER BY user_id",
         [userId]
       );
-      console.log(coordinatorFamilies.rows)
+
       if (coordinatorFamilies.rows[0]) {
         coordinatorFamilies = coordinatorFamilies.rows
         let arrFam = coordinatorFamilies.map(i => { return i.family_id })

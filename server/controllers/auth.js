@@ -6,9 +6,9 @@ const hash = bcrypt.hashSync("B4c0/\/", salt);
 
 const register = (async (req, res) => {
   try {
-    const { cell_phone, last_name, user_name } = req.body;
-    if (!(cell_phone && last_name && user_name)) {
-      res.status(400).send("All input is required");
+    const { cell_phone, last_name, user_name, password } = req.body;
+    if (!(cell_phone && last_name && user_name && password)) {
+      res.status(400).send("All the inputs are required");
     }
 
     // check if user already exist
@@ -18,7 +18,7 @@ const register = (async (req, res) => {
       [user_name]
     );
     if (oldUser.rows[0] !== undefined) {
-      if (oldUser.rows[0].cell_phone == cell_phone){
+      if (oldUser.rows[0].cell_phone == cell_phone) {
         return res.status(409).send("User Already Exist. Please Login by your uniq message");
       } else {
         return res.status(409).send("this username is already in use. please try another one")
@@ -26,17 +26,7 @@ const register = (async (req, res) => {
     }
 
     //Encrypt user password
-    
-      let password = "";
-      let possible = "0123456789";
-    
-      for (var i = 0; i < 6; i++)
-        password += possible.charAt(Math.floor(Math.random() * possible.length));
-     console.log(password)
-    
-    //console.log(password, "code : ")//, makeCode)
-     encryptedPassword = await bcrypt.hash(last_name, 5);
-    // console.log(encryptedPassword)
+    encryptedPassword = await bcrypt.hash(last_name, 5);
     // Create user in our database
     let user = await pool.query(
       "INSERT INTO users ( last_name, cell_phone, user_name, password) VALUES ($1,$2,$3,$4) RETURNING *",
@@ -44,7 +34,6 @@ const register = (async (req, res) => {
     );
 
     user = user.rows[0];
-    data = { user };
     // Create token
     const token = jwt.sign(
       { user_id: user.user_id, cell_phone },
@@ -53,11 +42,15 @@ const register = (async (req, res) => {
         expiresIn: "3650d",
       }
     );
+    const setToken = await pool.query(
+      "UPDATE users SET token = $1 WHERE user_id = $2 RETURNING *",
+      [token, user.user_id]
+    )
     // save user token
     user.token = token;
-
+ 
     // return new user
-    res.json(data);
+    res.json(user);
   } catch (err) {
     res.send(err);
   }
@@ -75,7 +68,6 @@ const authorization = (async (req, res, next) => {
           "SELECT * FROM users WHERE cell_phone=$1",
           [decodedToken.payload.cell_phone]
         );
-        console.log()
         res.locals.user = foundUser;
         res.locals.authenticated = !foundUser.anonymous;
         return next()
@@ -93,32 +85,21 @@ const authorization = (async (req, res, next) => {
 
 const login = (async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { user_name, password } = req.body;
 
     // Validate user input
-    if (!(email && password)) {
+    if (!(user_name && password)) {
       res.status(400).send("All input is required");
     }
     // Validate if user exist in our database
-    const user = await pool.query(
-      "SELECT * FROM users WHERE mail=$1",
-      [email]
+    let user = await pool.query(
+      "SELECT * FROM users WHERE user_name=$1 AND password=$2",
+      [user_name, password]
     );
-    if (user.rows[0] && (password === user.rows[0].password)) {
-      // Create token
-      const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
-
-      // save user token
-      user.token = token;
-
-      // user
-      res.status(200)?.json(token);
+    user = user.rows[0];
+    console.log(user)
+    if (user) {
+      res.status(200)?.json(user);
     } else {
       res.status(400)?.send("Invalid Credentials");
     }
@@ -146,13 +127,11 @@ const getUserData = (async (req, res) => {
     )) {
       if (userRole.rows[0] === undefined) {
         role = "coordunator";
-        //console.log(userRole)
       } else {
         role = userRole.rows[0].role;
       }
     }
     foundUser = foundUser.rows[0];
-    console.log(role)
     if (foundUser === undefined) {
       res.send("the user don't exist")
     } else {
@@ -162,7 +141,6 @@ const getUserData = (async (req, res) => {
         role,
         phone: foundUser.cell_phone
       };
-      console.log(data)
       res.json(data)
     }
   } catch (err) {
