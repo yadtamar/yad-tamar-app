@@ -43,7 +43,7 @@ const register = (async (req, res) => {
       }
     );
     const setToken = await pool.query(
-      "UPDATE users SET token = $1 WHERE user_id = $2 RETURNING *",
+      "UPDATE users SET user_token = $1 WHERE user_id = $2 RETURNING *",
       [token, user.user_id]
     )
     // save user token

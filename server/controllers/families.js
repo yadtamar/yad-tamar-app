@@ -72,7 +72,7 @@ const createFamily = (async (req, res, next) => {
         // save user token
         newuser.rows[0].token = token;
         const setToken = await pool.query(
-          "UPDATE families SET token=$1 WHERE family_id=$2 RETURNING * ",
+          "UPDATE families SET family_token=$1 WHERE family_id=$2 RETURNING * ",
           [token, newFamily.rows[0].family_id]
         );
         console.log(newuser.rows[0], mainRole.rows[0], coordinator.rows[0], setToken.rows[0])
@@ -159,7 +159,8 @@ const getCoordinatorsFamilies = (async (req, res, next) => {
                 volunteersCount,
                 last_name: i.last_name,
                 cell_phone: i.cell_phone,
-                family_id: i.family_id
+                family_id: i.family_id,
+                token: i.token
               }
               data.push(details)
             }
@@ -196,11 +197,11 @@ const getSingleFamily = (async (req, res, next) => {
           volunteers.push(i);
         }
       });
-
+      console.log(foundFamily.rows[0])
       data = {
         name: mainPerson.last_name,
         phone: mainPerson.cell_phone,
-        token: foundFamily.rows[0].token,
+        token: foundFamily.rows[0].family_token,
         volunteers
       }
       res.json(data)
