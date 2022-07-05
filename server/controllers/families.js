@@ -160,7 +160,9 @@ const getCoordinatorsFamilies = (async (req, res, next) => {
                 last_name: i.last_name,
                 cell_phone: i.cell_phone,
                 family_id: i.family_id,
-                token: i.token
+                token: i.token,
+                user_name: i.user_name,
+                password: i.password
               }
               data.push(details)
             }
@@ -202,6 +204,8 @@ const getSingleFamily = (async (req, res, next) => {
         name: mainPerson.last_name,
         phone: mainPerson.cell_phone,
         token: foundFamily.rows[0].family_token,
+        user_name: mainPerson.user_name,
+        password: mainPerson.password,
         volunteers
       }
       res.json(data)
