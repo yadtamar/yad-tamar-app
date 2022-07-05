@@ -71,7 +71,7 @@ const updateVoluteer = (async (req, res, next) => {
             ]
         );
         if (upVolunt.rows) {
-            res.send( upVolunt.rows[0]);
+            res.send(upVolunt.rows[0]);
         } else {
             res.send("soory, but the current volunteer didn't found")
         }
@@ -84,7 +84,7 @@ const sendSms = async (req, res) => {
     const {
         to, message
     } = req.body;
-	const body = `<?xml version="1.0" encoding="UTF-8"?> 
+    const body = `<?xml version="1.0" encoding="UTF-8"?> 
 	<sms> 
 	<user>  
 	<username>YadTamar</username>  
@@ -100,30 +100,30 @@ const sendSms = async (req, res) => {
 	<response>0</response> 
 	</sms> 
 	`;
-	const config = {
-		headers: {
-			'Content-Type': 'text/xml',
-			'X-Requested-With': 'XMLHttpRequest',
-		},
-	};
+    const config = {
+        headers: {
+            'Content-Type': 'text/xml',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    };
     let url = "https://www.019sms.co.il:8090/api/"//test"
-	try {
-		const rest = await axios.post(
-			url, //process.env.SMS_PROVIDER_URL,
-			body,
-			config,
-		);
+    try {
+        const rest = await axios.post(
+            url, //process.env.SMS_PROVIDER_URL,
+            body,
+            config,
+        );
         process.on('warning', e => console.warn(e.stack, e.message));
-            
-		if (rest.data.status !== 0) {
-			throw new Error('sms provider - send status faild');
-		}
- 
+
+        if (rest.data.status !== 0) {
+            throw new Error('sms provider - send status faild');
+        }
+
         res.sendStatus(200)
-		//return;
-	} catch (err) {
-		throw new Error('sms provider error');
-	}
+        //return;
+    } catch (err) {
+        throw new Error('sms provider error');
+    }
 
 };
 

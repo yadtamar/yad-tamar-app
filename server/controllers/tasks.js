@@ -3,7 +3,7 @@ const pool = require("../db");
 const createTask = (async (req, res, next) => {
     try {
         const {
-            family_id, task_name, helper_id, date, comments, was_completed,time_type
+            family_id, task_name, helper_id, date, comments, was_completed, time_type
         } = req.body;
 
         const newTask = await pool.query(
@@ -105,7 +105,7 @@ const updateTask = (async (req, res, next) => {
             ]
         );
         updatedTask = updatedTask.rows[0]
-        res.send( updatedTask);
+        res.send(updatedTask);
     } catch (err) {
         next(err);
     }

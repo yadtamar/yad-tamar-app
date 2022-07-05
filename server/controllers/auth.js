@@ -48,7 +48,7 @@ const register = (async (req, res) => {
     )
     // save user token
     user.token = token;
- 
+
     // return new user
     res.json(user);
   } catch (err) {
@@ -93,7 +93,7 @@ const login = (async (req, res) => {
     }
     // Validate if user exist in our database
     let user = await pool.query(
-      "SELECT * FROM users WHERE user_name=$1 AND password=$2",
+      "SELECT * FROM users INNER JOIN roles ON users.user_id = roles.user_id INNER JOIN families ON families.family_id = roles.family_id WHERE user_name=$1 AND password=$2",
       [user_name, password]
     );
     user = user.rows[0];

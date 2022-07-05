@@ -21,7 +21,7 @@ const createFamily = (async (req, res, next) => {
     const oldUser = await pool.query(
       "SELECT * FROM users WHERE user_name=$1",
       [user_name]
-    ); 
+    );
     if (oldUser.rows[0] !== undefined) {
       if (oldUser.rows[0].cell_phone == cell_phone) {
         return res.status(409).send("User Already Exist. Please Login by your uniq message");
