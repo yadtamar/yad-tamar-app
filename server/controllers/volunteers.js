@@ -84,7 +84,6 @@ const sendSms = async (req, res) => {
     const {
         to, message
     } = req.body;
-    console.log(to , message)
 	const body = `<?xml version="1.0" encoding="UTF-8"?> 
 	<sms> 
 	<user>  
@@ -117,11 +116,11 @@ const sendSms = async (req, res) => {
         process.on('warning', e => console.warn(e.stack, e.message));
             
 		if (rest.data.status !== 0) {
-			throw new Error('sms provider - send status faild', console.log(rest.data));
+			throw new Error('sms provider - send status faild');
 		}
-        console.log( rest)
-        //res.send(rest.data)
-		return;
+ 
+        res.sendStatus(200)
+		//return;
 	} catch (err) {
 		throw new Error('sms provider error');
 	}

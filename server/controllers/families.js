@@ -22,7 +22,6 @@ const createFamily = (async (req, res, next) => {
       "SELECT * FROM users WHERE user_name=$1",
       [user_name]
     ); 
-    console.log(oldUser)
     if (oldUser.rows[0] !== undefined) {
       if (oldUser.rows[0].cell_phone == cell_phone) {
         return res.status(409).send("User Already Exist. Please Login by your uniq message");
@@ -47,7 +46,6 @@ const createFamily = (async (req, res, next) => {
           "INSERT INTO users (last_name, cell_phone, user_name, password) VALUES ($1,$2,$3,$4) RETURNING *",
           [last_name, cell_phone, user_name, password]
         );
-        console.log(newuser.rows[0])
         const newFamily = await pool.query(
           "INSERT INTO families (last_name) VALUES ($1) RETURNING *",
           [last_name]
@@ -75,7 +73,6 @@ const createFamily = (async (req, res, next) => {
           "UPDATE families SET family_token=$1 WHERE family_id=$2 RETURNING * ",
           [token, newFamily.rows[0].family_id]
         );
-        console.log(newuser.rows[0], mainRole.rows[0], coordinator.rows[0], setToken.rows[0])
         res.status(201).json(newuser.rows[0], mainRole.rows[0], coordinator.rows[0], setToken.rows[0]);
       }
     }
@@ -199,7 +196,6 @@ const getSingleFamily = (async (req, res, next) => {
           volunteers.push(i);
         }
       });
-      console.log(foundFamily.rows[0])
       data = {
         name: mainPerson.last_name,
         phone: mainPerson.cell_phone,

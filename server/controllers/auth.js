@@ -97,7 +97,6 @@ const login = (async (req, res) => {
       [user_name, password]
     );
     user = user.rows[0];
-    console.log(user)
     if (user) {
       res.status(200)?.json(user);
     } else {
@@ -114,7 +113,6 @@ const getUserData = (async (req, res) => {
     const decodedToken = jwt.decode(token, {
       complete: true
     });
-    console.log(decodedToken.payload.user_id)
     let foundUser = await pool.query(
       "SELECT * FROM users WHERE users.user_id=$1",
       [decodedToken.payload.user_id]
