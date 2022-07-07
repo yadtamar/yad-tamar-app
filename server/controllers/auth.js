@@ -114,7 +114,7 @@ const getUserData = (async (req, res) => {
       complete: true
     });
     let foundUser = await pool.query(
-      "SELECT * FROM users WHERE users.user_id=$1",
+      "SELECT * FROM users INNER JOIN roles ON roles.user_id = users.user_id INNER JOIN families ON families.family_id = roles.family_id WHERE users.user_id=$1",
       [decodedToken.payload.user_id]
     );
     let userRole;
@@ -139,7 +139,7 @@ const getUserData = (async (req, res) => {
         role,
         phone: foundUser.cell_phone
       };
-      res.json(data)
+      res.json(foundUser)
     }
   } catch (err) {
     res.send(err)

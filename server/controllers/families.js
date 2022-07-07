@@ -61,7 +61,7 @@ const createFamily = (async (req, res, next) => {
           [coordinatorId, newFamily.rows[0].family_id, "coordinator"]
         );
         const token = jwt.sign(
-          { family_id: newFamily.rows[0].family_id, cell_phone },
+          { user_id: newuser.rows[0].user_id, cell_phone },
           process.env.TOKEN_KEY,
           {
             expiresIn: "3650d",
@@ -70,8 +70,8 @@ const createFamily = (async (req, res, next) => {
         // save user token
         newuser.rows[0].token = token;
         const setToken = await pool.query(
-          "UPDATE families SET family_token=$1 WHERE family_id=$2 RETURNING * ",
-          [token, newFamily.rows[0].family_id]
+          "UPDATE users SET user_token=$1 WHERE user_id=$2 RETURNING * ",
+          [token, newuser.rows[0].user_id]
         );
         res.status(201).json(newuser.rows[0], mainRole.rows[0], coordinator.rows[0], setToken.rows[0]);
       }
