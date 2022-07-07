@@ -133,12 +133,6 @@ const getUserData = (async (req, res) => {
     if (foundUser === undefined) {
       res.send("the user don't exist")
     } else {
-      const data = {
-        user_id: foundUser.user_id,
-        name: foundUser.first_name || foundUser.last_name,
-        role,
-        phone: foundUser.cell_phone
-      };
       res.json(foundUser)
     }
   } catch (err) {

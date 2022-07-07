@@ -19,7 +19,7 @@ const createTask = (async (req, res, next) => {
 const getTasksForFamily = (async (req, res, next) => {
     try {
         const { family_id } = req.params;
-        let familyTasks = await pool.query("SELECT * FROM tasks WHERE family_id=$1 ORDER BY date",
+        let familyTasks = await pool.query("SELECT * FROM tasks INNER JOIN users ON users.user_id = tasks.helper_id WHERE family_id=$1 ORDER BY date",
             [family_id]);
         familyTasks.rows[0] !== undefined ? res.json(familyTasks.rows) : res.send("no tasks for this family");
     } catch (err) {
