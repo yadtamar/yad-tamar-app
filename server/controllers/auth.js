@@ -6,31 +6,27 @@ const hash = bcrypt.hashSync("B4c0/\/", salt);
 
 const register = (async (req, res) => {
   try {
-    const { cell_phone, last_name, user_name, password } = req.body;
-    if (!(cell_phone && last_name && user_name && password)) {
+    const { cell_phone, last_name, password } = req.body;
+    if (!(cell_phone && last_name && password)) {
       res.status(400).send("All the inputs are required");
     }
-
+  
     // check if user already exist
     // Validate if user exist in our database
     const oldUser = await pool.query(
-      "SELECT * FROM users WHERE user_name=$1",
-      [user_name]
+      "SELECT * FROM users WHERE cell_phone=$1",
+      [cell_phone]
     );
-    if (oldUser.rows[0] !== undefined) {
-      if (oldUser.rows[0].cell_phone == cell_phone) {
-        return res.status(409).send("User Already Exist. Please Login by your uniq message");
-      } else {
-        return res.status(409).send("this username is already in use. please try another one")
-      }
+    if (oldUser.rows[0] !== undefined && oldUser.rows[0].last_name == last_name) {
+        return res.status(409).send("This user Already Exist. Please Login by your uniq message"); 
     }
 
     //Encrypt user password
     encryptedPassword = await bcrypt.hash(last_name, 5);
     // Create user in our database
     let user = await pool.query(
-      "INSERT INTO users ( last_name, cell_phone, user_name, password) VALUES ($1,$2,$3,$4) RETURNING *",
-      [last_name, cell_phone, user_name, password]
+      "INSERT INTO users ( last_name, cell_phone, password) VALUES ($1,$2,$3) RETURNING *",
+      [last_name, cell_phone, password]
     );
 
     user = user.rows[0];
@@ -85,18 +81,18 @@ const authorization = (async (req, res, next) => {
 
 const login = (async (req, res) => {
   try {
-    const { user_name, password } = req.body;
-
+    const { cell_phone, password } = req.body;
     // Validate user input
-    if (!(user_name && password)) {
+    if (!(cell_phone && password)) {
       res.status(400).send("All input is required");
     }
     // Validate if user exist in our database
     let user = await pool.query(
-      "SELECT * FROM users INNER JOIN roles ON users.user_id = roles.user_id INNER JOIN families ON families.family_id = roles.family_id WHERE user_name=$1 AND password=$2",
-      [user_name, password]
+      "SELECT * FROM users LEFT OUTER JOIN roles ON users.user_id = roles.user_id LEFT OUTER JOIN families ON families.family_id = roles.family_id WHERE cell_phone=$1 AND password=$2",
+      [cell_phone, password]
     );
     user = user.rows[0];
+    console.log(user)
     if (user) {
       res.status(200)?.json(user);
     } else {
@@ -114,9 +110,10 @@ const getUserData = (async (req, res) => {
       complete: true
     });
     let foundUser = await pool.query(
-      "SELECT * FROM users INNER JOIN roles ON roles.user_id = users.user_id INNER JOIN families ON families.family_id = roles.family_id WHERE users.user_id=$1",
+      "SELECT * FROM users WHERE users.user_id=$1",
       [decodedToken.payload.user_id]
     );
+    console.log(foundUser.rows, decodedToken.payload.user_id)
     let userRole;
     let role;
     if (userRole = await pool.query(
@@ -133,7 +130,7 @@ const getUserData = (async (req, res) => {
     if (foundUser === undefined) {
       res.send("the user don't exist")
     } else {
-      res.json(foundUser)
+      res.json({foundUser, role})
     }
   } catch (err) {
     res.send(err)
