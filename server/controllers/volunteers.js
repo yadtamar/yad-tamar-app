@@ -1,5 +1,7 @@
 const pool = require("../db");
 const axios = require('axios').default;
+const jwt = require('jsonwebtoken');
+
 const createVoluteer = (async (req, res, next) => {
     try {
         const {
@@ -20,10 +22,23 @@ const createVoluteer = (async (req, res, next) => {
             "INSERT INTO roles (user_id, family_id, role) VALUES ($1,$2,$3) RETURNING *",
             [newVolunteer.rows[0].user_id, family_id, "helper"]
         );
+        const user = newVolunteer.rows[0]
+        const token = jwt.sign(
+            { user_id: user.user_id, phone },
+            process.env.TOKEN_KEY,
+            {
+              expiresIn: "3650d",
+            }
+          );
+          const setToken = await pool.query(
+            "UPDATE users SET user_token = $1 WHERE user_id = $2 RETURNING *",
+            [token, user.user_id]
+          )
         res.json({
-            user: newVolunteer.rows,
-            role: VolunteerRole.rows[0],
-            community: VolunteerRole.rows[0].family_id,
+            user: newVolunteer.rows[0],
+            role: VolunteerRole.rows[0].role,
+            family_id: VolunteerRole.rows[0].family_id,
+            token: setToken.rows[0].user_token
         });
     } catch (err) {
         next(err.message);
