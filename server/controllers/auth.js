@@ -110,27 +110,30 @@ const getUserData = (async (req, res) => {
       complete: true
     });
     let foundUser = await pool.query(
-      "SELECT * FROM users WHERE users.user_id=$1",
+      "SELECT * FROM users LEFT OUTER JOIN roles ON users.user_id = roles.user_id LEFT OUTER JOIN families ON families.family_id = roles.family_id WHERE users.user_id=$1",
       [decodedToken.payload.user_id]
     );
-    console.log(foundUser.rows, decodedToken.payload.user_id)
     let userRole;
     let role;
-    if (userRole = await pool.query(
-      "SELECT * FROM roles WHERE roles.user_id=$1",
-      [decodedToken.payload.user_id]
-    )) {
-      if (userRole.rows[0] === undefined) {
-        role = "coordunator";
-      } else {
-        role = userRole.rows[0].role;
-      }
-    }
+    // if (userRole = await pool.query(
+    //   "SELECT * FROM roles WHERE roles.user_id=$1",
+    //   [decodedToken.payload.user_id]
+    // )) {
+    //   if (userRole.rows[0] === undefined) {
+    //     role = "coordunator";
+    //   } else {
+    //     role = userRole.rows[0].role;
+    //   }
+    // }
     foundUser = foundUser.rows[0];
+    foundUser.role == null? foundUser.role = "coordinator":"";                         
     if (foundUser === undefined) {
       res.send("the user don't exist")
     } else {
-      res.json({foundUser, role})
+      res.json({
+        foundUser, 
+        role
+      })
     }
   } catch (err) {
     res.send(err)
